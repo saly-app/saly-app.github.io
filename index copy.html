@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jane & John's Wedding</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:ital,wght@1,500;1,700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Configure custom fonts and colors for Tailwind */
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'sage': '#6a8273', /* Primary Color */
+                        'off-white': '#fdfdfa', /* Background Color (used for transparent overlays) */
+                        'text-dark': '#333',
+                    },
+                    fontFamily: {
+                        'header': ['"Playfair Display"', 'serif'],
+                        'body': ['Montserrat', 'sans-serif'],
+                    },
+                },
+            }
+        }
+        /* Custom styles to ensure smooth scrolling and responsive hero background */
+        html {
+            scroll-behavior: smooth;
+        }
+        /* FIX: Move background image and fixed attachment to the body element */
+        body {
+            /* Using a public domain image for the background */
+            background-image: url('https://images.unsplash.com/photo-1520854221256-17451cc331bf?q=80&w=1636&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+            /* FIX 1: Set background to fixed for parallax effect across all content */
+            background-attachment: fixed;
+            background-size: cover; /* Ensure image covers the viewport */
+            background-position: center; /* Center the image */
+            background-repeat: no-repeat; /* Prevent tiling */
+        }
+        .hero-bg {
+            /* This class is no longer needed but kept empty for safety */
+        }
+    </style>
+</head>
+
+<!-- FIX 2: Prevent scrolling until the video has finished playing. Removed bg-off-white from body as the image is the main background. -->
+<body class="font-body text-text-dark leading-relaxed" style="overflow: hidden;">
+
+    <!-- 
+        VIDEO SPLASH SCREEN: 
+        This is fixed and covers the entire viewport. It is removed/hidden once the video ends. 
+    -->
+    <div id="video-splash" class="fixed inset-0 z-[100] bg-black flex flex-col justify-center items-center">
+        <!-- Using a placeholder public domain video. Please replace 'src' with your actual wedding video URL. -->
+        <video id="intro-video" muted playsinline preload="auto" class="w-full h-full object-cover">
+            <source src="./video/intro.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        
+        <!-- Button to skip video or to start video if autoplay is blocked -->
+        <button id="skip-button" class="absolute bottom-10 right-10 z-10 bg-white/20 backdrop-blur-sm px-6 py-2 rounded-full text-sm text-white font-semibold hover:bg-white/40 transition duration-300">
+            Skip Intro
+        </button>
+        <!-- A simple loading text/indicator -->
+        <p id="loading-text" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white font-header text-2xl italic animate-pulse">Loading...</p>
+    </div>
+
+    <!-- 
+        WEBSITE CONTENT WRAPPER: 
+        This is initially hidden using 'opacity-0' and will fade in after the video.
+    -->
+    <div id="website-content" class="opacity-0 transition-opacity duration-1000 ease-in pointer-events-none">
+        
+        <!-- Hero Section: Remains visible initially (our "first page") -->
+        <header id="hero-header" class="relative min-h-screen bg-transparent bg-cover bg-center bg-no-repeat flex flex-col justify-center items-center text-center p-6">
+            <!-- Overlay -->
+            <div class="absolute inset-0 bg-black opacity-40"></div>
+            
+            <div class="hero-content relative z-10 text-white">
+                <p class="text-xl sm:text-2xl font-medium tracking-wider mb-2">We're getting married!</p>
+                <h1 class="font-header text-5xl sm:text-7xl md:text-8xl mt-2 mb-4 font-light italic">Jane & John</h1>
+                <p class="date-location text-lg sm:text-xl font-light mb-8 sm:mb-12">October 25, 2026 • Palm Springs, CA</p>
+                <!-- Changed to a button and updated text to prompt unlock -->
+                <button id="unlock-sections-button" class="cta-button inline-block bg-sage text-white px-10 py-3 rounded-full font-semibold transition duration-300 ease-in-out hover:bg-sage/80 shadow-lg hover:shadow-xl">
+                    View Full Details & RSVP
+                </button>
+            </div>
+        </header>
+
+        <!-- MAIN CONTENT AREA - HIDDEN until the button is clicked (our "second page") -->
+        <main class="p-4 sm:p-8 hidden">
+            <!-- Schedule Section - Visibility is now controlled by parent <main> -->
+            <section id="schedule" class="py-12 sm:py-20 px-6 max-w-xl mx-auto border-b border-gray-200 bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl mb-12 opacity-0 translate-y-8 transition-all duration-700 ease-out" data-animate="fade-up">
+                <h2 class="font-header text-3xl sm:text-4xl text-sage text-center mb-8">Schedule of Events</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-4 text-center">
+                    <!-- Events are initialized hidden for staggered animation -->
+                    <div class="event p-4 rounded-lg bg-white shadow-sm transition hover:shadow-md opacity-0 translate-y-8 transition-all duration-700 ease-out">
+                        <h3 class="font-semibold text-lg text-sage mb-1">The Ceremony</h3>
+                        <p class="text-gray-600 font-medium">4:00 PM</p>
+                        <p class="text-gray-500 text-sm">The Grand Garden</p>
+                    </div>
+                    
+                    <div class="event p-4 rounded-lg bg-white shadow-sm transition hover:shadow-md opacity-0 translate-y-8 transition-all duration-700 ease-out">
+                        <h3 class="font-semibold text-lg text-sage mb-1">Cocktail Hour</h3>
+                        <p class="text-gray-600 font-medium">5:00 PM</p>
+                        <p class="text-gray-500 text-sm">Terrace Patio</p>
+                    </div>
+                    
+                    <div class="event p-4 rounded-lg bg-white shadow-sm transition hover:shadow-md opacity-0 translate-y-8 transition-all duration-700 ease-out">
+                        <h3 class="font-semibold text-lg text-sage mb-1">Reception</h3>
+                        <p class="text-gray-600 font-medium">6:30 PM</p>
+                        <p class="text-gray-500 text-sm">Main Ballroom</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Venue & Travel Section - Visibility is now controlled by parent <main> -->
+            <section id="venue" class="py-12 sm:py-20 px-6 max-w-xl mx-auto border-b border-gray-200 bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl mb-12 opacity-0 translate-y-8 transition-all duration-700 ease-out" data-animate="fade-up">
+                <h2 class="font-header text-3xl sm:text-4xl text-sage text-center mb-6">Venue & Travel</h2>
+                
+                <p class="text-gray-700 mb-4">
+                    <strong class="font-semibold">The Parker Hotel</strong><br>
+                    123 Desert Road<br>
+                    Palm Springs, CA 92264
+                </p>
+                
+                <a href="https://maps.google.com/?q=123+Desert+Road,Palm+Springs,CA" target="_blank" class="link-button inline-block mt-4 text-sage border-2 border-sage px-6 py-2 rounded-full font-semibold transition duration-300 hover:bg-sage hover:text-white">
+                    Get Directions
+                </a>
+            </section>
+
+            <!-- RSVP Section - Visibility is now controlled by parent <main> -->
+            <section id="rsvp" class="py-12 sm:py-20 px-6 max-w-xl mx-auto text-center bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl mb-12 opacity-0 translate-y-8 transition-all duration-700 ease-out" data-animate="fade-up">
+                <h2 class="font-header text-3xl sm:text-4xl text-sage text-center mb-6">RSVP</h2>
+                
+                <p class="text-gray-600 mb-6">Please let us know if you can make it by September 1st.</p>
+                
+                <form class="flex flex-col gap-4 max-w-sm mx-auto">
+                    <input 
+                        type="text" 
+                        name="name" 
+                        placeholder="Your Full Name(s)" 
+                        required 
+                        class="w-full p-3 border border-gray-300 rounded-xl focus:ring-sage focus:border-sage transition"
+                    >
+                    <select 
+                        name="attending" 
+                        required 
+                        class="w-full p-3 border border-gray-300 rounded-xl bg-white appearance-none focus:ring-sage focus:border-sage transition"
+                    >
+                        <option value="" disabled selected>Will you be attending?</option>
+                        <option value="yes">Joyfully Accept</option>
+                        <option value="no">Regretfully Decline</option>
+                    </select>
+                    
+                    <button 
+                        type="submit" 
+                        class="cta-button w-full mt-4 bg-sage text-white px-8 py-3 rounded-full font-semibold transition duration-300 hover:bg-sage-dark shadow-md"
+                    >
+                        Submit RSVP
+                    </button>
+                </form>
+                <!-- Add a simple success/error message placeholder -->
+                <p id="message" class="mt-4 text-sm font-semibold"></p>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="text-center p-8 bg-black/50 text-white text-sm mt-8">
+            <p>Made with ❤️ by Jane & John</p>
+            <p class="mt-1">&copy; 2026. All rights reserved.</p>
+        </footer>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const videoSplash = document.getElementById('video-splash');
+            const introVideo = document.getElementById('intro-video');
+            const websiteContent = document.getElementById('website-content');
+            const skipButton = document.getElementById('skip-button');
+            const loadingText = document.getElementById('loading-text');
+
+            const form = document.querySelector('#rsvp form');
+            const messageElement = document.getElementById('message');
+            
+            // New variables for the button and locked sections
+            const unlockButton = document.getElementById('unlock-sections-button');
+            const mainContent = document.querySelector('main'); // Reference the main content area
+            const heroHeader = document.querySelector('#hero-header'); // Reference the hero header
+            
+            let observer = null; // Variable to hold the Intersection Observer instance
+
+            // --- Function to define and start the observer (now outside initScrollAnimations) ---
+            const startObserver = () => {
+                // Disconnect existing observer if it exists
+                if (observer) {
+                    observer.disconnect();
+                }
+
+                // Get ALL animated sections
+                const animatedSections = document.querySelectorAll('[data-animate="fade-up"]');
+                
+                observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        const target = entry.target;
+
+                        if (entry.isIntersecting) {
+                            // Logic for when the element enters the viewport: Animate In
+                            target.classList.remove('opacity-0', 'translate-y-8');
+                            
+                            // Handle staggered reveal for the Schedule events
+                            if (target.id === 'schedule') {
+                                const eventCards = target.querySelectorAll('.event');
+                                eventCards.forEach((card, index) => {
+                                    // Apply a staggered delay
+                                    setTimeout(() => {
+                                        card.classList.remove('opacity-0', 'translate-y-8');
+                                    }, index * 200); 
+                                });
+                            }
+                        } else {
+                            // Logic for when the element leaves the viewport: Animate Out/Reset
+                            // Only reset if the content is visible (i.e., hero is gone)
+                            if (heroHeader.classList.contains('hidden')) { 
+                                target.classList.add('opacity-0', 'translate-y-8');
+                                
+                                // Reset staggered elements immediately
+                                if (target.id === 'schedule') {
+                                    target.querySelectorAll('.event').forEach(card => {
+                                        card.classList.add('opacity-0', 'translate-y-8');
+                                    });
+                                }
+                            }
+                        }
+                    });
+                }, {
+                    threshold: 0.1 
+                });
+
+                // Start observing all currently loaded animated elements
+                animatedSections.forEach(element => {
+                    observer.observe(element);
+                });
+            };
+
+            // --- Function to transition to website content ---
+            const showWebsite = () => {
+                // 1. Show main content wrapper (removes opacity-0 and pointer-events-none)
+                websiteContent.classList.remove('opacity-0', 'pointer-events-none');
+                
+                // 2. Hide video splash screen (fade out and remove completely)
+                videoSplash.classList.add('opacity-0', 'transition-opacity', 'duration-500');
+
+                // 3. Wait for fade-out, then remove splash screen from flow
+                setTimeout(() => {
+                    videoSplash.style.display = 'none';
+                    // FIX: Ensure body is scrollable again after the splash screen is hidden
+                    document.body.style.overflow = 'auto'; 
+                    // 4. Start observer
+                    startObserver();
+                }, 500); 
+            };
+
+            // --- Content Unlock Logic ---
+            const unlockAndScrollSections = (e) => {
+                e.preventDefault();
+
+                // Check if the main content is currently hidden
+                if (mainContent.classList.contains('hidden')) { 
+                    
+                    // 1. HIDE THE HERO SECTION (FIRST PAGE)
+                    heroHeader.classList.add('hidden');
+                    
+                    // 2. Unlock the entire main content area (SECOND PAGE)
+                    mainContent.classList.remove('hidden');
+                    
+                    // 3. Re-start the observer
+                    startObserver();
+
+                    // 4. Scroll the user to the absolute top of the page, where the new content now begins
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+                    // 5. Update the button state (although hidden, this marks the action complete)
+                    unlockButton.textContent = 'Details Unlocked';
+                    unlockButton.classList.add('opacity-50', 'cursor-default');
+                    unlockButton.disabled = true;
+                }
+            };
+            
+            // Attach the unlock handler to the hero button
+            if (unlockButton) {
+                unlockButton.addEventListener('click', unlockAndScrollSections);
+            }
+            
+            // --- Video Logic (Remains the same) ---
+            
+            // Try to play the video immediately (most browsers require a user interaction to start unmuted video)
+            const tryPlayVideo = () => {
+                // Remove loading text once we attempt to play
+                loadingText.style.display = 'none'; 
+                introVideo.play().catch(error => {
+                    // Autoplay was blocked. Prompt user to start or skip.
+                    console.warn("Autoplay was blocked. User interaction required.");
+                    skipButton.textContent = "Start Experience";
+                    skipButton.style.display = 'block'; // Ensure button is visible
+                });
+            };
+
+            // Event listener for when the video ends naturally
+            introVideo.addEventListener('ended', showWebsite);
+
+            // Event listener for skip/start button
+            skipButton.addEventListener('click', () => {
+                // IMPORTANT: Unmute video when the user clicks the button
+                introVideo.muted = false; 
+                
+                if (introVideo.paused) {
+                    // If video is paused (due to autoplay block), start it
+                    introVideo.play();
+                    skipButton.textContent = "Skip Intro";
+                } else {
+                    // If video is playing or still loading, skip immediately
+                    introVideo.pause();
+                    showWebsite();
+                }
+            });
+            
+            // Start video playback attempt once video metadata is loaded
+            introVideo.addEventListener('canplaythrough', tryPlayVideo);
+
+            // Initially hide the skip button until we know if autoplay failed
+            skipButton.style.display = 'none';
+
+            // Start preloading/autoplay attempt
+            tryPlayVideo();
+            
+            // --- RSVP Logic (Static Demo - Remains the same) ---
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const name = this.elements.name.value;
+                const attending = this.elements.attending.value;
+
+                if (attending === 'yes') {
+                    messageElement.textContent = `Thank you, ${name}! We can't wait to celebrate with you.`;
+                    messageElement.className = 'mt-4 text-sm font-semibold text-sage';
+                } else if (attending === 'no') {
+                    messageElement.textContent = `Thank you, ${name}. We're sad you can't make it and appreciate you letting us know.`;
+                    messageElement.className = 'mt-4 text-sm font-semibold text-red-500';
+                } else {
+                    messageElement.textContent = 'Please select an option.';
+                    messageElement.className = 'mt-4 text-sm font-semibold text-yellow-600';
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>

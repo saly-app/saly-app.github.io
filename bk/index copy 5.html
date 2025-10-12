@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jane & John's Wedding</title>
+    <!-- Load Tailwind CSS --><script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:ital,wght@1,500;1,700&display=swap" rel="stylesheet">
+    <!-- IMPORTANT: Noto Sans Khmer to ensure the body text loads reliably -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Khmer:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* * 1. FONT FACE DECLARATIONS 
+         * We are using multiple source URLs here to check for both the 'font/' folder 
+         * path and the root directory path for maximum compatibility.
+         */
+        @font-face {
+            font-family: 'AKbalthomKhmerHand';
+            /* Try loading from the root and then from the font/ folder */
+            src: url('AKbalthomKhmerHand.ttf') format('truetype'),
+                 url('font/AKbalthomKhmerHand.ttf') format('truetype'); 
+            font-weight: normal;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Moul';
+            /* Assuming 'Moul.ttf' is also in your font folder for the names in the first invitation */
+            src: url('Moul.ttf') format('truetype'),
+                 url('font/Moul.ttf') format('truetype'); 
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        /* * 2. TAILWIND CONFIGURATION 
+         */
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'sage': '#6a8273', /* Primary Color */
+                        'off-white': '#fdfdfa', /* Background Color (used for transparent overlays) */
+                        'text-dark': '#333',
+                    },
+                    fontFamily: {
+                        'header': ['"Playfair Display"', 'serif'],
+                        'body': ['Montserrat', 'sans-serif'],
+                        /* Custom local font definitions */
+                        'khmer-script': ['AKbalthomKhmerHand', 'serif', 'system-ui'],
+                        'khmer-ler': ['AKbalthomKhmerLer', 'serif', 'system-ui'], /* Adding a utility for this */
+                        'moul': ['Moul', 'serif', 'system-ui'], /* Adding a utility for this */
+                        /* Noto Sans Khmer web font for the body text */
+                        'khmer': ['"Noto Sans Khmer"', 'sans-serif', 'system-ui'], 
+                    },
+                },
+            }
+        }
+        /* Custom styles to ensure smooth scrolling and responsive hero background */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            /* Ensure the body stays scrollable after video plays, but initially disabled by style="overflow: hidden;" */
+        }
+
+
+        /* Custom Timeline Styles for the Khmer Schedule Section */
+        .timeline-container:before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: rgba(255, 255, 255, 0.4); /* Light white line */
+            transform: translateX(-50%);
+        }
+        /* Style for the icons/dots on the timeline */
+        .timeline-item-icon {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+        }
+        /* Gallery modal style */
+        .modal-content-wrapper {
+            max-width: 90vw;
+            max-height: 90vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+
+<!-- FIX 2: Prevent scrolling until the video has finished playing. --><body class="font-body text-text-dark leading-relaxed" style="overflow: hidden;">
+
+    <!-- 
+        VIDEO SPLASH SCREEN: 
+    --><div id="video-splash" class="fixed inset-0 z-[100] bg-black flex flex-col justify-center items-center">
+        <!-- Using your local video path: ./video/intro.mp4 --><video id="intro-video" muted playsinline preload="auto" class="w-full h-full object-cover">
+            <source src="./video/intro.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        
+        <!-- Button to skip video or to start video if autoplay is blocked --><button id="skip-button" class="absolute bottom-10 right-10 z-10 bg-white/20 backdrop-blur-sm px-6 py-2 rounded-full text-sm text-white font-semibold hover:bg-white/40 transition duration-300">
+            Skip Intro
+        </button>
+        <!-- A simple loading text/indicator --><p id="loading-text" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white font-header text-2xl italic animate-pulse">Loading...</p>
+    </div>
+
+    <!-- 
+        WEBSITE CONTENT WRAPPER: 
+    --><div id="website-content" class="opacity-0 transition-opacity duration-1000 ease-in pointer-events-none">
+        
+        <!-- Hero Section: The initial "first page" --><header id="hero-header" class="relative min-h-screen bg-transparent flex flex-col justify-center items-center text-center p-6">
+            
+            <!-- NEW: Video Background for Page 1 --><div class="absolute inset-0 z-[0]"> 
+                <video id="hero-background-video" autoplay loop muted playsinline class="w-full h-full object-cover">
+                    <!-- Using your local video path: ./video/2.mp4 --><source src="./video/2.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            
+            <!-- Overlay: z-[1] ensures the overlay is above the video but below the text (z-10) --><div class="absolute inset-0 bg-black opacity-40 z-[1]"></div>
+            
+            <div class="hero-content relative z-10 text-white">
+                <p class="text-xl sm:text-2xl font-medium tracking-wider mb-2">សូមគោរពអញ្ជើញ</p>
+                
+                <!-- START: REVERTED TO IMAGE AS BACKGROUND BOX WITH TEXT OVERLAY -->
+                <!-- The text is centered inside a div box which uses btn_01.png as its background -->
+                <div id="names-background-box" 
+                     class="h-24 sm:h-36 w-full max-w-lg mx-auto flex items-center justify-center"
+                     style="background-image: url('./images/btn_01.png'); background-size: cover; background-position: center;">
+                    <!-- Text is placed in a p tag as requested, styled to be prominent -->
+                    <p style="font-family:'AKbalthomKhmerLer'; size: 22px;" class="text-black">
+                        ឯកឧត្តម ម៉ក់ ហ៊ុយ
+                    </p>
+                </div>
+                <!-- END: REVERTED TO IMAGE AS BACKGROUND BOX WITH TEXT OVERLAY -->
+
+                <p class="date-location text-lg sm:text-xl font-light mb-8 sm:mb-12">ចូលរួមជាភ្ញៀវកិត្តិយស ដល់គូរស្វាមី
+ភរិយាថ្មីក្នុងថ្ងៃដ៍ពិសេសនេះ</p>
+                <!-- Button reverted to the original text-based style -->
+                <button id="unlock-sections-button" class="cta-button inline-block bg-sage text-white px-10 py-3 rounded-full font-semibold transition duration-300 ease-in-out hover:bg-sage/80 shadow-lg hover:shadow-xl">
+                    សូមចុចបើកសំបុត្រ
+                </button>
+            </div>
+
+        </header>
+
+        <!-- Page 2's Video Background (Fixed Position, Hidden Initially) --><div id="video-bg-page2" class="fixed inset-0 z-0 hidden"> 
+            <!-- Using your local video path: ./video/3.mp4 --><video id="background-video" autoplay loop muted playsinline class="w-full h-full object-cover">
+                <!-- IMPORTANT: Replace this source with your actual 'video.mp4' file path --><source src="./video/3.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <!-- Overlay to darken video and improve text readability over bg-white/90 sections --><div class="absolute inset-0 bg-black opacity-30"></div>
+        </div>
+
+        <!-- MAIN CONTENT AREA - HIDDEN until the button is clicked (our "second page") --><main class="p-4 sm:p-8 relative z-10 hidden">
+      
+            <!-- Dinner Invitation Section -->
+             <section id="khmer-invite" class="py-12 sm:py-20 px-6 max-w-xl mx-auto border-b border-gray-200 bg-black/10 backdrop-blur-sm rounded-2xl shadow-xl mb-12 opacity-0 translate-y-8 transition-all duration-700 ease-out" data-animate="fade-up">
+                
+                <div class="text-center font-khmer leading-loose text-white">
+                    <h2 class="font-khmer-script text-3xl text-white mb-4" style="font-family:'AKbalthomKhmerHand'; color: darkgoldenrod;">សិរីមង្គលអាពាហ៍ពិពាហ៍</h2>
+                    
+                    <div style="font-family:'AKbalthomKhmerLer';" class="grid grid-cols-2 gap-6 text-lg mb-8">
+                        <p class="text-right" style="margin-right: 10px;">លោក កែវ សេដ្ឋា</p><p class="text-left" style="margin-left: 10px;">ឯកឧត្តម ម៉ក់ ហ៊ុយ</p>
+                        <p class="text-right" style="margin-right: 10px;">លោកស្រី សាន សាវី</p><p class="text-left"  style="margin-left: 10px;">លោកជំទាវ យិត គីមជូរ</p>
+                    </div>
+
+                    
+                    <p style="font-family:'AKbalthomKhmerLer'; font-size: 26px;" class="font-bold text-xl mb-6">មានកិត្តិយសសូមគោរពអញ្ជើញ</p>
+                    
+                    <div style="font-family:'AKbalthomKhmerLer';"  class="text-lg mb-8 text-white">
+                        <p style="margin-top: 10px; line-height: 2.0;">សម្ដេច ទ្រង់ ឯកឧត្ដម លោកឧកញ៉ា លោកជំទាវ លោក
+                            លោកស្រី អ្នកនាង កញ្ញា និងប្រិយមិត្តអញ្ញើញចូលរួមជា អធិបតី
+                            និងជាភ្ញៀវកិត្តិយសដើម្បីប្រសិទ្ធពរជ័យ សិរីសួស្ដី ជ័យមង្គល
+                            ក្នុងពិធីរៀបអាពាហ៍ពិពាហ៍ កូនប្រុស-កូនស្រី របស់យើងខ្ញុំ</p>
+                    </div>
+
+                    <div style="font-family: Moul; line-height:2;" class="flex justify-center items-center gap-6 mb-8 text-xl font-semibold">
+                        <p style="color: #eca700;"  class="w-1/3 text-right">កូនប្រុស<br>កែវ សាលី</p>
+                        <div class="w-1/3 flex flex-col items-center">
+                            <!-- Using a placeholder image for the ring icon -->
+                            <img src="./images/ring.png" onerror="this.onerror=null; this.src='./images/ring.png';" width="64" class="rounded-full shadow-lg">
+                        </div>
+                        <p style="color: #eca700;" class="w-1/3 text-left">កូនស្រី<br>ម៉ក់ គីមបួយ</p>
+                    </div>
+                    
+                    <div class="text-lg text-white"style="font-family:'AKbalthomKhmerLer';" >
+                        <p class="font-semibold mb-2">សូមភ្ញៀវកិត្តិយសអញ្ជើញចូលរួមពិសាភោជនីយអាហារនៅ</p>
+                        <p>ថ្ងៃអាទិត្យ ៨ រោច ខែបុស្ស ឆ្នាំម្សាញ់ ស.រ ព.ស ២៥៦៩</p>
+                        <p>ត្រូវនឹងថ្ងៃទី ១១ ខែមករា ឆ្នាំ ២០២៦</p>
+                        <p>ម៉ោង ៥:០០នាទីល្ងាច</p>
+                        <p>ស្ថិតនៅ បុរីលឹមឈៀងហាក់ គីឡូ6 ផ្ទះលេខ 48i 46i  ផ្លូវលេខ2 កែង3A រាជធានីភ្នំពេញ ដោយមេត្រីភាព!</p>
+                    </div>
+                    
+                    <p style="font-family:'AKbalthomKhmerLer'; " class="font-bold text-lg mt-8 text-white">សូមអរគុណ។</p>
+                </div>
+
+            </section>
+
+
+            <!-- NEW: Khmer Ceremony Timeline Section --><section id="khmer-schedule" class="py-12 sm:py-20 px-6 max-w-xl mx-auto border-b border-gray-200 bg-black/10 backdrop-blur-sm rounded-2xl shadow-xl mb-12 opacity-0 translate-y-8 transition-all duration-700 ease-out" data-animate="fade-up">
+                
+                <div class="text-center font-khmer leading-normal text-white">
+                    <h2 class="font-khmer-script text-3xl text-white mb-8" style="font-family:'AKbalthomKhmerHand'; color: darkgoldenrod;">កម្មវិធីមង្គលអាពាហ៍ពិពាហ៍</h2>
+                    
+
+                    <h3  style="font-family:'AKbalthomKhmerLer'; font-size: 20px; margin-top: 40px;" class="text-lg mb-8 text-white">កម្មវិធីទី១  ថ្ងៃសៅរ៍ ទី១០ ខែមករា ឆ្នាំ២០២៦</h3>
+                    <div class="timeline-container max-w-md mx-auto relative px-4" style="margin-top: -30px; font-family:'AKbalthomKhmerLer';">
+                        <!-- Timeline Item 1: ពិធីសូត្រមន្ត (Monk Blessing) -->
+                        <div class="timeline-item relative py-6 flex">
+                            <!-- Icon/Dot -->
+                            <div class="timeline-item-icon w-8 h-8 flex items-center justify-center text-xl text-white">
+                                <!-- Group Icon: 🧑‍🤝‍🧑 -->
+                                <img src="./images/ic_04.png">
+                            </div>
+                            <!-- Content -->
+                            <div class="w-1/2 pr-6 text-right font-khmer-ler text-sm">
+                                <p class="font-bold text-red-400">ម៉ោង ២:០០ នាទីរសៀល</p>
+                            </div>
+                            <div class="w-1/2 pl-6 text-left font-khmer-ler text-sm">
+                                <p style="color: #eca700;" class="font-bold text-sm mb-1">ពិធីក្រុងពាលី</p>
+                            </div>
+                        </div>
+
+                        <!-- Timeline Item 2: ជួបជុំភ្ញៀវ (Breakfast Gathering) -->
+                        <div class="timeline-item relative py-6 flex">
+                            <!-- Icon/Dot -->
+                            <div class="timeline-item-icon w-8 h-8 flex items-center justify-center text-xl text-white">
+                                <!-- Group Icon: 🧑‍🤝‍🧑 -->
+                                <img src="./images/ic_04.png">
+                            </div>
+                            <!-- Content -->
+                            <div class="w-1/2 pr-6 text-right font-khmer-ler text-sm">
+                                <p class="font-bold text-red-400">ម៉ោង ៣:០០ នាទីរសៀល</p>
+                            </div>
+                            <div class="w-1/2 pl-6 text-left font-khmer-ler text-sm">
+                                <p style="color: #eca700;"  class="font-bold text-sm mb-1">ពិធីសូត្រមន្តចំរើនព្រះបរិត្ត</p>
+                            </div>
+                        </div>
+
+                        <!-- Timeline Item 3: ពិធីហែរជំនូន (Engagement Procession) -->
+                        <div class="timeline-item relative py-6 flex">
+                            <!-- Icon/Dot -->
+                            <div class="timeline-item-icon w-8 h-8 flex items-center justify-center text-xl text-white">
+                                <!-- Group Icon: 🧑‍🤝‍🧑 -->
+                                <img src="./images/ic_04.png">
+                            </div>
+                            <!-- Content -->
+                            <div class="w-1/2 pr-6 text-right font-khmer-ler text-sm">
+                                <p class="font-bold text-red-400">ម៉ោង ៥:០០ នាទីរសៀល</p>
+                            </div>
+                            <div class="w-1/2 pl-6 text-left font-khmer-ler text-sm">
+                                <p style="color: #eca700;" class="font-bold text-sm mb-1">ពិធីជាវខាន់ស្លា</p>
+                            </div>
+                        </div>
+
+                        <!-- Timeline Item 4: ពិសាភោជនីយអាហារ (Breakfast Meal) -->
+                        <div class="timeline-item relative py-6 flex">
+                            <!-- Icon/Dot -->
+                            <div class="timeline-item-icon w-8 h-8 flex items-center justify-center text-xl text-white">
+                                <!-- Group Icon: 🧑‍🤝‍🧑 -->
+                                <img src="./images/ic_04.png">
+                            </div>
+                            <!-- Content -->
+                            <div class="w-1/2 pr-6 text-right font-khmer-ler text-sm">
+                                <p class="font-bold text-red-400">ម៉ោង ៥:០០ នាទីល្ងាច</p>
+                            </div>
+                            <div class="w-1/2 pl-6 text-left font-khmer-ler text-sm">
+                                <p style="color: #eca700;" class="font-bold text-sm mb-1">អញ្ជើញភ្ញៀវកិត្តិយកពិសាអាហារពេលល្ងាច</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3  style="font-family:'AKbalthomKhmerLer'; font-size: 20px; margin-top: 0px;" class="text-lg mb-8 text-white">កម្មវិធីទី២  ថ្ងៃអាទិត្យ ទី១១ ខែមករា ឆ្នាំ២០២៦</h3>
+                    <div class="timeline-container max-w-md mx-auto relative px-4" style="margin-top: -30px;  font-family:'AKbalthomKhmerLer';">
+                        <!-- Timeline Item 1: ពិធីសូត្រមន្ត (Monk Blessing) -->
+                        <div class="timeline-item relative py-6 flex">
+                            <!-- Icon/Dot -->
+                            <div class="timeline-item-icon w-8 h-8 flex items-center justify-center text-xl text-white">
+                                <!-- Group Icon: 🧑‍🤝‍🧑 -->
+                                <img src="./images/ic_04.png">
+                            </div>
+                            <!-- Content -->
+                            <div class="w-1/2 pr-6 text-right font-khmer-ler text-sm">
+                                <p class="font-bold text-red-400">៧:០០ នាទីរព្រឹក</p>
+                            </div>
+                            <div class="w-1/2 pl-6 text-left font-khmer-ler text-sm">
+                                <p  style="color: #eca700;" class="font-bold text-sm  mb-1">ពិធីហែរជំនូន(ហែរកំណត់)</p>
+                            </div>
+                        </div>
+
+                        <!-- Timeline Item 2: ជួបជុំភ្ញៀវ (Breakfast Gathering) -->
+                        <div class="timeline-item relative py-6 flex">
+                            <!-- Icon/Dot -->
+                            <div class="timeline-item-icon w-8 h-8 flex items-center justify-center text-xl text-white">
+                                <!-- Group Icon: 🧑‍🤝‍🧑 -->
+                                <img src="./images/ic_04.png">
+                            </div>
+                            <!-- Content -->
+                            <div class="w-1/2 pr-6 text-right font-khmer-ler text-sm">
+                                <p class="font-bold text-red-400">៨:០០ នាទីរព្រឹក</p>
+                            </div>
+                            <div class="w-1/2 pl-6 text-left font-khmer-ler text-sm">
+                                <p style="color: #eca700;" class="font-bold text-sm mb-1">ពិធីរៀបរាប់ផ្លែឈើ <br>និងសែនព្រេន</p>
+                            </div>
+                        </div>
+
+                        <!-- Timeline Item 3: ពិធីហែរជំនូន (Engagement Procession) -->
+                        <div class="timeline-item relative py-6 flex">
+                            <!-- Icon/Dot -->
+                            <div class="timeline-item-icon w-8 h-8 flex items-center justify-center text-xl text-white">
+                                <!-- Group Icon: 🧑‍🤝‍🧑 -->
+                                <img src="./images/ic_04.png">
+                            </div>
+                            <!-- Content -->
+                            <div class="w-1/2 pr-6 text-right font-khmer-ler text-sm">
+                                <p class="font-bold text-red-400">៨:៣០ នាទីរព្រឹក</p>
+                            </div>
+                            <div class="w-1/2 pl-6 text-left font-khmer-ler text-sm">
+                                <p style="color: #eca700;" class="font-bold text-sm mb-1">ពិធីបំពាក់ចិញ្ចៀន</p>
+                            </div>
+                        </div>
+
+                        <!-- Timeline Item 3: ពិធីហែរជំនូន (Engagement Procession) -->
+                        <div class="timeline-item relative py-6 flex">
+                            <!-- Icon/Dot -->
+                            <div class="timeline-item-icon w-8 h-8 flex items-center justify-center text-xl text-white">
+                                <!-- Group Icon: 🧑‍🤝‍🧑 -->
+                                <img src="./images/ic_04.png">
+                            </div>
+                            <!-- Content -->
+                            <div class="w-1/2 pr-6 text-right font-khmer-ler text-sm">
+                                <p class="font-bold text-red-400">៩:៣០ នាទីរព្រឹក</p>
+                            </div>
+                            <div class="w-1/2 pl-6 text-left font-khmer-ler text-sm">
+                                <p style="color: #eca700;" class="font-bold text-sm mb-1">ពីធីកាត់សក់បង្កក់សិរី​​​​ <br>កូនប្រុស កូនស្រី</p>
+                            </div>
+                        </div>
+
+                        <!-- Timeline Item 3: ពិធីហែរជំនូន (Engagement Procession) -->
+                        <div class="timeline-item relative py-6 flex">
+                            <!-- Icon/Dot -->
+                            <div class="timeline-item-icon w-8 h-8 flex items-center justify-center text-xl text-white">
+                                <!-- Group Icon: 🧑‍🤝‍🧑 -->
+                                <img src="./images/ic_04.png">
+                            </div>
+                            <!-- Content -->
+                            <div class="w-1/2 pr-6 text-right font-khmer-ler text-sm">
+                                <p class="font-bold text-red-400">១១:០០ នាទីរព្រឹក</p>
+                            </div>
+                            <div class="w-1/2 pl-6 text-left font-khmer-ler text-sm">
+                                <p style="color: #eca700;" class="font-bold text-sm mb-1">ពីធីសំពះផ្ទឹម ពីធីបង្វិលពពិល សែនចងដៃ</p>
+                            </div>
+                        </div>
+
+                        <!-- Timeline Item 3: ពិធីហែរជំនូន (Engagement Procession) -->
+                        <div class="timeline-item relative py-6 flex">
+                            <!-- Icon/Dot -->
+                            <div class="timeline-item-icon w-8 h-8 flex items-center justify-center text-xl text-white">
+                                <!-- Group Icon: 🧑‍🤝‍🧑 -->
+                                <img src="./images/ic_04.png">
+                            </div>
+                            <!-- Content -->
+                            <div class="w-1/2 pr-6 text-right font-khmer-ler text-sm">
+                                <p class="font-bold text-red-400">៥:០០ នាទីរល្ងាច</p>
+                            </div>
+                            <div class="w-1/2 pl-6 text-left font-khmer-ler text-sm">
+                                <p style="color: #eca700;" class="font-bold text-sm mb-1">សូមភ្ញៀវកិត្តិយសអញ្ជើញចូលរួមពិសាភោជនីយអាហារ</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+        <!-- Venue & Travel Section - Now bg-white/50 -->
+            <section id="venue" class="py-12 sm:py-20 px-6 max-w-xl mx-auto border-b border-gray-200 bg-black/10 backdrop-blur-sm rounded-2xl shadow-xl mb-12 opacity-0 translate-y-8 transition-all duration-700 ease-out" data-animate="fade-up">
+                <div class="text-center font-khmer leading-loose text-white">
+                    <h2 class="font-khmer-script text-3xl text-white mb-4" style="font-family:'AKbalthomKhmerHand'; color: darkgoldenrod;">ទីតាំងកម្មវិធី</h2>
+
+                    <div class="text-lg text-white"style="font-family:'AKbalthomKhmerLer';" >
+                        <p>ស្ថិតនៅ បុរីលឹមឈៀងហាក់ គីឡូ6 ផ្ទះលេខ 48i 46i  ផ្លូវលេខ2 កែង3A រាជធានីភ្នំពេញ!</p>
+                    </div>
+                    
+                    
+                    <a href="https://maps.app.goo.gl/3DtryAv9kyWQXQoP8?g_st=ipc" target="_blank" class="link-button inline-block mt-4 text-sage border-2 border-sage px-6 py-2 rounded-full font-semibold transition duration-300 hover:bg-sage hover:text-white">
+                    ចុចចូលតាម Google Map
+                </a>
+                </div>
+
+            </section>
+
+          <!-- Bank/Gift Section - NEW -->
+            <section id="bank" class="py-12 sm:py-20 px-6 max-w-xl mx-auto border-b border-gray-200 bg-black/10 backdrop-blur-sm rounded-2xl shadow-xl mb-12 opacity-0 translate-y-8 transition-all duration-700 ease-out" data-animate="fade-up">
+                <!-- flex flex-col items-center centers all content vertically and horizontally -->
+                <div class="flex flex-col items-center font-khmer leading-loose text-white">
+                    <h2 class="font-khmer-script text-3xl text-white mb-6" style="font-family:'AKbalthomKhmerHand'; color: darkgoldenrod;">គណនេយ្យ ABA</h2>
+                    
+                    <!-- Image Display (Clicking the image views it large) -->
+                    <a href="./images/aba.JPG" target="_blank" title="View ABA QR Code" class="mb-6 rounded-lg overflow-hidden shadow-lg border-4 border-white transform hover:scale-[1.02] transition duration-300 ease-in-out">
+                        <!-- The image is now block level and centered by the parent flex container -->
+                        <img src="./images/aba.JPG" width="190" alt="ABA Bank QR Code" class="block">
+                    </a>
+
+                    <p class="mb-6 text-xl font-medium" style="font-family:'AKbalthomKhmerLer';">សម្រាប់ ចំណង់ដៃរតាមរយៈ ធនាគារ</p>
+                    
+                    <!-- Buttons for View and Download -->
+                    <div class="flex space-x-4">
+                        <!-- View Button (Redundant but gives explicit action) -->
+                        <a href="./images/aba.JPG" target="_blank" class="inline-block bg-transparent text-sage px-6 py-2 rounded-full font-semibold transition duration-300 hover:bg-gray-200 shadow-md text-sm">
+                            មើលរូបភាព (View)
+                        </a>
+                        <!-- Download Button (Uses the 'download' attribute) -->
+                        <a href="./images/aba.JPG" download="ABA_QR_Code_KeavSaly_MokKimBouy.JPG" class="inline-block bg-sage text-white px-6 py-2 rounded-full font-semibold transition duration-300 hover:bg-sage/80 shadow-md text-sm">
+                            ទាញយករូបភាព (Download)
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Photo Gallery Section - UPDATED TO INCLUDE ONCLICK FOR MODAL -->
+            <section id="gallery" class="py-12 sm:py-20 px-6 max-w-4xl mx-auto border-b border-gray-200 bg-black/10 backdrop-blur-sm rounded-2xl shadow-xl mb-12 opacity-0 translate-y-8 transition-all duration-700 ease-out" data-animate="fade-up">
+                <div class="text-center font-khmer leading-loose text-white">
+                    <h2 class="font-khmer-script text-3xl text-white mb-6" style="font-family:'AKbalthomKhmerHand'; color: darkgoldenrod;">រូបថតអនុស្សាវរីយ៍</h2>
+                    <p class="mb-8 text-xl font-medium" style="font-family:'AKbalthomKhmerLer';">ដំណើរកម្សាន្តរបស់យើង</p>
+                    
+                    <!-- Photo Grid - Responsive for mobile (2 columns) and desktop (3 columns) -->
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                        <!-- Placeholder Images - ADDED onclick="openModal(this.src)" -->
+                        <img src="./images/us_01.png" alt="Gallery Photo 1" class="w-full h-auto object-cover rounded-xl shadow-lg transform hover:scale-105 transition duration-300 cursor-pointer" onclick="openModal(this.src)">
+                        <img src="./images/us_01.png" alt="Gallery Photo 2" class="w-full h-auto object-cover rounded-xl shadow-lg transform hover:scale-105 transition duration-300 cursor-pointer" onclick="openModal(this.src)">
+                        <img src="./images/us_01.png" alt="Gallery Photo 3" class="w-full h-auto object-cover rounded-xl shadow-lg transform hover:scale-105 transition duration-300 cursor-pointer" onclick="openModal(this.src)">
+                        <img src="./images/us_01.png" alt="Gallery Photo 4" class="w-full h-auto object-cover rounded-xl shadow-lg transform hover:scale-105 transition duration-300 cursor-pointer" onclick="openModal(this.src)">
+                        <img src="./images/us_01.png" alt="Gallery Photo 5" class="w-full h-auto object-cover rounded-xl shadow-lg transform hover:scale-105 transition duration-300 cursor-pointer" onclick="openModal(this.src)">
+                        <img src="./images/us_01.png" alt="Gallery Photo 6" class="w-full h-auto object-cover rounded-xl shadow-lg transform hover:scale-105 transition duration-300 cursor-pointer" onclick="openModal(this.src)">
+                    </div>
+
+                    <!-- Button to link to the top of the gallery for "scroll mores" -->
+                    <a href="#gallery" class="inline-block mt-8 bg-sage text-white px-8 py-3 rounded-full font-semibold transition duration-300 hover:bg-sage/80 shadow-md">
+                        មើលរូបភាពទាំងអស់ (View All Photos)
+                    </a>
+                </div>
+            </section>
+
+          
+        </main>
+
+    </div>
+    
+    <!-- Gallery Modal (Lightbox) -->
+    <div id="gallery-modal" class="fixed inset-0 bg-black bg-opacity-90 z-[100] hidden flex items-center justify-center p-4" onclick="closeModal()">
+        <div class="modal-content-wrapper relative">
+            <!-- Modal Image -->
+            <img id="modal-image" src="" alt="Zoomed Gallery Image" class="max-w-full max-h-full object-contain rounded-lg shadow-2xl">
+            
+            <!-- Close Button -->
+            <button id="close-modal-btn" class="absolute top-4 right-4 text-white text-4xl font-light hover:text-gray-300 transition duration-200 p-2 leading-none" aria-label="Close Modal" onclick="closeModal()">
+                &times;
+            </button>
+        </div>
+    </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const videoSplash = document.getElementById('video-splash');
+            const introVideo = document.getElementById('intro-video');
+            const websiteContent = document.getElementById('website-content');
+            const skipButton = document.getElementById('skip-button');
+            const loadingText = document.getElementById('loading-text');
+
+            // New references
+            const unlockButton = document.getElementById('unlock-sections-button');
+            const mainContent = document.querySelector('main'); 
+            const heroHeader = document.querySelector('#hero-header'); 
+            const videoBgPage2 = document.getElementById('video-bg-page2'); 
+            
+            let observer = null; 
+            const form = document.querySelector('#rsvp form'); // Keep even if RSVP section is missing for completeness
+            const messageElement = document.getElementById('message'); // Keep even if RSVP section is missing for completeness
+
+            // --- Function to handle the end of the splash video ---
+            const videoEndHandler = () => {
+                // Fade out splash screen
+                videoSplash.classList.add('opacity-0');
+                // Allow scrolling on the body and show website content
+                document.body.style.overflow = 'auto';
+                websiteContent.classList.remove('opacity-0', 'pointer-events-none');
+                
+                // Hide the splash screen completely after the transition
+                setTimeout(() => {
+                    videoSplash.style.display = 'none';
+                }, 1000); // 1 second transition time
+            };
+
+
+            // --- Video/Splash Screen Logic ---
+
+            introVideo.addEventListener('loadeddata', () => {
+                loadingText.style.display = 'none';
+                introVideo.play().catch(e => {
+                    // Autoplay was prevented, prompt user to start
+                    console.log("Autoplay prevented:", e);
+                    skipButton.textContent = 'Start Viewing';
+                });
+            });
+
+            introVideo.addEventListener('ended', videoEndHandler);
+
+            skipButton.addEventListener('click', () => {
+                introVideo.pause();
+                videoEndHandler();
+            });
+
+            // --- Unlock Sections Logic ---
+            unlockButton.addEventListener('click', () => {
+                // 1. Hide the hero header
+                heroHeader.classList.add('hidden');
+                // 2. Show the main content
+                mainContent.classList.remove('hidden');
+                // 3. Show the fixed background video for page 2
+                videoBgPage2.classList.remove('hidden');
+
+                // 4. Start the intersection observer for fade-up animations
+                startObserver();
+            });
+
+
+            // --- Function to define and start the observer (completed) ---
+            const startObserver = () => {
+                // Disconnect existing observer if it exists
+                if (observer) {
+                    observer.disconnect();
+                }
+
+                // Get ALL animated sections
+                const animatedSections = document.querySelectorAll('[data-animate="fade-up"]');
+                
+                observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        const target = entry.target;
+
+                        if (entry.isIntersecting) {
+                            // Logic for when the element enters the viewport: Animate In
+                            target.classList.remove('opacity-0', 'translate-y-8');
+                            
+                            // Handle staggered reveal (if needed, currently not used)
+                            if (target.id === 'schedule' && target) { 
+                                const eventCards = target.querySelectorAll('.event');
+                                eventCards.forEach((card, index) => {
+                                    // Apply a staggered delay
+                                    setTimeout(() => {
+                                        card.classList.remove('opacity-0', 'translate-y-8');
+                                    }, index * 200); 
+                                });
+                            }
+                        } else {
+                            // Logic for when the element leaves the viewport: Animate Out/Reset
+                            // Only reset if the content is visible (i.e., hero is gone)
+                            if (heroHeader.classList.contains('hidden')) { 
+                                target.classList.add('opacity-0', 'translate-y-8');
+                                
+                                // Reset staggered elements immediately (if needed)
+                                if (target.id === 'schedule' && target) { 
+                                    target.querySelectorAll('.event').forEach(card => {
+                                        card.classList.add('opacity-0', 'translate-y-8');
+                                    });
+                                }
+                            }
+                        }
+                    });
+                }, {
+                    // Options for the observer
+                    root: null, // relative to the viewport
+                    rootMargin: '0px',
+                    threshold: 0.1 // Trigger when 10% of the element is visible
+                });
+
+                // Start observing all sections
+                animatedSections.forEach(section => {
+                    observer.observe(section);
+                });
+            };
+
+            // --- Gallery Modal Logic (NEW) ---
+            const modal = document.getElementById('gallery-modal');
+            const modalImg = document.getElementById('modal-image');
+            const closeModalBtn = document.getElementById('close-modal-btn');
+
+            // Function exposed globally via window for use with onclick attributes
+            window.openModal = function(imageSrc) {
+                modalImg.src = imageSrc;
+                modal.classList.remove('hidden');
+                // Prevent body scrolling when modal is open
+                document.body.style.overflow = 'hidden'; 
+            };
+
+            // Function exposed globally via window for use with onclick attributes
+            window.closeModal = function() {
+                modal.classList.add('hidden');
+                 // Restore body scrolling when modal is closed
+                document.body.style.overflow = 'auto'; 
+            };
+
+            // Add event listener to close button (if clicking the 'x')
+            if (closeModalBtn) {
+                closeModalBtn.addEventListener('click', window.closeModal);
+            }
+
+            // The modal itself has an onclick to close when clicking the backdrop
+            if (modal) {
+                modal.addEventListener('click', (e) => {
+                    // Only close if the click target is the modal backdrop itself, not the image
+                    if (e.target === modal) {
+                        window.closeModal();
+                    }
+                });
+            }
+
+        });
+    </script>
+</body>
+</html>
