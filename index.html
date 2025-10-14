@@ -4,12 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Saly & Kimbouy's Wedding</title>
-    <!-- Load Tailwind CSS --><script src="https://cdn.tailwindcss.com"></script>
-    <!-- Load Google Fonts -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:ital,wght@1,500;1,700&display=swap" rel="stylesheet">
-    <!-- IMPORTANT: Noto Sans Khmer to ensure the body text loads reliably -->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Khmer:wght@400;600;700&display=swap" rel="stylesheet">
     
     <style>
@@ -92,32 +90,43 @@
             align-items: center;
             justify-content: center;
         }
+
+        /* 3. BUTTON ANIMATION KEYFRAMES (NEW) */
+        @keyframes pulseZoom {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05); /* Zooms in 5% */
+            }
+            100% {
+                transform: scale(1); /* Zooms back out */
+            }
+        }
+
+        .animate-zoom-pulse {
+            animation: pulseZoom 2s infinite ease-in-out; /* 2s duration, repeats forever */
+        }
     </style>
 </head>
 
-<!-- FIX 2: Prevent scrolling until the video has finished playing. --><body class="font-body text-text-dark leading-relaxed" style="overflow: hidden;">
+<body class="font-body text-text-dark leading-relaxed" style="overflow: hidden;">
 
-    <!-- 
-        VIDEO SPLASH SCREEN: 
-    --><div id="video-splash" class="fixed inset-0 z-[100] bg-black flex flex-col justify-center items-center">
-        <!-- Using your local video path: ./video/intro.mp4 --><video id="intro-video" muted playsinline preload="auto" class="w-full h-full object-cover">
+    <div id="video-splash" class="fixed inset-0 z-[100] bg-black flex flex-col justify-center items-center">
+        <video id="intro-video" muted playsinline preload="auto" class="w-full h-full object-cover">
             <source src="./video/intro.mp4" type="video/mp4">
             Your browser does not support the video tag.
         </video>
         
-        <!-- Button to skip video or to start video if autoplay is blocked --><button id="skip-button" class="absolute bottom-10 right-10 z-10 bg-white/20 backdrop-blur-sm px-6 py-2 rounded-full text-sm text-white font-semibold hover:bg-white/40 transition duration-300">
+        <button id="skip-button" class="absolute bottom-10 right-10 z-10 bg-white/20 backdrop-blur-sm px-6 py-2 rounded-full text-sm text-white font-semibold hover:bg-white/40 transition duration-300">
             Skip Intro
         </button>
-        <!-- A simple loading text/indicator --><p id="loading-text" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white font-header text-2xl italic animate-pulse">Loading...</p>
+        <p id="loading-text" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white font-header text-2xl italic animate-pulse">Loading...</p>
     </div>
 
-    <!-- 
-        WEBSITE CONTENT WRAPPER: 
-    --><div id="website-content" class="opacity-0 transition-opacity duration-1000 ease-in pointer-events-none">
+    <div id="website-content" class="opacity-0 transition-opacity duration-1000 ease-in pointer-events-none">
         
-        <!-- Hero Section: The initial "first page" -->
-         
-       <header id="hero-header" class="relative min-h-screen bg-transparent flex flex-col justify-center items-center text-center p-6 border-b border-black-100">
+        <header id="hero-header" class="relative min-h-screen bg-transparent flex flex-col justify-center items-center text-center p-6 border-b border-black-100">
                     
     <div class="absolute inset-0 z-[0] after:content-[''] after:absolute after:inset-0 after:bg-black/40"> 
         <video id="hero-background-video" autoplay loop muted playsinline class="w-full h-full object-cover">
@@ -128,7 +137,7 @@
     
     <section id="invite" class="relative z-10 py-0 max-w-xl mx-auto border-b border-gray-200 bg-black/10 backdrop-blur-sm rounded-2xl shadow-xl mb-12">
         
-        <img src="./images/Invite3.png" 
+        <img src="./images/Invite4.png" 
             style="width: 100%; height: 100%; display: block; object-fit: cover; border-radius: inherit;" 
             alt="Invitation Image">
 
@@ -150,38 +159,34 @@
             ឯកឧត្តម ម៉ក់ ហ៊ុយ
         </p>
     </div>
-
-    <div id="button-background-box"
-         class="mt-auto flex items-center justify-center w-64 h-20"
-         style="
-            /* REMOVED mb-6 to pin it closer to the bottom padding of the parent */
-            background-image: url('./images/btn_01.png');
-            background-size: contain; 
-            background-repeat: no-repeat; 
-            background-position: center;
-            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
-         ">
-        <button id="unlock-sections-button" class="cta-button inline-block bg-transparent text-white px-6 py-2 rounded-full font-semibold transition duration-300 ease-in-out hover:bg-transparent shadow-none" style="background-color: transparent !important; color: #444; padding: 0;">
-            ចុចចូលមើលព័ត៌មានលម្អិត
-        </button>
-    </div>
+            <div id="button-background-box"
+                class="mt-auto flex items-center justify-center w-4/5 max-w-sm h-16 sm:h-20 relative animate-zoom-pulse"
+                style="
+                    background-image: url('./images/btn_01.png');
+                    background-size: contain; 
+                    background-repeat: no-repeat; 
+                    background-position: center;
+                    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
+                ">
+                <button  id="unlock-sections-button" class="cta-button inline-block bg-transparent text-sm sm:text-base text-white px-6 py-2 rounded-full font-semibold transition duration-300 ease-in-out hover:bg-transparent shadow-none" background-color: transparent !important; color: #5b5b5b; padding: 0;">
+                </button>
+            </div>
 </div>
         
     </section>
 </header>
 
-        <!-- Page 2's Video Background (Fixed Position, Hidden Initially) --><div id="video-bg-page2" class="fixed inset-0 z-0 hidden"> 
-            <!-- Using your local video path: ./video/3.mp4 --><video id="background-video" autoplay loop muted playsinline class="w-full h-full object-cover">
-                <!-- IMPORTANT: Replace this source with your actual 'video.mp4' file path --><source src="./video/3.mp4" type="video/mp4">
+        <div id="video-bg-page2" class="fixed inset-0 z-0 hidden"> 
+            <video id="background-video" autoplay loop muted playsinline class="w-full h-full object-cover">
+                <source src="./video/3.mp4" type="video/mp4">
                 Your browser does not support the video tag.
             </video>
-            <!-- Overlay to darken video and improve text readability over bg-white/90 sections --><div class="absolute inset-0 bg-black opacity-30"></div>
+            <div class="absolute inset-0 bg-black opacity-30"></div>
         </div>
 
-        <!-- MAIN CONTENT AREA - HIDDEN until the button is clicked (our "second page") --><main class="p-4 sm:p-8 relative z-10 hidden">
+        <main class="p-4 sm:p-8 relative z-10 hidden">
       
-            <!-- Dinner Invitation Section -->
-             <section id="khmer-invite" class="py-12 sm:py-20 px-6 max-w-xl mx-auto border-b border-gray-200 bg-black/10 backdrop-blur-sm rounded-2xl shadow-xl mb-12 opacity-0 translate-y-8 transition-all duration-700 ease-out" data-animate="fade-up">
+            <section id="khmer-invite" class="py-12 sm:py-20 px-6 max-w-xl mx-auto border-b border-gray-200 bg-black/10 backdrop-blur-sm rounded-2xl shadow-xl mb-12 opacity-0 translate-y-8 transition-all duration-700 ease-out" data-animate="fade-up">
                 
                 <div class="text-center font-khmer leading-loose text-white">
                     <h2 class="font-khmer-script text-3xl text-white mb-4" style="font-family:'AKbalthomKhmerHand'; color: darkgoldenrod;">សិរីមង្គលអាពាហ៍ពិពាហ៍</h2>
@@ -204,7 +209,6 @@
                     <div style="font-family: Moul; line-height:2;" class="flex justify-center items-center gap-6 mb-8 text-xl font-semibold">
                         <p style="color: #eca700;"  class="w-1/3 text-right">កូនប្រុស<br>កែវ សាលី</p>
                         <div class="w-1/3 flex flex-col items-center">
-                            <!-- Using a placeholder image for the ring icon -->
                             <img src="./images/ring.png" onerror="this.onerror=null; this.src='./images/ring.png';" width="64" class="rounded-full shadow-lg">
                         </div>
                         <p style="color: #eca700;" class="w-1/3 text-left">កូនស្រី<br>ម៉ក់ គីមបួយ</p>
@@ -225,14 +229,12 @@
 
 
         
-        <!-- Program Section - Now bg-white/50 -->
-            <section id="program" class="max-w-xl mx-auto border-b border-gray-200 bg-black/10 backdrop-blur-sm rounded-2xl shadow-xl mb-12 opacity-0 translate-y-8 transition-all duration-700 ease-out" data-animate="fade-up">
+        <section id="program" class="max-w-xl mx-auto border-b border-gray-200 bg-black/10 backdrop-blur-sm rounded-2xl shadow-xl mb-12 opacity-0 translate-y-8 transition-all duration-700 ease-out" data-animate="fade-up">
                 <img src="./images/program3.png" style="width: 100%; height: 100%; display: block; object-fit: cover;">
             </section> 
             
     
-        <!-- Venue & Travel Section - Now bg-white/50 -->
-            <section id="venue" class="py-12 sm:py-20 px-6 max-w-xl mx-auto border-b border-gray-200 bg-black/10 backdrop-blur-sm rounded-2xl shadow-xl mb-12 opacity-0 translate-y-8 transition-all duration-700 ease-out" data-animate="fade-up">
+        <section id="venue" class="py-12 sm:py-20 px-6 max-w-xl mx-auto border-b border-gray-200 bg-black/10 backdrop-blur-sm rounded-2xl shadow-xl mb-12 opacity-0 translate-y-8 transition-all duration-700 ease-out" data-animate="fade-up">
                 <div class="text-center font-khmer leading-loose text-white">
                     <h2 class="font-khmer-script text-3xl text-white mb-4" style="font-family:'AKbalthomKhmerHand'; color: darkgoldenrod;">ទីតាំងកម្មវិធី</h2>
 
@@ -248,8 +250,7 @@
 
             </section>
 
-          <!-- Bank/Gift Section - NEW -->
-            <section id="bank" class="py-12 sm:py-20 px-6 max-w-xl mx-auto border-b border-gray-200 bg-black/10 backdrop-blur-sm rounded-2xl shadow-xl mb-12 opacity-0 translate-y-8 transition-all duration-700 ease-out" data-animate="fade-up">
+          <section id="bank" class="py-12 sm:py-20 px-6 max-w-xl mx-auto border-b border-gray-200 bg-black/10 backdrop-blur-sm rounded-2xl shadow-xl mb-12 opacity-0 translate-y-8 transition-all duration-700 ease-out" data-animate="fade-up">
                 <div class="flex flex-col items-center font-khmer leading-loose text-white">
                     <h2 class="font-khmer-script text-3xl text-white mb-6" style="font-family:'AKbalthomKhmerHand'; color: darkgoldenrod;">គណនេយ្យ ABA</h2>
                     
@@ -266,26 +267,15 @@
                     </div>
                     <p class="mb-6 text-xl font-medium" style="font-family:'AKbalthomKhmerLer';">សម្រាប់ ចំណង់ដៃរតាមរយៈ ធនាគារ</p>
                     
-                    <!-- <div class="flex space-x-4">
-                        <a href="./images/aba.JPG" target="_blank" class="inline-block bg-transparent text-sage px-6 py-2 rounded-full font-semibold transition duration-300 hover:bg-gray-200 shadow-md text-sm">
-                            មើលរូបភាព (View)
-                        </a>
-                        <a href="./images/aba.JPG" download="ABA_QR_Code_KeavSaly_MokKimBouy.JPG" class="inline-block bg-sage text-white px-6 py-2 rounded-full font-semibold transition duration-300 hover:bg-sage/80 shadow-md text-sm">
-                            ទាញយករូបភាព (Download)
-                        </a>
-                    </div> -->
-                </div>
+                    </div>
             </section>
 
-            <!-- Photo Gallery Section - UPDATED TO INCLUDE ONCLICK FOR MODAL -->
             <section id="gallery" class="py-12 sm:py-20 px-6 max-w-4xl mx-auto border-b border-gray-200 bg-black/10 backdrop-blur-sm rounded-2xl shadow-xl mb-12 opacity-0 translate-y-8 transition-all duration-700 ease-out" data-animate="fade-up">
                 <div class="text-center font-khmer leading-loose text-white">
                     <h2 class="font-khmer-script text-3xl text-white mb-6" style="font-family:'AKbalthomKhmerHand'; color: darkgoldenrod;">រូបថតអនុស្សាវរីយ៍</h2>
                     <p class="mb-8 text-xl font-medium" style="font-family:'AKbalthomKhmerLer';">ដំណើរកម្សាន្តរបស់យើង</p>
                     
-                    <!-- Photo Grid - Responsive for mobile (2 columns) and desktop (3 columns) -->
                     <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                        <!-- Placeholder Images - ADDED onclick="openModal(this.src)" -->
                         <img src="./images/us_01.png" alt="Gallery Photo 1" class="w-full h-auto object-cover rounded-xl shadow-lg transform hover:scale-105 transition duration-300 cursor-pointer" onclick="openModal(this.src)">
                         <img src="./images/us_01.png" alt="Gallery Photo 2" class="w-full h-auto object-cover rounded-xl shadow-lg transform hover:scale-105 transition duration-300 cursor-pointer" onclick="openModal(this.src)">
                         <img src="./images/us_01.png" alt="Gallery Photo 3" class="w-full h-auto object-cover rounded-xl shadow-lg transform hover:scale-105 transition duration-300 cursor-pointer" onclick="openModal(this.src)">
@@ -294,7 +284,6 @@
                         <img src="./images/us_01.png" alt="Gallery Photo 6" class="w-full h-auto object-cover rounded-xl shadow-lg transform hover:scale-105 transition duration-300 cursor-pointer" onclick="openModal(this.src)">
                     </div>
 
-                    <!-- Button to link to the top of the gallery for "scroll mores" -->
                     <a href="#gallery" class="inline-block mt-8 bg-sage text-white px-8 py-3 rounded-full font-semibold transition duration-300 hover:bg-sage/80 shadow-md">
                         មើលរូបភាពទាំងអស់ (View All Photos)
                     </a>
@@ -306,15 +295,12 @@
 
     </div>
     
-    <!-- Gallery Modal (Lightbox) -->
     <div id="gallery-modal" class="fixed inset-0 bg-black bg-opacity-90 z-[100] hidden flex items-center justify-center p-4" onclick="closeModal()">
         <div class="modal-content-wrapper relative">
-            <!-- Modal Image -->
             <img id="modal-image" src="" alt="Zoomed Gallery Image" class="max-w-full max-h-full object-contain rounded-lg shadow-2xl">
             
-            <!-- Close Button -->
             <button id="close-modal-btn" class="absolute top-4 right-4 text-white text-4xl font-light hover:text-gray-300 transition duration-200 p-2 leading-none" aria-label="Close Modal" onclick="closeModal()">
-                &times;
+                ×
             </button>
         </div>
     </div>
