@@ -117,23 +117,57 @@
         
         <!-- Hero Section: The initial "first page" -->
          
-        <!-- Hero Section: Static Card over Video Background -->
-        <header id="hero-header" class="relative min-h-screen bg-transparent flex flex-col justify-center items-center text-center p-6 border-b border-gray-100">
+       <header id="hero-header" class="relative min-h-screen bg-transparent flex flex-col justify-center items-center text-center p-6 border-b border-black-100">
                     
-            <div class="absolute inset-0 z-[0] after:content-[''] after:absolute after:inset-0 after:bg-black/10"> 
-                <video id="hero-background-video" autoplay loop muted playsinline class="w-full h-full object-cover">
-                    <source src="./video/2.mp4" type="video/mp4">
-                    Your browser does not support the video tag.
-                </video>
-            </div>
-            <section id="invite" class="relative z-10 py-0 max-w-xl mx-auto border-b border-gray-200 bg-black/10 backdrop-blur-sm rounded-2xl shadow-xl mb-12">
-                
-                <img src="./images/Invite2.png" 
-                    style="width: 100%; height: 100%; display: block; object-fit: cover; border-radius: inherit;" 
-                    alt="Program Image">
+    <div class="absolute inset-0 z-[0] after:content-[''] after:absolute after:inset-0 after:bg-black/40"> 
+        <video id="hero-background-video" autoplay loop muted playsinline class="w-full h-full object-cover">
+            <source src="./video/2.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+    
+    <section id="invite" class="relative z-10 py-0 max-w-xl mx-auto border-b border-gray-200 bg-black/10 backdrop-blur-sm rounded-2xl shadow-xl mb-12">
+        
+        <img src="./images/Invite3.png" 
+            style="width: 100%; height: 100%; display: block; object-fit: cover; border-radius: inherit;" 
+            alt="Invitation Image">
 
-            </section>
-    </header>
+        <div class="absolute inset-0 flex flex-col items-center p-6 text-center">
+        
+    <div id="names-background-box" 
+        class="absolute top-1/2 left-1/2 h-24 sm:h-24 w-full mx-auto flex items-center justify-center text-center"
+        style="
+            background-image: url('./images/btn_namecard.png'); 
+            background-size: contain; 
+            background-repeat: no-repeat; 
+            background-position: center;
+            transform: translate(-50%, -50%); 
+            margin: 0;
+            max-width: 80%;
+        ">
+        <p style="font-family:'Moul'; color: #efc455; size: 16px; margin-top: 30px;" class="text-1xl sm:text-1xl font-bold p-2">
+            ឯកឧត្តម ម៉ក់ ហ៊ុយ ព្រមទាំង លោកជំទាវ
+        </p>
+    </div>
+
+    <div id="button-background-box"
+         class="mt-auto flex items-center justify-center w-64 h-20"
+         style="
+            /* REMOVED mb-6 to pin it closer to the bottom padding of the parent */
+            background-image: url('./images/btn_01.png');
+            background-size: contain; 
+            background-repeat: no-repeat; 
+            background-position: center;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
+         ">
+        <button id="unlock-sections-button" class="cta-button inline-block bg-transparent text-white px-6 py-2 rounded-full font-semibold transition duration-300 ease-in-out hover:bg-transparent shadow-none" style="background-color: transparent !important; color: #444; padding: 0;">
+            ចុចចូលមើលព័ត៌មានលម្អិត
+        </button>
+    </div>
+</div>
+        
+    </section>
+</header>
 
         <!-- Page 2's Video Background (Fixed Position, Hidden Initially) --><div id="video-bg-page2" class="fixed inset-0 z-0 hidden"> 
             <!-- Using your local video path: ./video/3.mp4 --><video id="background-video" autoplay loop muted playsinline class="w-full h-full object-cover">
