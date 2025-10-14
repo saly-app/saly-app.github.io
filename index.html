@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jane & John's Wedding</title>
+    <title>Saly & Kimbouy's Wedding</title>
     <!-- Load Tailwind CSS --><script src="https://cdn.tailwindcss.com"></script>
     <!-- Load Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -119,79 +119,21 @@
          
         <!-- Hero Section: Static Card over Video Background -->
         <header id="hero-header" class="relative min-h-screen bg-transparent flex flex-col justify-center items-center text-center p-6 border-b border-gray-100">
-            
-            <!-- VIDEO BACKGROUND CODE UPDATED FOR LESS OVERLAY (bg-black/20) -->
-            <div class="absolute inset-0 z-[0] after:content-[''] after:absolute after:inset-0 after:bg-black/20"> 
+                    
+            <div class="absolute inset-0 z-[0] after:content-[''] after:absolute after:inset-0 after:bg-black/10"> 
                 <video id="hero-background-video" autoplay loop muted playsinline class="w-full h-full object-cover">
-                    <!-- Using your local video path: ./video/2.mp4 --><source src="./video/2.mp4" type="video/mp4">
+                    <source src="./video/2.mp4" type="video/mp4">
                     Your browser does not support the video tag.
                 </video>
             </div>
-            <!-- END VIDEO BACKGROUND -->
-
-            <div class="hero-content relative z-10 text-text-dark max-w-sm sm:max-w-md mx-auto py-8 px-4 sm:p-10 border border-gray-20 shadow-2xl rounded-2xl bg-white/20 backdrop-blur-sm">
+            <section id="invite" class="relative z-10 py-0 max-w-xl mx-auto border-b border-gray-200 bg-black/10 backdrop-blur-sm rounded-2xl shadow-xl mb-12">
                 
-                <!-- Monogram/Logo -->
-                <div class="mb-8">
-                    <!-- Placeholder for the gold S&B Monogram. Replace with your actual image. -->
-                    <img src="./images/our_icon.png" alt="Saly & Kimbouy Monogram" 
-                         onerror="this.onerror=null;this.src='https://placehold.co/150x150/fdfdfa/C0A278?text=S%26B+Logo';"
-                         class="w-40 h-40 mx-auto mb-2">
-                    <!-- <p class="font-header text-xl tracking-widest text-text-dark uppercase font-light">Saly & Kimbouy</p> -->
-                </div>
+                <img src="./images/Invite2.png" 
+                    style="width: 100%; height: 100%; display: block; object-fit: cover; border-radius: inherit;" 
+                    alt="Program Image">
 
-                <!-- សូមគោរពអញ្ជើញ -->
-                <p class="text-xl sm:text-2xl font-body font-normal tracking-wider text-sage mb-4" style="font-family:'AKbalthomKhmerHand'; color: #444;">សូមគោរពអញ្ជើញ</p>
-                
-                <!-- Decorative Separator (Mimicking the gold flourish) -->
-                <div class="flex items-center justify-center my-4">
-                    <img src="./images/ornament_line.png" 
-                         onerror="this.onerror=null;this.src='https://placehold.co/150x2/C0A278/C0A278?text=';"
-                         class="w-32 h-auto opacity-70">
-                </div>
-                
-                <!-- Name Box (Using btn_01.png as the decorative frame) -->
-
-                <div id="names-background-box" 
-                     class="h-24 sm:h-24 w-full mx-auto flex items-center justify-center my-6"
-                     style="background-image: url('./images/btn_01.png'); background-size: contain; background-repeat: no-repeat; background-position: center;">
-                    <!-- Guest Name (Placeholder) -->
-                    <p style="font-family:'AKbalthomKhmerLer'; color: #4b4b4b; size: 16px;" class="text-1xl sm:text-1xl font-bold p-2">
-                        ឯកឧត្តម ម៉ក់ ហ៊ុយ
-                    </p>
-                </div>
-
-                <!-- Invitation Phrase -->
-                <p class="date-location text-base sm:text-lg font-body font-light text-text-dark mb-8" style="font-family:'AKbalthomKhmerLer';">
-                    ចូលរួមជាភ្ញៀវកិត្តិយស ដល់គូរស្វាមី ភរិយាថ្មីក្នុងថ្ងៃដ៍ពិសេសនេះ
-                </p>
-                
-                <!-- Date Block (Styled to match the image) -->
-                <div class="border-t border-b border-gray-300 py-4 mb-8">
-                     <div class="flex justify-center items-center text-lg sm:text-xl text-text-dark font-body font-medium" style="font-family:'AKbalthomKhmerLer';">
-                        <p class="pr-4 border-r border-gray-300">ថ្ងៃអាទិត្យ</p>
-                        <!-- Central number 10, using image's style -->
-                        <div class="px-4 text-4xl font-header italic font-extrabold text-gold-accent">
-                            ១១
-                        </div>
-                        <p class="pl-4 border-l border-gray-300">មករា, ឆ្នាំ២០២៦</p>
-                    </div>
-                </div>
-
-                <!-- Time & Location -->
-                <p class="text-lg font-body text-text-dark mb-2" style="font-family:'AKbalthomKhmerLer';">
-                    ចាប់ផ្ដើមម៉ោង ៥:០០ នាទីល្ងាច
-                </p>
-                <p class="text-sm font-body text-text-dark mb-6 tracking-widest" style="font-family:'Noto Sans Khmer';">
-                    RECEPTION TO FOLLOW
-                </p>
-
-                <!-- Button to unlock -->
-                <button id="unlock-sections-button" class="cta-button inline-block bg-sage text-white px-10 py-3 rounded-full font-semibold transition duration-300 ease-in-out hover:bg-sage/80 shadow-lg hover:shadow-xl">
-                    ចុចចូលមើលព័ត៌មានលម្អិត
-                </button>
-            </div>
-        </header>
+            </section>
+    </header>
 
         <!-- Page 2's Video Background (Fixed Position, Hidden Initially) --><div id="video-bg-page2" class="fixed inset-0 z-0 hidden"> 
             <!-- Using your local video path: ./video/3.mp4 --><video id="background-video" autoplay loop muted playsinline class="w-full h-full object-cover">
