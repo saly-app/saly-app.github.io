@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jane & John's Wedding</title>
+    <!-- Load Tailwind CSS --><script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:ital,wght@1,500;1,700&display=swap" rel="stylesheet">
+    <!-- Optional: Load Khmer Font if necessary -->
+    <!-- <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Khmer:wght@400;600;700&display=swap" rel="stylesheet"> -->
+    
+    <style>
+        /* Configure custom fonts and colors for Tailwind */
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'sage': '#6a8273', /* Primary Color */
+                        'off-white': '#fdfdfa', /* Background Color (used for transparent overlays) */
+                        'text-dark': '#333',
+                    },
+                    fontFamily: {
+                        'header': ['"Playfair Display"', 'serif'],
+                        'body': ['Montserrat', 'sans-serif'],
+                        /* Add Khmer font support */
+                        'khmer': ['"Noto Sans Khmer"', 'sans-serif', 'system-ui'],
+                    },
+                },
+            }
+        }
+        /* Custom styles to ensure smooth scrolling and responsive hero background */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            /* Ensure the body stays scrollable after video plays, but initially disabled by style="overflow: hidden;" */
+        }
+
+        /* Custom style for the large Khmer text */
+        .khmer-text {
+            font-family: 'khmer';
+            line-height: 1.8; /* Increased line height for better readability of Khmer script */
+        }
+    </style>
+</head>
+
+<!-- FIX 2: Prevent scrolling until the video has finished playing. --><body class="font-body text-text-dark leading-relaxed" style="overflow: hidden;">
+
+    <!-- 
+        VIDEO SPLASH SCREEN: 
+        This is fixed and covers the entire viewport. It is removed/hidden once the video ends. 
+    --><div id="video-splash" class="fixed inset-0 z-[100] bg-black flex flex-col justify-center items-center">
+        <!-- Using your local video path: ./video/intro.mp4 --><video id="intro-video" muted playsinline preload="auto" class="w-full h-full object-cover">
+            <source src="./video/intro.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        
+        <!-- Button to skip video or to start video if autoplay is blocked --><button id="skip-button" class="absolute bottom-10 right-10 z-10 bg-white/20 backdrop-blur-sm px-6 py-2 rounded-full text-sm text-white font-semibold hover:bg-white/40 transition duration-300">
+            Skip Intro
+        </button>
+        <!-- A simple loading text/indicator --><p id="loading-text" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white font-header text-2xl italic animate-pulse">Loading...</p>
+    </div>
+
+    <!-- 
+        WEBSITE CONTENT WRAPPER: 
+        This is initially hidden using 'opacity-0' and will fade in after the video.
+    --><div id="website-content" class="opacity-0 transition-opacity duration-1000 ease-in pointer-events-none">
+        
+        <!-- Hero Section: The initial "first page" - Now uses a video background --><header id="hero-header" class="relative min-h-screen bg-transparent flex flex-col justify-center items-center text-center p-6">
+            
+            <!-- NEW: Video Background for Page 1 --><div class="absolute inset-0 z-[0]"> 
+                <video id="hero-background-video" autoplay loop muted playsinline class="w-full h-full object-cover">
+                    <!-- Using your local video path: ./video/2.mp4 --><source src="./video/2.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            
+            <!-- Overlay: z-[1] ensures the overlay is above the video but below the text (z-10) --><div class="absolute inset-0 bg-black opacity-40 z-[1]"></div>
+            
+            <div class="hero-content relative z-10 text-white">
+                <p class="text-xl sm:text-2xl font-medium tracking-wider mb-2">We're getting married!</p>
+                <h1 class="font-header text-5xl sm:text-7xl md:text-8xl mt-2 mb-4 font-light italic">Jane & John</h1>
+                <p class="date-location text-lg sm:text-xl font-light mb-8 sm:mb-12">October 25, 2026 • Palm Springs, CA</p>
+                <!-- Changed to a button and updated text to prompt unlock --><button id="unlock-sections-button" class="cta-button inline-block bg-sage text-white px-10 py-3 rounded-full font-semibold transition duration-300 ease-in-out hover:bg-sage/80 shadow-lg hover:shadow-xl">
+                    View Full Details & RSVP
+                </button>
+            </div>
+        </header>
+
+        <!-- Page 2's Video Background (Fixed Position, Hidden Initially) --><div id="video-bg-page2" class="fixed inset-0 z-0 hidden"> 
+            <!-- Using your local video path: ./video/3.mp4 --><video id="background-video" autoplay loop muted playsinline class="w-full h-full object-cover">
+                <!-- IMPORTANT: Replace this source with your actual 'video.mp4' file path --><source src="./video/3.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <!-- Overlay to darken video and improve text readability over bg-white/90 sections --><div class="absolute inset-0 bg-black opacity-30"></div>
+        </div>
+
+        <!-- MAIN CONTENT AREA - HIDDEN until the button is clicked (our "second page") --><main class="p-4 sm:p-8 relative z-10 hidden">
+      
+            <!-- Schedule Section --><section id="schedule" class="py-12 sm:py-20 px-6 max-w-xl mx-auto border-b border-gray-200 bg-white/50 backdrop-blur-sm rounded-2xl shadow-xl mb-12 opacity-0 translate-y-8 transition-all duration-700 ease-out" data-animate="fade-up">
+                <h2 class="font-header text-3xl sm:text-4xl text-sage text-center mb-8">Schedule of Events</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-4 text-center">
+                    <!-- Events are initialized hidden for staggered animation -->
+                    <div class="event p-4 rounded-lg bg-white/80 shadow-sm transition hover:shadow-md opacity-0 translate-y-8 transition-all duration-700 ease-out">
+                        <h3 class="font-semibold text-lg text-sage mb-1">The Ceremony</h3>
+                        <p class="text-gray-600 font-medium">4:00 PM</p>
+                        <p class="text-gray-500 text-sm">The Grand Garden</p>
+                    </div>
+                    
+                    <div class="event p-4 rounded-lg bg-white/80 shadow-sm transition hover:shadow-md opacity-0 translate-y-8 transition-all duration-700 ease-out">
+                        <h3 class="font-semibold text-lg text-sage mb-1">Cocktail Hour</h3>
+                        <p class="text-gray-600 font-medium">5:00 PM</p>
+                        <p class="text-gray-500 text-sm">Terrace Patio</p>
+                    </div>
+                    
+                    <div class="event p-4 rounded-lg bg-white/80 shadow-sm transition hover:shadow-md opacity-0 translate-y-8 transition-all duration-700 ease-out">
+                        <h3 class="font-semibold text-lg text-sage mb-1">Reception</h3>
+                        <p class="text-gray-600 font-medium">6:30 PM</p>
+                        <p class="text-gray-500 text-sm">Main Ballroom</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- NEW: Khmer Invitation Section --><section id="khmer-invite" class="py-12 sm:py-20 px-6 max-w-xl mx-auto border-b border-gray-200 bg-black/20 backdrop-blur-sm rounded-2xl shadow-xl mb-12 opacity-0 translate-y-8 transition-all duration-700 ease-out" data-animate="fade-up">
+                
+                <div class="text-center khmer-text text-text-white">
+                    <h2 class="font-bold text-3xl text-white mb-4">សិរីមង្គលអាពាហ៍ពិពាហ៍</h2>
+                    
+                    <div class="grid grid-cols-2 gap-4 text-xl mb-6">
+                        <p class="text-right">លោកស្រី ឡុង សារឿន</p><p class="text-left">លោក កែវ សំណាង</p>
+                        <p class="text-right">លោកស្រី ជា សារី</p><p class="text-left">លោកស្រី សាន សារី</p>
+                    </div>
+                    
+                    <p class="font-medium text-xl mb-6">មានកិត្តិយសសូមគោរពអញ្ជើញ</p>
+                    
+                    <div class="text-lg mb-8">
+                        <p>សម្ដេច ព្រះរាជ ឯកឧត្តម លោកឧកញ៉ា លោកជំទាវ លោក</p>
+                        <p>លោកស្រី អ្នកនាង កញ្ញា និងប្រិយមិត្តជាទីស្រលាញ់ជញ្ជើញចូលរួម</p>
+                        <p>ពិសាភោជនាហារ</p>
+                        <p>និងជាកិត្តិយសដើម្បីប្រសិទ្ធិពរជ័យ សិរីសួស្ដី ជ័យមង្គល</p>
+                        <p>ក្នុងពិធីអាពាហ៍ពិពាហ៍ កូនប្រុស-កូនស្រី របស់យើងខ្ញុំ</p>
+                    </div>
+
+                    <div class="flex justify-center items-center gap-6 mb-8 text-xl font-semibold">
+                        <p class="w-1/3 text-right">កូនប្រុស<br>ញឹម មករា</p>
+                        <div class="w-1/3 flex flex-col items-center">
+                            <!-- SVG Wedding Rings Icon -->
+                            <svg class="w-12 h-12 text-sage mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4m16 0c0 4.418-3.582 8-8 8s-8-3.582-8-8 3.582-8 8-8 8 3.582 8 8zm-8 0c0 4.418-3.582 8-8 8s-8-3.582-8-8 3.582-8 8-8 8 3.582 8 8z"></path></svg>
+                            <span class="text-red-500 text-4xl">♡</span>
+                        </div>
+                        <p class="w-1/3 text-left">កូនស្រី<br>កែវ កញ្ញាណិត</p>
+                    </div>
+                    
+                    <div class="text-lg text-gray-700">
+                        <p class="font-semibold mb-2">នៅភោជនីយដ្ឋានចាស់ស្រុក</p>
+                        <p>ថ្ងៃសុក្រ ៤ រោច ខែអស្សុជ ឆ្នាំជូត ទោស័ក ព.ស ២៥៦៤</p>
+                        <p>ត្រូវនឹងថ្ងៃទី ០៩ ខែតុលា ឆ្នាំ ២០២០</p>
+                        <p>ម៉ោង ៦:០០នាទីល្ងាច</p>
+                    </div>
+                    
+                    <p class="font-bold text-lg mt-8 text-sage">សូមអញ្ជើញជាភ្ញៀវកិត្តិយស</p>
+                </div>
+
+            </section>
+
+
+            <!-- Venue & Travel Section - Now bg-white/50 --><section id="venue" class="py-12 sm:py-20 px-6 max-w-xl mx-auto border-b border-gray-200 bg-white/50 backdrop-blur-sm rounded-2xl shadow-xl mb-12 opacity-0 translate-y-8 transition-all duration-700 ease-out" data-animate="fade-up">
+                <h2 class="font-header text-3xl sm:text-4xl text-sage text-center mb-6">Venue & Travel</h2>
+                
+                <p class="text-gray-700 mb-4">
+                    <strong class="font-semibold">The Parker Hotel</strong><br>
+                    123 Desert Road<br>
+                    Palm Springs, CA 92264
+                </p>
+                
+                <a href="https://maps.google.com/?q=123+Desert+Road,Palm+Springs,CA" target="_blank" class="link-button inline-block mt-4 text-sage border-2 border-sage px-6 py-2 rounded-full font-semibold transition duration-300 hover:bg-sage hover:text-white">
+                    Get Directions
+                </a>
+            </section>
+
+            <!-- RSVP Section - Now bg-white/50 --><section id="rsvp" class="py-12 sm:py-20 px-6 max-w-xl mx-auto text-center bg-white/50 backdrop-blur-sm rounded-2xl shadow-xl mb-12 opacity-0 translate-y-8 transition-all duration-700 ease-out" data-animate="fade-up">
+                <h2 class="font-header text-3xl sm:text-4xl text-sage text-center mb-6">RSVP</h2>
+                
+                <p class="text-gray-600 mb-6">Please let us know if you can make it by September 1st.</p>
+                
+                <form class="flex flex-col gap-4 max-w-sm mx-auto">
+                    <input 
+                        type="text" 
+                        name="name" 
+                        placeholder="Your Full Name(s)" 
+                        required 
+                        class="w-full p-3 border border-gray-300 rounded-xl focus:ring-sage focus:border-sage transition"
+                    >
+                    <select 
+                        name="attending" 
+                        required 
+                        class="w-full p-3 border border-gray-300 rounded-xl bg-white appearance-none focus:ring-sage focus:border-sage transition"
+                    >
+                        <option value="" disabled selected>Will you be attending?</option>
+                        <option value="yes">Joyfully Accept</option>
+                        <option value="no">Regretfully Decline</option>
+                    </select>
+                    
+                    <button 
+                        type="submit" 
+                        class="cta-button w-full mt-4 bg-sage text-white px-8 py-3 rounded-full font-semibold transition duration-300 hover:bg-sage-dark shadow-md"
+                    >
+                        Submit RSVP
+                    </button>
+                </form>
+                <!-- Add a simple success/error message placeholder --><p id="message" class="mt-4 text-sm font-semibold"></p>
+            </section>
+        </main>
+
+        <!-- Footer --><footer class="text-center p-8 bg-black/50 text-white text-sm mt-8 relative z-10">
+            <p>Made with ❤️ by Jane & John</p>
+            <p class="mt-1">&copy; 2026. All rights reserved.</p>
+        </footer>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const videoSplash = document.getElementById('video-splash');
+            const introVideo = document.getElementById('intro-video');
+            const websiteContent = document.getElementById('website-content');
+            const skipButton = document.getElementById('skip-button');
+            const loadingText = document.getElementById('loading-text');
+
+            const form = document.querySelector('#rsvp form');
+            const messageElement = document.getElementById('message');
+            
+            // New references
+            const unlockButton = document.getElementById('unlock-sections-button');
+            const mainContent = document.querySelector('main'); 
+            const heroHeader = document.querySelector('#hero-header'); 
+            const videoBgPage2 = document.getElementById('video-bg-page2'); 
+            
+            let observer = null; 
+
+            // --- Function to define and start the observer ---
+            const startObserver = () => {
+                // Disconnect existing observer if it exists
+                if (observer) {
+                    observer.disconnect();
+                }
+
+                // Get ALL animated sections
+                const animatedSections = document.querySelectorAll('[data-animate="fade-up"]');
+                
+                observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        const target = entry.target;
+
+                        if (entry.isIntersecting) {
+                            // Logic for when the element enters the viewport: Animate In
+                            target.classList.remove('opacity-0', 'translate-y-8');
+                            
+                            // Handle staggered reveal for the Schedule events
+                            if (target.id === 'schedule' && target) { 
+                                const eventCards = target.querySelectorAll('.event');
+                                eventCards.forEach((card, index) => {
+                                    // Apply a staggered delay
+                                    setTimeout(() => {
+                                        card.classList.remove('opacity-0', 'translate-y-8');
+                                    }, index * 200); 
+                                });
+                            }
+                        } else {
+                            // Logic for when the element leaves the viewport: Animate Out/Reset
+                            // Only reset if the content is visible (i.e., hero is gone)
+                            if (heroHeader.classList.contains('hidden')) { 
+                                target.classList.add('opacity-0', 'translate-y-8');
+                                
+                                // Reset staggered elements immediately
+                                if (target.id === 'schedule' && target) { 
+                                    target.querySelectorAll('.event').forEach(card => {
+                                        card.classList.add('opacity-0', 'translate-y-8');
+                                    });
+                                }
+                            }
+                        }
+                    });
+                }, {
+                    threshold: 0.1 
+                });
+
+                // Start observing all currently loaded animated elements
+                animatedSections.forEach(element => {
+                    observer.observe(element);
+                });
+            };
+
+            // --- Function to transition to website content (after video splash) ---
+            const showWebsite = () => {
+                // 1. Show main content wrapper (removes opacity-0 and pointer-events-none)
+                websiteContent.classList.remove('opacity-0', 'pointer-events-none');
+                
+                // 2. Hide video splash screen (fade out and remove completely)
+                videoSplash.classList.add('opacity-0', 'transition-opacity', 'duration-500');
+
+                // 3. Wait for fade-out, then remove splash screen from flow
+                setTimeout(() => {
+                    videoSplash.style.display = 'none';
+                    // Ensure body is scrollable again
+                    document.body.style.overflow = 'auto'; 
+                    // 4. Start observer (will only observe existing content, which is currently none)
+                    startObserver();
+                }, 500); 
+            };
+
+            // --- Content Unlock Logic (The page transition) ---
+            const unlockAndScrollSections = (e) => {
+                e.preventDefault();
+
+                // Check if the main content is currently hidden
+                if (mainContent.classList.contains('hidden')) { 
+                    
+                    // 1. SHOW THE VIDEO BACKGROUND (Page 2's new background)
+                    videoBgPage2.classList.remove('hidden'); 
+                    
+                    // 2. HIDE THE HERO SECTION (FIRST PAGE)
+                    heroHeader.classList.add('hidden');
+                    
+                    // 3. Unlock the entire main content area (SECOND PAGE)
+                    mainContent.classList.remove('hidden');
+                    
+                    // 4. Re-start the observer to trigger fade-up animations on the newly visible sections
+                    startObserver();
+
+                    // 5. Scroll the user to the absolute top of the page (new beginning)
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+                    // 6. Update the button state
+                    unlockButton.textContent = 'Details Unlocked';
+                    unlockButton.classList.add('opacity-50', 'cursor-default');
+                    unlockButton.disabled = true;
+                }
+            };
+            
+            // Attach the unlock handler to the hero button
+            if (unlockButton) {
+                unlockButton.addEventListener('click', unlockAndScrollSections);
+            }
+            
+            // --- Video Logic (Remains the same) ---
+            
+            const tryPlayVideo = () => {
+                loadingText.style.display = 'none'; 
+                introVideo.play().catch(error => {
+                    console.warn("Autoplay was blocked. User interaction required.");
+                    skipButton.textContent = "Start Experience";
+                    skipButton.style.display = 'block'; 
+                });
+            };
+
+            introVideo.addEventListener('ended', showWebsite);
+
+            skipButton.addEventListener('click', () => {
+                introVideo.muted = false; 
+                
+                if (introVideo.paused) {
+                    introVideo.play();
+                    skipButton.textContent = "Skip Intro";
+                } else {
+                    introVideo.pause();
+                    showWebsite();
+                }
+            });
+            
+            introVideo.addEventListener('canplaythrough', tryPlayVideo);
+
+            skipButton.style.display = 'none';
+
+            tryPlayVideo();
+            
+            // --- RSVP Logic (Static Demo - Remains the same) ---
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const name = this.elements.name.value;
+                const attending = this.elements.attending.value;
+
+                if (attending === 'yes') {
+                    messageElement.textContent = `Thank you, ${name}! We can't wait to celebrate with you.`;
+                    messageElement.className = 'mt-4 text-sm font-semibold text-sage';
+                } else if (attending === 'no') {
+                    messageElement.textContent = `Thank you, ${name}. We're sad you can't make it and appreciate you letting us know.`;
+                    messageElement.className = 'mt-4 text-sm font-semibold text-red-500';
+                } else {
+                    messageElement.textContent = 'Please select an option.';
+                    messageElement.className = 'mt-4 text-sm font-semibold text-yellow-600';
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
