@@ -59,7 +59,7 @@
         }
         
         body {
-            /* Ensure the body stays scrollable after video plays, but initially disabled by style="overflow: hidden;" */
+            /* Ensure the body stays scrollable after content reveal */
         }
 
 
@@ -110,9 +110,9 @@
     </style>
 </head>
 
-<body class="font-body text-text-dark leading-relaxed" style="overflow: hidden;">
-
-    <div id="video-splash" class="fixed inset-0 z-[100] bg-black flex flex-col justify-center items-center">
+<body class="font-body text-text-dark leading-relaxed">
+    
+    <div id="video-splash" class="fixed inset-0 z-[100] bg-black flex flex-col justify-center items-center opacity-0 transition-opacity duration-1000 hidden">
         <video id="intro-video" muted playsinline preload="auto" class="w-full h-full object-cover">
             <source src="./video/intro.mp4" type="video/mp4">
             Your browser does not support the video tag.
@@ -124,61 +124,61 @@
         <p id="loading-text" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white font-header text-2xl italic animate-pulse">Loading...</p>
     </div>
 
-    <div id="website-content" class="opacity-0 transition-opacity duration-1000 ease-in pointer-events-none">
+    <div id="website-content" class="transition-opacity duration-1000 ease-in">
         
         <header id="hero-header" class="relative min-h-screen bg-transparent flex flex-col justify-center items-center text-center p-6 border-b border-black-100">
                     
-    <div class="absolute inset-0 z-[0] after:content-[''] after:absolute after:inset-0 after:bg-black/0"> 
-        <video id="hero-background-video" autoplay loop muted playsinline class="w-full h-full object-cover">
-            <source src="./video/bg_vdo_04.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
-    </div>
-    
-    <section id="invite" class="relative z-10 py-0 max-w-xl mx-auto mb-12">
-        
-        <img src="./images/Invite5.png" 
-            style="width: 100%; height: 100%; display: block; object-fit: cover; border-radius: inherit;" 
-            alt="Invitation Image">
-
-        <div class="absolute inset-0 flex flex-col items-center p-6 text-center">
-        
-    <div id="names-background-box" 
-        class="absolute top-1/2 left-1/2 h-24 sm:h-24 w-full mx-auto flex items-center justify-center text-center"
-        style="
-            background-image: url('./images/btn_namecard.png'); 
-            background-size: contain; 
-            background-repeat: no-repeat; 
-            background-position: center;
-            transform: translate(-50%, -50%); 
-            margin: 0;
-            max-width: 80%;
-        ">
-
-        <p style="font-family:'Moul'; color: #efc455; size: 10px; margin-top: 30px;">
-            ឯកឧត្តម ម៉ក់ ហ៊ុយ
-        </p>
-    </div>
-            <div id="button-background-box"
-                class="mt-auto flex items-center justify-center w-4/5 max-w-sm h-16 sm:h-20 relative animate-zoom-pulse"
-                style="
-                    background-image: url('./images/btn_open.png');
-                    background-size: contain; 
-                    background-repeat: no-repeat; 
-                    background-position: center;
-                    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
-                ">
-                <button  id="unlock-sections-button" class="cta-button inline-block bg-transparent text-sm sm:text-base text-white px-6 py-2 rounded-full font-semibold transition duration-300 ease-in-out hover:bg-transparent shadow-none" background-color: transparent !important; color: #5b5b5b; padding: 0;">
-                </button>
+            <div class="absolute inset-0 z-[0] after:content-[''] after:absolute after:inset-0 after:bg-black/0"> 
+                <video id="hero-background-video" autoplay loop muted playsinline class="w-full h-full object-cover">
+                    <source src="./video/bg_vdo_04.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
             </div>
-</div>
-        
-    </section>
-</header>
+            
+            <section id="invite" class="relative z-10 py-0 max-w-xl mx-auto mb-12">
+                
+                <img src="./images/Invite_update_2.png" 
+                    style="width: 100%; height: 100%; display: block; object-fit: cover; border-radius: inherit;" 
+                    alt="Invitation Image">
+
+                <div class="absolute inset-0 flex flex-col items-center p-6 text-center">
+                
+                    <div id="names-background-box" 
+                        class="absolute top-1/2 left-1/2 h-24 sm:h-24 w-full mx-auto flex items-center justify-center text-center"
+                        style="
+                            background-image: url('./images/btn_namecard.png'); 
+                            background-size: contain; 
+                            background-repeat: no-repeat; 
+                            background-position: center;
+                            transform: translate(-50%, -50%); 
+                            margin: 0;
+                            max-width: 80%;
+                        ">
+
+                        <p id="tag_name_list" style="font-family:'Moul'; color: #efc455; size: 10px; margin-top: 30px;">
+                            កំពុងផ្ទុក...
+                        </p>
+                    </div>
+                    <div id="button-background-box"
+                        class="mt-auto flex items-center justify-center w-4/5 max-w-sm h-16 sm:h-20 relative animate-zoom-pulse"
+                        style="
+                            background-image: url('./images/btn_open.png');
+                            background-size: contain; 
+                            background-repeat: no-repeat; 
+                            background-position: center;
+                            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
+                        ">
+                        <button  id="unlock-sections-button" class="cta-button inline-block bg-transparent text-sm sm:text-base text-white px-6 py-2 rounded-full font-semibold transition duration-300 ease-in-out hover:bg-transparent shadow-none" background-color: transparent !important; color: #5b5b5b; padding: 0;">
+                        </button>
+                    </div>
+                </div>
+                
+            </section>
+        </header>
 
         <div id="video-bg-page2" class="fixed inset-0 z-0 hidden"> 
             <video id="background-video" autoplay loop muted playsinline class="w-full h-full object-cover">
-                <source src="./video/bg_vdo_01.mp4" type="video/mp4">
+                <source src="./video/3.mp4" type="video/mp4">
                 Your browser does not support the video tag.
             </video>
             <div class="absolute inset-0 bg-black opacity-30"></div>
@@ -196,7 +196,7 @@
                     <div id="button-background-box2"
                         class="flex items-center justify-center w-4/5 max-w-sm h-16 sm:h-20 relative animate-zoom-pulse"
                         style="
-                            background-image: url('./images/btn_02.png');
+                            background-image: url('./images/btn_save.png');
                             background-size: contain; 
                             background-repeat: no-repeat; 
                             background-position: center;
@@ -209,17 +209,14 @@
                         style="text-decoration: none; display: block; width: 100%; height: 100%;">
                             
                             <button  
-                                id="unlock-sections-button" 
+                                id="save-date-button" 
                                 aria-label="Save the date to Google Calendar"
                                 class="cta-button inline-block bg-transparent text-sm sm:text-base text-white rounded-full font-semibold shadow-none" 
                                 style="
-                                    /* Ensure button is transparent and completely overlaps */
                                     background-color: transparent !important; 
                                     border: none;
-                                    /* Make button cover the entire anchor tag area */
                                     width: 100%;
                                     height: 100%;
-                                    /* Remove internal padding/margins that could shrink the click area */
                                     padding: 0;
                                     margin: 0;
                                 ">
@@ -243,7 +240,7 @@
                     <h2 class="font-khmer-script text-3xl text-white mb-4" style="font-family:'AKbalthomKhmerHand'; color: darkgoldenrod;">ទីតាំងកម្មវិធី</h2>
 
                     <div class="text-lg text-white"style="font-family:'AKbalthomKhmerLer';" >
-                        <p>ស្ថិតនៅ បុរីលឹមឈៀងហាក់ គីឡូ6 ផ្ទះលេខ 48i 46i  ផ្លូវលេខ2 កែង3A រាជធានីភ្នំពេញ!</p>
+                        <p>ស្ថិតនៅ បុរីលឹមឈៀងហាក់ គីឡូ6 ផ្ទះលេខ 48i 46i ផ្លូវលេខ2 កែង3A រាជធានីភ្នំពេញ!</p>
                     </div>
                     
                     
@@ -311,6 +308,8 @@
 
 
     <script>
+        const GUEST_DATA_FILE = './guests.csv'; // Path to your CSV file
+
         document.addEventListener('DOMContentLoaded', () => {
             const videoSplash = document.getElementById('video-splash');
             const introVideo = document.getElementById('intro-video');
@@ -323,66 +322,139 @@
             const mainContent = document.querySelector('main'); 
             const heroHeader = document.querySelector('#hero-header'); 
             const videoBgPage2 = document.getElementById('video-bg-page2'); 
+            const tagNameList = document.getElementById('tag_name_list'); // Reference to the P tag
             
             let observer = null; 
-            const form = document.querySelector('#rsvp form'); // Keep even if RSVP section is missing for completeness
-            const messageElement = document.getElementById('message'); // Keep even if RSVP section is missing for completeness
 
-            // --- Function to handle the end of the splash video ---
-            const videoEndHandler = () => {
-                // Fade out splash screen
-                videoSplash.classList.add('opacity-0');
-                // Allow scrolling on the body and show website content
-                document.body.style.overflow = 'auto';
-                websiteContent.classList.remove('opacity-0', 'pointer-events-none');
+            // =========================================================================
+            // CORE FUNCTION: LOAD GUEST NAME
+            // =========================================================================
+            async function loadGuestName() {
+                // 1. Get the Code from the URL Hash (e.g., #0002 -> 0002)
+                let guestCode = window.location.hash.substring(1).trim();
                 
-                // Hide the splash screen completely after the transition
+                // If there is no hash or the hash is empty, use a default code or text
+                if (!guestCode) {
+                    tagNameList.innerHTML = ' '; 
+                    console.log('No guest code found in URL hash. Using default text.');
+                    return;
+                }
+
+                // 2. Fetch the CSV file
+                try {
+                    const response = await fetch(GUEST_DATA_FILE);
+                    
+                    if (!response.ok) {
+                        throw new Error(`Failed to load CSV: ${response.statusText}`);
+                    }
+                    
+                    const csvText = await response.text();
+                    
+                    // 3. Parse CSV and find the name
+                    const lines = csvText.trim().split('\n');
+                    let foundName = null;
+
+                    for (const line of lines) {
+                        // Split by comma. This assumes the Khmer name does not contain a comma.
+                        const parts = line.trim().split(',', 2); 
+                        
+                        // Ensure we have both parts before comparing
+                        if (parts.length === 2 && parts[0].trim() === guestCode) {
+                            foundName = parts[1].trim();
+                            break;
+                        }
+                    }
+
+                    // 4. Update the Invitation Name Tag
+                    if (foundName) {
+                        tagNameList.innerHTML = foundName;
+                    } else {
+                        // Name not found for the given code
+                        tagNameList.innerHTML = ''; // Fallback
+                        console.warn(`Guest code ${guestCode} not found in CSV. Using fallback text.`);
+                    }
+
+                } catch (error) {
+                    console.error('Error processing guest data:', error);
+                    // Critical error (e.g., file not found), show fallback text
+                    tagNameList.innerHTML = ' ';
+                }
+            }
+            
+            // =========================================================================
+            // PAGE FLOW HANDLERS 
+            // =========================================================================
+
+            const contentRevealHandler = () => {
+                // 1. Fade out and hide the video splash screen
+                videoSplash.classList.add('opacity-0');
+                
                 setTimeout(() => {
                     videoSplash.style.display = 'none';
-                }, 1000); // 1 second transition time
+                    videoSplash.classList.add('hidden'); 
+                    videoSplash.classList.remove('opacity-0');
+                    document.body.style.overflow = 'auto'; 
+                }, 1000); 
+                
+                // 2. Hide the hero header (the invite)
+                heroHeader.classList.add('hidden');
+                
+                // 3. Show the main content area (which contains khmer-invite)
+                mainContent.classList.remove('hidden');
+
+                // 4. Show the fixed background video for page 2
+                videoBgPage2.classList.remove('hidden');
+
+                // 5. Start the intersection observer for fade-up animations
+                startObserver();
+                
+                // 6. Scroll to the beginning of the new content
+                 setTimeout(() => {
+                    window.scrollTo({ top: 0, behavior: 'smooth' }); 
+                 }, 50);
             };
 
-
-            // --- Video/Splash Screen Logic ---
-
-            introVideo.addEventListener('loadeddata', () => {
-                loadingText.style.display = 'none';
+            const videoStartHandler = () => {
+                 // 1. Show the video splash and remove the hidden class
+                videoSplash.classList.remove('hidden');
+                videoSplash.style.display = 'flex';
+                
+                setTimeout(() => {
+                     videoSplash.classList.remove('opacity-0');
+                }, 10);
+                
+                // 2. Play the video
                 introVideo.play().catch(e => {
-                    // Autoplay was prevented, prompt user to start
                     console.log("Autoplay prevented:", e);
                     skipButton.textContent = 'Start Viewing';
                 });
-            });
+                
+                 // 3. Disable body scrolling while video is playing
+                document.body.style.overflow = 'hidden';
+            };
 
-            introVideo.addEventListener('ended', videoEndHandler);
+
+            // --- Event Listeners ---
+            introVideo.addEventListener('ended', contentRevealHandler);
 
             skipButton.addEventListener('click', () => {
                 introVideo.pause();
-                videoEndHandler();
+                contentRevealHandler();
             });
-
-            // --- Unlock Sections Logic ---
-            unlockButton.addEventListener('click', () => {
-                // 1. Hide the hero header
-                heroHeader.classList.add('hidden');
-                // 2. Show the main content
-                mainContent.classList.remove('hidden');
-                // 3. Show the fixed background video for page 2
-                videoBgPage2.classList.remove('hidden');
-
-                // 4. Start the intersection observer for fade-up animations
-                startObserver();
+            
+            unlockButton.addEventListener('click', videoStartHandler);
+            
+            introVideo.addEventListener('loadeddata', () => {
+                loadingText.style.display = 'none';
             });
 
 
-            // --- Function to define and start the observer (completed) ---
+            // --- Function to define and start the observer (for fade-up animations) ---
             const startObserver = () => {
-                // Disconnect existing observer if it exists
                 if (observer) {
                     observer.disconnect();
                 }
 
-                // Get ALL animated sections
                 const animatedSections = document.querySelectorAll('[data-animate="fade-up"]');
                 
                 observer = new IntersectionObserver((entries) => {
@@ -390,81 +462,61 @@
                         const target = entry.target;
 
                         if (entry.isIntersecting) {
-                            // Logic for when the element enters the viewport: Animate In
                             target.classList.remove('opacity-0', 'translate-y-8');
-                            
-                            // Handle staggered reveal (if needed, currently not used)
-                            if (target.id === 'schedule' && target) { 
-                                const eventCards = target.querySelectorAll('.event');
-                                eventCards.forEach((card, index) => {
-                                    // Apply a staggered delay
-                                    setTimeout(() => {
-                                        card.classList.remove('opacity-0', 'translate-y-8');
-                                    }, index * 200); 
-                                });
-                            }
                         } else {
-                            // Logic for when the element leaves the viewport: Animate Out/Reset
-                            // Only reset if the content is visible (i.e., hero is gone)
                             if (heroHeader.classList.contains('hidden')) { 
                                 target.classList.add('opacity-0', 'translate-y-8');
-                                
-                                // Reset staggered elements immediately (if needed)
-                                if (target.id === 'schedule' && target) { 
-                                    target.querySelectorAll('.event').forEach(card => {
-                                        card.classList.add('opacity-0', 'translate-y-8');
-                                    });
-                                }
                             }
                         }
                     });
                 }, {
-                    // Options for the observer
-                    root: null, // relative to the viewport
+                    root: null, 
                     rootMargin: '0px',
-                    threshold: 0.1 // Trigger when 10% of the element is visible
+                    threshold: 0.1 
                 });
 
-                // Start observing all sections
                 animatedSections.forEach(section => {
                     observer.observe(section);
                 });
             };
 
-            // --- Gallery Modal Logic (NEW) ---
+            // --- Gallery Modal Logic (remains the same) ---
             const modal = document.getElementById('gallery-modal');
             const modalImg = document.getElementById('modal-image');
             const closeModalBtn = document.getElementById('close-modal-btn');
 
-            // Function exposed globally via window for use with onclick attributes
             window.openModal = function(imageSrc) {
                 modalImg.src = imageSrc;
                 modal.classList.remove('hidden');
-                // Prevent body scrolling when modal is open
                 document.body.style.overflow = 'hidden'; 
             };
 
-            // Function exposed globally via window for use with onclick attributes
             window.closeModal = function() {
                 modal.classList.add('hidden');
-                 // Restore body scrolling when modal is closed
-                document.body.style.overflow = 'auto'; 
+                if (heroHeader.classList.contains('hidden')) {
+                     document.body.style.overflow = 'auto'; 
+                }
             };
 
-            // Add event listener to close button (if clicking the 'x')
             if (closeModalBtn) {
                 closeModalBtn.addEventListener('click', window.closeModal);
             }
 
-            // The modal itself has an onclick to close when clicking the backdrop
             if (modal) {
                 modal.addEventListener('click', (e) => {
-                    // Only close if the click target is the modal backdrop itself, not the image
                     if (e.target === modal) {
                         window.closeModal();
                     }
                 });
             }
+
+            // --- Initial Load Setup: RUN THE NAME LOADER ---
+            // This is the first thing that happens after the DOM is ready.
+            loadGuestName(); 
+            
+            document.body.style.overflow = 'auto'; 
+            websiteContent.classList.remove('opacity-0', 'pointer-events-none');
+            videoSplash.style.display = 'none';
 
         });
     </script>

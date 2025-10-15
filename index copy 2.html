@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saly & Kimbouy's Wedding</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:ital,wght@1,500;1,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Khmer:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* * 1. FONT FACE DECLARATIONS 
+         * We are using multiple source URLs here to check for both the 'font/' folder 
+         * path and the root directory path for maximum compatibility.
+         */
+        @font-face {
+            font-family: 'AKbalthomKhmerHand';
+            /* Try loading from the root and then from the font/ folder */
+            src: url('AKbalthomKhmerHand.ttf') format('truetype'),
+                 url('font/AKbalthomKhmerHand.ttf') format('truetype'); 
+            font-weight: normal;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Moul';
+            /* Assuming 'Moul.ttf' is also in your font folder for the names in the first invitation */
+            src: url('Moul.ttf') format('truetype'),
+                 url('font/Moul.ttf') format('truetype'); 
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        /* * 2. TAILWIND CONFIGURATION 
+         */
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'sage': '#6a8273', /* Primary Color */
+                        'off-white': '#fdfdfa', /* Background Color (used for transparent overlays) */
+                        'text-dark': '#333',
+                    },
+                    fontFamily: {
+                        'header': ['"Playfair Display"', 'serif'],
+                        'body': ['Montserrat', 'sans-serif'],
+                        /* Custom local font for the main Khmer header */
+                        'khmer-script': ['Moulpali','AKbalthomKhmerHand','AKbalthomFreehand','AKbalthomKhmerLer','Moul', 'serif', 'system-ui'],
+                        /* Noto Sans Khmer web font for the body text */
+                        'khmer': ['"Noto Sans Khmer"', 'sans-serif', 'system-ui'], 
+                    },
+                },
+            }
+        }
+        /* Custom styles to ensure smooth scrolling and responsive hero background */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            /* Ensure the body stays scrollable after video plays, but initially disabled by style="overflow: hidden;" */
+        }
+
+
+        /* Custom Timeline Styles for the Khmer Schedule Section */
+        .timeline-container:before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: rgba(255, 255, 255, 0.4); /* Light white line */
+            transform: translateX(-50%);
+        }
+        /* Style for the icons/dots on the timeline */
+        .timeline-item-icon {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+        }
+        /* Gallery modal style */
+        .modal-content-wrapper {
+            max-width: 90vw;
+            max-height: 90vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* 3. BUTTON ANIMATION KEYFRAMES (NEW) */
+        @keyframes pulseZoom {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05); /* Zooms in 5% */
+            }
+            100% {
+                transform: scale(1); /* Zooms back out */
+            }
+        }
+
+        .animate-zoom-pulse {
+            animation: pulseZoom 2s infinite ease-in-out; /* 2s duration, repeats forever */
+        }
+    </style>
+</head>
+
+<body class="font-body text-text-dark leading-relaxed" style="overflow: hidden;">
+
+    <div id="video-splash" class="fixed inset-0 z-[100] bg-black flex flex-col justify-center items-center">
+        <video id="intro-video" muted playsinline preload="auto" class="w-full h-full object-cover">
+            <source src="./video/intro.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        
+        <button id="skip-button" class="absolute bottom-10 right-10 z-10 bg-white/20 backdrop-blur-sm px-6 py-2 rounded-full text-sm text-white font-semibold hover:bg-white/40 transition duration-300">
+            Skip Intro
+        </button>
+        <p id="loading-text" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white font-header text-2xl italic animate-pulse">Loading...</p>
+    </div>
+
+    <div id="website-content" class="opacity-0 transition-opacity duration-1000 ease-in pointer-events-none">
+        
+        <header id="hero-header" class="relative min-h-screen bg-transparent flex flex-col justify-center items-center text-center p-6 border-b border-black-100">
+                    
+    <div class="absolute inset-0 z-[0] after:content-[''] after:absolute after:inset-0 after:bg-black/0"> 
+        <video id="hero-background-video" autoplay loop muted playsinline class="w-full h-full object-cover">
+            <source src="./video/bg_vdo_04.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+    
+    <section id="invite" class="relative z-10 py-0 max-w-xl mx-auto mb-12">
+        
+        <img src="./images/Invite_update_2.png" 
+            style="width: 100%; height: 100%; display: block; object-fit: cover; border-radius: inherit;" 
+            alt="Invitation Image">
+
+        <div class="absolute inset-0 flex flex-col items-center p-6 text-center">
+        
+    <div id="names-background-box" 
+        class="absolute top-1/2 left-1/2 h-24 sm:h-24 w-full mx-auto flex items-center justify-center text-center"
+        style="
+            background-image: url('./images/btn_namecard.png'); 
+            background-size: contain; 
+            background-repeat: no-repeat; 
+            background-position: center;
+            transform: translate(-50%, -50%); 
+            margin: 0;
+            max-width: 80%;
+        ">
+
+        <p style="font-family:'Moul'; color: #efc455; size: 10px; margin-top: 30px;">
+            ឯកឧត្តម ម៉ក់ ហ៊ុយ
+        </p>
+    </div>
+            <div id="button-background-box"
+                class="mt-auto flex items-center justify-center w-4/5 max-w-sm h-16 sm:h-20 relative animate-zoom-pulse"
+                style="
+                    background-image: url('./images/btn_open.png');
+                    background-size: contain; 
+                    background-repeat: no-repeat; 
+                    background-position: center;
+                    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
+                ">
+                <button  id="unlock-sections-button" class="cta-button inline-block bg-transparent text-sm sm:text-base text-white px-6 py-2 rounded-full font-semibold transition duration-300 ease-in-out hover:bg-transparent shadow-none" background-color: transparent !important; color: #5b5b5b; padding: 0;">
+                </button>
+            </div>
+</div>
+        
+    </section>
+</header>
+
+        <div id="video-bg-page2" class="fixed inset-0 z-0 hidden"> 
+            <video id="background-video" autoplay loop muted playsinline class="w-full h-full object-cover">
+                <source src="./video/3.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <div class="absolute inset-0 bg-black opacity-30"></div>
+        </div>
+
+        <main class="p-4 sm:p-8 relative z-10 hidden">
+
+
+        <section id="khmer-invite" class="relative max-w-xl mx-auto bg-black/10 backdrop-blur-sm rounded-1xl shadow-xl mb-12 opacity-0 translate-y-8 transition-all duration-700 ease-out" data-animate="fade-up">
+                
+                <img src="./images/wedding_card2.png" style="width: 100%; height: 100%; display: block; object-fit: cover;">
+
+                <div class="absolute inset-x-0 bottom-0 flex justify-center items-center p-6 pt-0">
+                    
+                    <div id="button-background-box2"
+                        class="flex items-center justify-center w-4/5 max-w-sm h-16 sm:h-20 relative animate-zoom-pulse"
+                        style="
+                            background-image: url('./images/btn_save.png');
+                            background-size: contain; 
+                            background-repeat: no-repeat; 
+                            background-position: center;
+                            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
+                        ">
+                        
+                        <a href="https://calendar.google.com/calendar/event?action=TEMPLATE&tmeid=NTFia241cW1rMzZvcjFmczZ0dmlhc29yaDdfMjAyNjAxMTFUMTAwMDAwWiBrZW9zYWx5QG0&tmsrc=keosaly%40gmail.com&scp=ALL" 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        style="text-decoration: none; display: block; width: 100%; height: 100%;">
+                            
+                            <button  
+                                id="unlock-sections-button" 
+                                aria-label="Save the date to Google Calendar"
+                                class="cta-button inline-block bg-transparent text-sm sm:text-base text-white rounded-full font-semibold shadow-none" 
+                                style="
+                                    /* Ensure button is transparent and completely overlaps */
+                                    background-color: transparent !important; 
+                                    border: none;
+                                    /* Make button cover the entire anchor tag area */
+                                    width: 100%;
+                                    height: 100%;
+                                    /* Remove internal padding/margins that could shrink the click area */
+                                    padding: 0;
+                                    margin: 0;
+                                ">
+                            </button>
+                        </a>
+                        
+                    </div>
+                    
+                </div>
+                
+            </section>
+
+
+        <section id="program" class="max-w-xl mx-auto bg-black/10 backdrop-blur-sm rounded-1xl shadow-xl mb-12 opacity-0 translate-y-8 transition-all duration-700 ease-out" data-animate="fade-up">
+                <img src="./images/program_5.png" style="width: 100%; height: 100%; display: block; object-fit: cover;">
+            </section> 
+            
+    
+        <section id="venue" class="py-12 sm:py-20 px-6 max-w-xl mx-auto border-b border-gray-200 bg-black/10 backdrop-blur-sm rounded-2xl shadow-xl mb-12 opacity-0 translate-y-8 transition-all duration-700 ease-out" data-animate="fade-up">
+                <div class="text-center font-khmer leading-loose text-white">
+                    <h2 class="font-khmer-script text-3xl text-white mb-4" style="font-family:'AKbalthomKhmerHand'; color: darkgoldenrod;">ទីតាំងកម្មវិធី</h2>
+
+                    <div class="text-lg text-white"style="font-family:'AKbalthomKhmerLer';" >
+                        <p>ស្ថិតនៅ បុរីលឹមឈៀងហាក់ គីឡូ6 ផ្ទះលេខ 48i 46i  ផ្លូវលេខ2 កែង3A រាជធានីភ្នំពេញ!</p>
+                    </div>
+                    
+                    
+                    <a href="https://maps.app.goo.gl/3DtryAv9kyWQXQoP8?g_st=ipc" target="_blank" class="link-button inline-block mt-4 text-sage border-2 border-sage px-6 py-2 rounded-full font-semibold transition duration-300 hover:bg-sage hover:text-white">
+                    ចុចចូលតាម Google Map
+                </a>
+                </div>
+
+            </section>
+
+          <section id="bank" class="py-12 sm:py-20 px-6 max-w-xl mx-auto border-b border-gray-200 bg-black/10 backdrop-blur-sm rounded-2xl shadow-xl mb-12 opacity-0 translate-y-8 transition-all duration-700 ease-out" data-animate="fade-up">
+                <div class="flex flex-col items-center font-khmer leading-loose text-white">
+                    <h2 class="font-khmer-script text-3xl text-white mb-6" style="font-family:'AKbalthomKhmerHand'; color: darkgoldenrod;">គណនេយ្យ ABA</h2>
+                    
+                    <div class="flex justify-center items-center space-x-8 mb-6">
+                        
+                        <a href="./images/aba.JPG" target="_blank" title="View ABA QR Code for Saly" class="rounded-lg overflow-hidden shadow-lg border-4 border-white transform hover:scale-[1.02] transition duration-300 ease-in-out">
+                            <img src="./images/aba.JPG" alt="ABA Bank QR Code 1" class="block w-34">
+                        </a>
+
+                        <a href="./images/aba.JPG" target="_blank" title="View ABA QR Code for Kimbouy" class="rounded-lg overflow-hidden shadow-lg border-4 border-white transform hover:scale-[1.02] transition duration-300 ease-in-out">
+                            <img src="./images/aba2.JPG" alt="ABA Bank QR Code 2" class="block w-34">
+                        </a>
+
+                    </div>
+                    <p class="mb-6 text-xl font-medium" style="font-family:'AKbalthomKhmerLer';">សម្រាប់ ចំណង់ដៃរតាមរយៈ ធនាគារ</p>
+                    
+                    </div>
+            </section>
+
+            <section id="gallery" class="py-12 sm:py-20 px-6 max-w-4xl mx-auto border-b border-gray-200 bg-black/10 backdrop-blur-sm rounded-2xl shadow-xl mb-12 opacity-0 translate-y-8 transition-all duration-700 ease-out" data-animate="fade-up">
+                <div class="text-center font-khmer leading-loose text-white">
+                    <h2 class="font-khmer-script text-3xl text-white mb-6" style="font-family:'AKbalthomKhmerHand'; color: darkgoldenrod;">រូបថតអនុស្សាវរីយ៍</h2>
+                    <p class="mb-8 text-xl font-medium" style="font-family:'AKbalthomKhmerLer';">ដំណើរកម្សាន្តរបស់យើង</p>
+                    
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                        <img src="./images/us_01.png" alt="Gallery Photo 1" class="w-full h-auto object-cover rounded-xl shadow-lg transform hover:scale-105 transition duration-300 cursor-pointer" onclick="openModal(this.src)">
+                        <img src="./images/us_01.png" alt="Gallery Photo 2" class="w-full h-auto object-cover rounded-xl shadow-lg transform hover:scale-105 transition duration-300 cursor-pointer" onclick="openModal(this.src)">
+                        <img src="./images/us_01.png" alt="Gallery Photo 3" class="w-full h-auto object-cover rounded-xl shadow-lg transform hover:scale-105 transition duration-300 cursor-pointer" onclick="openModal(this.src)">
+                        <img src="./images/us_01.png" alt="Gallery Photo 4" class="w-full h-auto object-cover rounded-xl shadow-lg transform hover:scale-105 transition duration-300 cursor-pointer" onclick="openModal(this.src)">
+                        <img src="./images/us_01.png" alt="Gallery Photo 5" class="w-full h-auto object-cover rounded-xl shadow-lg transform hover:scale-105 transition duration-300 cursor-pointer" onclick="openModal(this.src)">
+                        <img src="./images/us_01.png" alt="Gallery Photo 6" class="w-full h-auto object-cover rounded-xl shadow-lg transform hover:scale-105 transition duration-300 cursor-pointer" onclick="openModal(this.src)">
+                    </div>
+
+                    <a href="#gallery" class="inline-block mt-8 bg-sage text-white px-8 py-3 rounded-full font-semibold transition duration-300 hover:bg-sage/80 shadow-md">
+                        មើលរូបភាពទាំងអស់ (View All Photos)
+                    </a>
+                </div>
+            </section>
+
+          
+        </main>
+
+    </div>
+    
+    <div id="gallery-modal" class="fixed inset-0 bg-black bg-opacity-90 z-[100] hidden flex items-center justify-center p-4" onclick="closeModal()">
+        <div class="modal-content-wrapper relative">
+            <img id="modal-image" src="" alt="Zoomed Gallery Image" class="max-w-full max-h-full object-contain rounded-lg shadow-2xl">
+            
+            <button id="close-modal-btn" class="absolute top-4 right-4 text-white text-4xl font-light hover:text-gray-300 transition duration-200 p-2 leading-none" aria-label="Close Modal" onclick="closeModal()">
+                ×
+            </button>
+        </div>
+    </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const videoSplash = document.getElementById('video-splash');
+            const introVideo = document.getElementById('intro-video');
+            const websiteContent = document.getElementById('website-content');
+            const skipButton = document.getElementById('skip-button');
+            const loadingText = document.getElementById('loading-text');
+
+            // New references
+            const unlockButton = document.getElementById('unlock-sections-button');
+            const mainContent = document.querySelector('main'); 
+            const heroHeader = document.querySelector('#hero-header'); 
+            const videoBgPage2 = document.getElementById('video-bg-page2'); 
+            
+            let observer = null; 
+            const form = document.querySelector('#rsvp form'); // Keep even if RSVP section is missing for completeness
+            const messageElement = document.getElementById('message'); // Keep even if RSVP section is missing for completeness
+
+            // --- Function to handle the end of the splash video ---
+            const videoEndHandler = () => {
+                // Fade out splash screen
+                videoSplash.classList.add('opacity-0');
+                // Allow scrolling on the body and show website content
+                document.body.style.overflow = 'auto';
+                websiteContent.classList.remove('opacity-0', 'pointer-events-none');
+                
+                // Hide the splash screen completely after the transition
+                setTimeout(() => {
+                    videoSplash.style.display = 'none';
+                }, 1000); // 1 second transition time
+            };
+
+
+            // --- Video/Splash Screen Logic ---
+
+            introVideo.addEventListener('loadeddata', () => {
+                loadingText.style.display = 'none';
+                introVideo.play().catch(e => {
+                    // Autoplay was prevented, prompt user to start
+                    console.log("Autoplay prevented:", e);
+                    skipButton.textContent = 'Start Viewing';
+                });
+            });
+
+            introVideo.addEventListener('ended', videoEndHandler);
+
+            skipButton.addEventListener('click', () => {
+                introVideo.pause();
+                videoEndHandler();
+            });
+
+            // --- Unlock Sections Logic ---
+            unlockButton.addEventListener('click', () => {
+                // 1. Hide the hero header
+                heroHeader.classList.add('hidden');
+                // 2. Show the main content
+                mainContent.classList.remove('hidden');
+                // 3. Show the fixed background video for page 2
+                videoBgPage2.classList.remove('hidden');
+
+                // 4. Start the intersection observer for fade-up animations
+                startObserver();
+            });
+
+
+            // --- Function to define and start the observer (completed) ---
+            const startObserver = () => {
+                // Disconnect existing observer if it exists
+                if (observer) {
+                    observer.disconnect();
+                }
+
+                // Get ALL animated sections
+                const animatedSections = document.querySelectorAll('[data-animate="fade-up"]');
+                
+                observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        const target = entry.target;
+
+                        if (entry.isIntersecting) {
+                            // Logic for when the element enters the viewport: Animate In
+                            target.classList.remove('opacity-0', 'translate-y-8');
+                            
+                            // Handle staggered reveal (if needed, currently not used)
+                            if (target.id === 'schedule' && target) { 
+                                const eventCards = target.querySelectorAll('.event');
+                                eventCards.forEach((card, index) => {
+                                    // Apply a staggered delay
+                                    setTimeout(() => {
+                                        card.classList.remove('opacity-0', 'translate-y-8');
+                                    }, index * 200); 
+                                });
+                            }
+                        } else {
+                            // Logic for when the element leaves the viewport: Animate Out/Reset
+                            // Only reset if the content is visible (i.e., hero is gone)
+                            if (heroHeader.classList.contains('hidden')) { 
+                                target.classList.add('opacity-0', 'translate-y-8');
+                                
+                                // Reset staggered elements immediately (if needed)
+                                if (target.id === 'schedule' && target) { 
+                                    target.querySelectorAll('.event').forEach(card => {
+                                        card.classList.add('opacity-0', 'translate-y-8');
+                                    });
+                                }
+                            }
+                        }
+                    });
+                }, {
+                    // Options for the observer
+                    root: null, // relative to the viewport
+                    rootMargin: '0px',
+                    threshold: 0.1 // Trigger when 10% of the element is visible
+                });
+
+                // Start observing all sections
+                animatedSections.forEach(section => {
+                    observer.observe(section);
+                });
+            };
+
+            // --- Gallery Modal Logic (NEW) ---
+            const modal = document.getElementById('gallery-modal');
+            const modalImg = document.getElementById('modal-image');
+            const closeModalBtn = document.getElementById('close-modal-btn');
+
+            // Function exposed globally via window for use with onclick attributes
+            window.openModal = function(imageSrc) {
+                modalImg.src = imageSrc;
+                modal.classList.remove('hidden');
+                // Prevent body scrolling when modal is open
+                document.body.style.overflow = 'hidden'; 
+            };
+
+            // Function exposed globally via window for use with onclick attributes
+            window.closeModal = function() {
+                modal.classList.add('hidden');
+                 // Restore body scrolling when modal is closed
+                document.body.style.overflow = 'auto'; 
+            };
+
+            // Add event listener to close button (if clicking the 'x')
+            if (closeModalBtn) {
+                closeModalBtn.addEventListener('click', window.closeModal);
+            }
+
+            // The modal itself has an onclick to close when clicking the backdrop
+            if (modal) {
+                modal.addEventListener('click', (e) => {
+                    // Only close if the click target is the modal backdrop itself, not the image
+                    if (e.target === modal) {
+                        window.closeModal();
+                    }
+                });
+            }
+
+        });
+    </script>
+</body>
+</html>
