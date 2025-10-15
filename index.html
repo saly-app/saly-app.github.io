@@ -235,20 +235,48 @@
             
     
         <section id="venue" class="py-12 sm:py-20 px-6 max-w-xl mx-auto border-b border-gray-200 bg-black/10 backdrop-blur-sm rounded-2xl shadow-xl mb-12 opacity-0 translate-y-8 transition-all duration-700 ease-out" data-animate="fade-up">
-                <div class="text-center font-khmer leading-loose text-white">
-                    <h2 class="font-khmer-script text-3xl text-white mb-4" style="font-family:'AKbalthomKhmerHand'; color: darkgoldenrod;">ទីតាំងកម្មវិធី</h2>
+    <div class="text-center font-khmer leading-loose text-white">
+        <h2 class="font-khmer-script text-3xl text-white mb-4" style="font-family:'AKbalthomKhmerHand'; color: darkgoldenrod;">ទីតាំងកម្មវិធី</h2>
 
-                    <div class="text-lg text-white"style="font-family:'AKbalthomKhmerLer';" >
-                        <p>ស្ថិតនៅ បុរីលឹមឈៀងហាក់ គីឡូ6 ផ្ទះលេខ 48i 46i ផ្លូវលេខ2 កែង3A រាជធានីភ្នំពេញ!</p>
-                    </div>
-                    
-                    
-                    <a href="https://maps.app.goo.gl/3DtryAv9kyWQXQoP8?g_st=ipc" target="_blank" class="link-button inline-block mt-4 text-sage border-2 border-sage px-6 py-2 rounded-full font-semibold transition duration-300 hover:bg-sage hover:text-white">
-                    ចុចចូលតាម Google Map
-                </a>
-                </div>
+        <img src="./images/map.jpg" alt="Gallery Photo 1" class="w-full h-auto object-cover rounded-xl shadow-lg transform hover:scale-105 transition duration-300 cursor-pointer" onclick="openModal(this.src)">
+        <br>
+        <div class="text-lg text-white" style="font-family:'AKbalthomKhmerLer';">
+            <p>ស្ថិតនៅ បុរីលឹមឈៀងហាក់ គីឡូ6 ផ្ទះលេខ 48i 46i ផ្លូវលេខ2 កែង3A រាជធានីភ្នំពេញ!</p>
+        </div>
+        
+        <div id="button-openmap"
+            class="mt-8 flex items-center justify-center w-4/5 max-w-sm h-16 sm:h-20 relative animate-zoom-pulse mx-auto"
+            style="
+                background-image: url('./images/btn_map.png');
+                background-size: contain; 
+                background-repeat: no-repeat; 
+                background-position: center;
+                filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
+            ">
 
-            </section>
+            <a href="https://maps.app.goo.gl/3DtryAv9kyWQXQoP8?g_st=ipc" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                style="text-decoration: none; display: block; width: 100%; height: 100%;">
+                    
+                <button  
+                    id="save-date-button" 
+                    aria-label="Open googlemap."
+                    class="cta-button inline-block bg-transparent text-sm sm:text-base text-white rounded-full font-semibold shadow-none" 
+                    style="
+                        background-color: transparent !important; 
+                        border: none;
+                        width: 100%;
+                        height: 100%;
+                        padding: 0;
+                        margin: 0;
+                    ">
+                </button>
+            </a>
+        </div>
+
+    </div>
+</section>
 
           <section id="bank" class="py-12 sm:py-20 px-6 max-w-xl mx-auto border-b border-gray-200 bg-black/10 backdrop-blur-sm rounded-2xl shadow-xl mb-12 opacity-0 translate-y-8 transition-all duration-700 ease-out" data-animate="fade-up">
                 <div class="flex flex-col items-center font-khmer leading-loose text-white">
