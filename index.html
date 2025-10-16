@@ -137,7 +137,7 @@
             
             <section id="invite" class="relative z-10 py-0 max-w-xl mx-auto mb-12">
                 
-                <img src="./images/Invite_update_2.png" 
+                <img src="./images/Invite_new_2.png" 
                     style="width: 100%; height: 100%; display: block; object-fit: cover; border-radius: inherit;" 
                     alt="Invitation Image">
 
@@ -229,54 +229,93 @@
             </section>
 
 
+        <section id="countdown" class="py-12 sm:py-20 px-6 max-w-xl mx-auto bg-black/10 backdrop-blur-sm rounded-2xl shadow-xl mb-12 opacity-0 translate-y-8 transition-all duration-700 ease-out" data-animate="fade-up">
+            <div class="text-center font-khmer leading-loose text-white">
+                <h2 class="font-khmer-script text-3xl text-white mb-6" style="font-family:'AKbalthomKhmerHand'; color: darkgoldenrod;">ថ្ងៃរៀបអាពាហ៍ពិពាហ៍របស់ពួកយើងខ្ញុំ</h2>
+                <p class="mb-8 text-xl font-medium" style="font-family:'AKbalthomKhmerLer';">នៅសល់តែ...</p>
+
+                <div id="timer" class="flex justify-center space-x-4 sm:space-x-8 text-4xl font-bold font-header">
+                    
+                    <div class="flex flex-col items-center">
+                        <span id="days" class="text-5xl text-red-400">00</span>
+                        <span class="text-sm font-body font-medium mt-1">ថ្ងៃ</span>
+                    </div>
+
+                    <div class="text-gray-300 text-5xl">:</div>
+                    
+                    <div class="flex flex-col items-center">
+                        <span id="hours" class="text-5xl text-red-400">00</span>
+                        <span class="text-sm font-body font-medium mt-1">ម៉ោង</span>
+                    </div>
+                    
+                    <div class="text-gray-300 text-5xl">:</div>
+
+                    <div class="flex flex-col items-center">
+                        <span id="minutes" class="text-5xl text-red-400">00</span>
+                        <span class="text-sm font-body font-medium mt-1">នាទី</span>
+                    </div>
+                    
+                    <div class="text-gray-300 text-5xl hidden sm:block">:</div>
+                    
+                    <div class="flex flex-col items-center hidden sm:flex">
+                        <span id="seconds" class="text-5xl text-red-400">00</span>
+                        <span class="text-sm font-body font-medium mt-1">វិនាទី</span>
+                    </div>
+                </div>
+
+                <p id="timer-message" class="mt-8 text-lg font-body italic text-gray-300 hidden">We are married! Thank you for joining us.</p>
+            </div>
+        </section>
+
+
         <section id="program" class="max-w-xl mx-auto bg-black/10 backdrop-blur-sm rounded-1xl shadow-xl mb-12 opacity-0 translate-y-8 transition-all duration-700 ease-out" data-animate="fade-up">
                 <img src="./images/program_5.png" style="width: 100%; height: 100%; display: block; object-fit: cover;">
             </section> 
             
     
         <section id="venue" class="py-12 sm:py-20 px-6 max-w-xl mx-auto border-b border-gray-200 bg-black/10 backdrop-blur-sm rounded-2xl shadow-xl mb-12 opacity-0 translate-y-8 transition-all duration-700 ease-out" data-animate="fade-up">
-    <div class="text-center font-khmer leading-loose text-white">
-        <h2 class="font-khmer-script text-3xl text-white mb-4" style="font-family:'AKbalthomKhmerHand'; color: darkgoldenrod;">ទីតាំងកម្មវិធី</h2>
+            <div class="text-center font-khmer leading-loose text-white">
+                <h2 class="font-khmer-script text-3xl text-white mb-4" style="font-family:'AKbalthomKhmerHand'; color: darkgoldenrod;">ទីតាំងកម្មវិធី</h2>
 
-        <img src="./images/map.jpg" alt="Gallery Photo 1" class="w-full h-auto object-cover rounded-xl shadow-lg transform hover:scale-105 transition duration-300 cursor-pointer" onclick="openModal(this.src)">
-        <br>
-        <div class="text-lg text-white" style="font-family:'AKbalthomKhmerLer';">
-            <p>ស្ថិតនៅ បុរីលឹមឈៀងហាក់ គីឡូ6 ផ្ទះលេខ 48i 46i ផ្លូវលេខ2 កែង3A រាជធានីភ្នំពេញ!</p>
-        </div>
-        
-        <div id="button-openmap"
-            class="mt-8 flex items-center justify-center w-4/5 max-w-sm h-16 sm:h-20 relative animate-zoom-pulse mx-auto"
-            style="
-                background-image: url('./images/btn_map.png');
-                background-size: contain; 
-                background-repeat: no-repeat; 
-                background-position: center;
-                filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
-            ">
-
-            <a href="https://maps.app.goo.gl/3DtryAv9kyWQXQoP8?g_st=ipc" 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                style="text-decoration: none; display: block; width: 100%; height: 100%;">
-                    
-                <button  
-                    id="save-date-button" 
-                    aria-label="Open googlemap."
-                    class="cta-button inline-block bg-transparent text-sm sm:text-base text-white rounded-full font-semibold shadow-none" 
+                <img src="./images/map.jpg" alt="Map image of the venue" class="w-full h-auto object-cover rounded-xl shadow-lg transform hover:scale-105 transition duration-300 cursor-pointer" onclick="openModal(this.src)">
+                <br>
+                <div class="text-lg text-white" style="font-family:'AKbalthomKhmerLer';">
+                    <p>ស្ថិតនៅ បុរីលឹមឈៀងហាក់ គីឡូ6 ផ្ទះលេខ 48i 46i ផ្លូវលេខ2 កែង3A រាជធានីភ្នំពេញ!</p>
+                </div>
+                
+                <div id="button-openmap"
+                    class="mt-8 flex items-center justify-center w-4/5 max-w-sm h-16 sm:h-20 relative animate-zoom-pulse mx-auto"
                     style="
-                        background-color: transparent !important; 
-                        border: none;
-                        width: 100%;
-                        height: 100%;
-                        padding: 0;
-                        margin: 0;
+                        background-image: url('./images/btn_map.png');
+                        background-size: contain; 
+                        background-repeat: no-repeat; 
+                        background-position: center;
+                        filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
                     ">
-                </button>
-            </a>
-        </div>
 
-    </div>
-</section>
+                    <a href="https://maps.app.goo.gl/3DtryAv9kyWQXQoP8?g_st=ipc" 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        style="text-decoration: none; display: block; width: 100%; height: 100%;">
+                            
+                        <button  
+                            id="save-date-button" 
+                            aria-label="Open googlemap."
+                            class="cta-button inline-block bg-transparent text-sm sm:text-base text-white rounded-full font-semibold shadow-none" 
+                            style="
+                                background-color: transparent !important; 
+                                border: none;
+                                width: 100%;
+                                height: 100%;
+                                padding: 0;
+                                margin: 0;
+                            ">
+                        </button>
+                    </a>
+                </div>
+
+            </div>
+        </section>
 
           <section id="bank" class="py-12 sm:py-20 px-6 max-w-xl mx-auto border-b border-gray-200 bg-black/10 backdrop-blur-sm rounded-2xl shadow-xl mb-12 opacity-0 translate-y-8 transition-all duration-700 ease-out" data-animate="fade-up">
                 <div class="flex flex-col items-center font-khmer leading-loose text-white">
@@ -335,7 +374,11 @@
 
 
     <script>
+        // --- DATA AND INITIAL SETUP ---
+        // Set the wedding date to January 11, 2026. I've assumed 10:00 AM (10:00:00) as a default time.
+        const WEDDING_DATE = new Date('2026-01-11T10:00:00').getTime(); 
         const GUEST_DATA_FILE = './guests.csv'; // Path to your CSV file
+
 
         document.addEventListener('DOMContentLoaded', () => {
             const videoSplash = document.getElementById('video-splash');
@@ -406,6 +449,43 @@
                     // Critical error (e.g., file not found), show fallback text
                     tagNameList.innerHTML = ' ';
                 }
+            }
+
+            // =========================================================================
+            // CORE FUNCTION: COUNTDOWN TIMER
+            // =========================================================================
+            function startCountdown() {
+                const timerElement = document.getElementById('timer');
+                const messageElement = document.getElementById('timer-message');
+
+                const updateTimer = () => {
+                    const now = new Date().getTime();
+                    const distance = WEDDING_DATE - now;
+
+                    // Time calculations for days, hours, minutes and seconds
+                    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                    if (distance < 0) {
+                        clearInterval(interval);
+                        timerElement.innerHTML = `<span class="text-4xl text-red-400">អបអរសាទរ!</span>`;
+                        messageElement.textContent = "It's today! We are so excited to celebrate with you.";
+                        messageElement.classList.remove('hidden');
+                        return;
+                    }
+
+                    // Pad numbers with leading zero if less than 10
+                    document.getElementById('days').innerText = String(days).padStart(2, '0');
+                    document.getElementById('hours').innerText = String(hours).padStart(2, '0');
+                    document.getElementById('minutes').innerText = String(minutes).padStart(2, '0');
+                    document.getElementById('seconds').innerText = String(seconds).padStart(2, '0');
+                };
+
+                // Update the timer every 1 second
+                updateTimer(); // Initial call to prevent flicker
+                const interval = setInterval(updateTimer, 1000);
             }
             
             // =========================================================================
@@ -537,9 +617,10 @@
                 });
             }
 
-            // --- Initial Load Setup: RUN THE NAME LOADER ---
+            // --- Initial Load Setup: RUN THE NAME LOADER AND COUNTDOWN ---
             // This is the first thing that happens after the DOM is ready.
             loadGuestName(); 
+            startCountdown(); // <-- Countdown is initialized here
             
             document.body.style.overflow = 'auto'; 
             websiteContent.classList.remove('opacity-0', 'pointer-events-none');
