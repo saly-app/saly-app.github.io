@@ -37,6 +37,9 @@
                         'sage': '#6a8273', /* Primary Color */
                         'off-white': '#fdfdfa', /* Background Color */
                         'text-dark': '#333',
+                        /* Custom color for menu items based on the image */
+                        'menu-gold': '#efc455', 
+                        'menu-bg': 'rgba(106, 130, 115, 0.7)', /* Sage with transparency */
                     },
                     fontFamily: {
                         'header': ['"Playfair Display"', 'serif'],
@@ -96,27 +99,127 @@
         .animate-zoom-pulse {
             animation: pulseZoom 2s infinite ease-in-out; /* 2s duration, repeats forever */
         }
+        
+        /* 4. CUSTOM MENU STYLES - Adapted for the new design */
+        #menu-overlay {
+            z-index: 150; /* Higher than other content */
+            pointer-events: none; /* Allows clicks to pass through when hidden */
+        }
+        #menu-overlay.active {
+            pointer-events: auto; /* Re-enable clicks when active */
+        }
+
+        #menu-content {
+            position: absolute;
+            right: 2.5rem; /* Matches bottom-10 right-10 for the floating button */
+            bottom: 2.5rem;
+            transform: scale(0.8) translate(20%, 20%); /* Start smaller and offset */
+            transform-origin: bottom right;
+            transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+            opacity: 0;
+            visibility: hidden; /* Hide initially */
+            display: flex; /* Flex container for buttons */
+            flex-direction: column; /* Stack buttons vertically */
+            align-items: flex-end; /* Align to the right */
+            gap: 10px; /* Space between menu buttons */
+        }
+
+        #menu-overlay.active #menu-content {
+            transform: scale(1) translate(0, 0); /* Scale to 1 and no offset */
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .menu-button {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end; /* Align text and icon to the right */
+            background-color: #6a8273; /* Sage color */
+            color: #efc455; /* Gold-like color for text/icons */
+            padding: 0.75rem 1.25rem;
+            border-radius: 9999px; /* Fully rounded corners */
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            transition: background-color 0.2s, transform 0.2s;
+            min-width: 180px; /* Ensure consistent width for buttons */
+            text-align: right;
+        }
+        .menu-button:hover {
+            background-color: #5b6e61; /* Darker sage on hover */
+            transform: translateX(-5px); /* Slight hover effect */
+        }
+        .menu-button img, .menu-button svg {
+            margin-left: 10px; /* Space between text and icon */
+            filter: brightness(1.2); /* Make icons brighter */
+        }
+
+        /* Specific style for the + button */
+        #floating-menu-btn {
+            background-color: #efc455; /* Gold color */
+            box-shadow: 0 6px 10px rgba(0,0,0,0.4);
+            transition: transform 0.3s ease-in-out, background-color 0.2s;
+        }
+        #floating-menu-btn svg {
+            color: white; /* Plus icon is white */
+            stroke: white;
+        }
+        #floating-menu-btn.active {
+            transform: rotate(135deg); /* Rotate the + to become an X */
+            background-color: #d1b04a; /* Slightly darker gold when active */
+        }
     </style>
 </head>
 
 <body class="font-body text-text-dark leading-relaxed">
     
+    <audio id="background-music" loop muted preload="auto">
+        <source src="./music/song1.wav" type="audio/wav">
+        Your browser does not support the audio element.
+    </audio>
+
     <div id="video-splash" class="fixed inset-0 z-[100] bg-black flex flex-col justify-center items-center opacity-0 transition-opacity duration-1000 hidden">
         <video id="intro-video" muted autoplay playsinline preload="auto" class="w-full h-full object-cover">
             <source src="./video/intro.mov" type="video/mp4">
             Your browser does not support the video tag.
         </video>
-        
-        <p id="loading-text" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white font-header text-2xl italic animate-pulse">Loading...</p>
-        
-            <div id="sound-toggle" class="absolute bottom-10 right-10 text-white p-3 rounded-full bg-black/50 cursor-pointer z-110">
-                <img id="speaker-off" src="./images/silence.png" alt="Sound Off" class="w-8 h-8">
-                
-                <img id="speaker-on" src="./images/volume.png" alt="Sound On" class="w-8 h-8 hidden">
-            </div>
-        </div>
+    </div>
 
     <div id="website-content" class="transition-opacity duration-1000 ease-in">
+        
+        <div id="floating-menu-btn" class="fixed bottom-10 right-10 p-3 rounded-full cursor-pointer z-50 hidden transition-all duration-300 opacity-0">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+            </svg>
+        </div>
+        
+        <div id="menu-overlay" class="fixed inset-0 z-[150] hidden">
+            <div id="menu-content">
+                <button id="music-toggle-btn" class="menu-button">
+                    <span id="music-status" class="font-khmer text-lg">កំពុងចាក់</span>
+                    <img id="speaker-icon" src="./images/volume.png" alt="Sound Icon" class="w-6 h-6">
+                </button>
+
+                <button class="menu-button" data-target="khmer-invite">
+                    <span class="font-khmer text-lg">ប័ណ្ណ​អញ្ជើញ</span>
+                    <img src="./images/icon_invite.png" alt="Invite Icon" class="w-6 h-6">
+                </button>
+                <button class="menu-button" data-target="program">
+                    <span class="font-khmer text-lg">កម្មវិធី</span>
+                    <img src="./images/icon_program.png" alt="Program Icon" class="w-6 h-6">
+                </button>
+                <button class="menu-button" data-target="venue">
+                    <span class="font-khmer text-lg">ទីតាំង</span>
+                    <img src="./images/icon_venue.png" alt="Venue Icon" class="w-6 h-6">
+                </button>
+                <button class="menu-button" data-target="bank">
+                    <span class="font-khmer text-lg">ចំណងដៃ</span>
+                    <img src="./images/icon_bank.png" alt="Bank Icon" class="w-6 h-6">
+                </button>
+                <button class="menu-button" data-target="gallery">
+                    <span class="font-khmer text-lg">រូបថត</span>
+                    <img src="./images/icon_gallery.png" alt="Gallery Icon" class="w-6 h-6">
+                </button>
+                </div>
+        </div>
         
         <header id="hero-header" class="relative min-h-screen bg-transparent flex flex-col justify-center items-center text-center p-6 border-b border-black-100">
                     
@@ -127,14 +230,6 @@
                 </video>
             </div>
 
-            <!-- <div class="absolute inset-0 z-[0]"> 
-                <img id="hero-background-image" 
-                    src="./video/bg_vdo_01.gif" 
-                    alt="Animated Background"
-                    class="w-full h-full object-cover" 
-                    style="filter: brightness(0.9);">
-            </div> -->
-            
             <section id="invite" class="relative z-10 py-0 max-w-xl mx-auto mb-12">
                 
                 <img src="./images/Invite_new.png" 
@@ -202,7 +297,7 @@
                             filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
                         ">
                         
-                        <a href="https://calendar.google.com/calendar/event?action=TEMPLATE&tmeid=NTFia241cW1rMzZvcjFmczZ0dmlhc29yaDdfMjAyNjAxMTFUMTAwMDAwWiBrZW9zYWx5QG0&tmsrc=keosaly%40gmail.com&scp=ALL" 
+                        <a href="https://calendar.google.com/calendar/event?action=TEMPLATE&tmeid=NTFia241cW1rMzZvcjFmczZ0dmlhc29yaDdfMjAyNjAxMTFUMTAwMDAwWiBrZW9zYXR5QG0&tmsrc=keosaly%40gmail.com&scp=ALL" 
                         target="_blank" 
                         rel="noopener noreferrer" 
                         style="text-decoration: none; display: block; width: 100%; height: 100%;">
@@ -342,19 +437,24 @@
             const videoSplash = document.getElementById('video-splash');
             const introVideo = document.getElementById('intro-video');
             const websiteContent = document.getElementById('website-content');
-            const loadingText = document.getElementById('loading-text');
+            
+            // Reference to the background music audio element
+            const bgMusic = document.getElementById('background-music');
 
-            // New references
+            // References
             const unlockButton = document.getElementById('unlock-sections-button');
             const mainContent = document.querySelector('main'); 
             const heroHeader = document.querySelector('#hero-header'); 
             const videoBgPage2 = document.getElementById('video-bg-page2'); 
             const tagNameList = document.getElementById('tag_name_list'); 
             
-            // New references for sound toggle
-            const soundToggle = document.getElementById('sound-toggle');
-            const speakerOn = document.getElementById('speaker-on');
-            const speakerOff = document.getElementById('speaker-off');
+            // NEW Menu References
+            const floatingMenuBtn = document.getElementById('floating-menu-btn');
+            const menuOverlay = document.getElementById('menu-overlay');
+            const menuContent = document.getElementById('menu-content');
+            const musicToggleBtn = document.getElementById('music-toggle-btn');
+            const speakerIcon = document.getElementById('speaker-icon');
+            const musicStatus = document.getElementById('music-status');
             
             // References for sections to show immediately
             const khmerInviteSection = document.getElementById('khmer-invite');
@@ -362,6 +462,9 @@
             
             let observer = null; 
 
+            // **INITIALIZATION STEP:** Ensure the video is muted permanently
+            introVideo.muted = true;
+            
             // =========================================================================
             // CORE FUNCTION: LOAD GUEST NAME
             // =========================================================================
@@ -413,7 +516,83 @@
             }
             
             // =========================================================================
-            // PAGE FLOW HANDLER (MODIFIED)
+            // MUSIC CONTROL LOGIC
+            // =========================================================================
+            function updateMusicToggleUI() {
+                if (bgMusic.muted) {
+                    speakerIcon.src = './images/silence.png'; // Assuming you have a silence.png
+                    speakerIcon.alt = 'Sound Off';
+                    musicStatus.textContent = 'បិទសំឡេង'; // Muted in Khmer
+                    bgMusic.pause();
+                } else {
+                    speakerIcon.src = './images/volume.png'; // Assuming you have a volume.png
+                    speakerIcon.alt = 'Sound On';
+                    musicStatus.textContent = 'កំពុងចាក់'; // Playing in Khmer
+                    bgMusic.play().catch(e => console.warn("Music play failed:", e));
+                }
+            }
+
+            musicToggleBtn.addEventListener('click', (event) => {
+                event.stopPropagation(); // Prevent closing menu when toggling music
+                bgMusic.muted = !bgMusic.muted;
+                updateMusicToggleUI();
+            });
+
+            // =========================================================================
+            // MENU NAVIGATION LOGIC
+            // =========================================================================
+            function openMenu() {
+                floatingMenuBtn.classList.add('active'); // Rotate + icon
+                menuOverlay.classList.remove('hidden');
+                menuOverlay.classList.add('active'); // Enable pointer events
+                document.body.style.overflow = 'hidden';
+                updateMusicToggleUI(); // Ensure the music status is correct when opening
+                // No need for a setTimeout for opacity if controlled by 'active' class
+            }
+
+            function closeMenu() {
+                floatingMenuBtn.classList.remove('active'); // Rotate + icon back
+                menuOverlay.classList.remove('active'); // Disable pointer events
+                document.body.style.overflow = 'auto'; 
+                setTimeout(() => menuOverlay.classList.add('hidden'), 300); // Wait for transition
+            }
+
+            function navigateToSection(targetId) {
+                const targetElement = document.getElementById(targetId);
+                if (targetElement) {
+                    closeMenu();
+                    setTimeout(() => {
+                        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }, 350); // Wait for menu to close
+                }
+            }
+
+            floatingMenuBtn.addEventListener('click', (event) => {
+                event.stopPropagation(); // Prevent document click from immediately closing it
+                if (menuOverlay.classList.contains('active')) {
+                    closeMenu();
+                } else {
+                    openMenu();
+                }
+            });
+            
+            // Close menu if clicking anywhere on the overlay outside the actual menu content
+            menuOverlay.addEventListener('click', (event) => {
+                if (!menuContent.contains(event.target) && menuOverlay.classList.contains('active')) {
+                    closeMenu();
+                }
+            });
+            
+            // Event delegation for navigation links (using menu-button class)
+            menuContent.addEventListener('click', (event) => {
+                const targetButton = event.target.closest('.menu-button');
+                if (targetButton && targetButton.dataset.target) {
+                    navigateToSection(targetButton.dataset.target);
+                }
+            });
+
+            // =========================================================================
+            // PAGE FLOW HANDLER 
             // =========================================================================
 
             const contentRevealHandler = () => {
@@ -436,15 +615,17 @@
                 // 4. Show the fixed background video for page 2
                 videoBgPage2.classList.remove('hidden');
 
-                // 5. *** FORCE SHOW KHMEER-INVITE AND PROGRAM SECTIONS ***
-                // Remove the initial animation classes immediately for the top two sections
+                // 5. Force show KHMEER-INVITE and PROGRAM SECTIONS
                 khmerInviteSection.classList.remove('opacity-0', 'translate-y-8');
                 programSection.classList.remove('opacity-0', 'translate-y-8');
 
-                // 6. Start the intersection observer for the *remaining* fade-up animations
+                // 6. Show the floating menu button
+                floatingMenuBtn.classList.remove('hidden', 'opacity-0');
+                
+                // 7. Start the intersection observer for the remaining fade-up animations
                 startObserver();
                 
-                // 7. Scroll to the beginning of the new content
+                // 8. Scroll to the beginning of the new content
                  setTimeout(() => {
                     window.scrollTo({ top: 0, behavior: 'smooth' }); 
                  }, 50);
@@ -454,7 +635,7 @@
             
             introVideo.addEventListener('ended', contentRevealHandler);
 
-            // Click the main button to start the muted video splash
+            // 🌟 MUSIC START ON CLICK: The moment the user interacts
             unlockButton.addEventListener('click', () => {
                 document.getElementById('button-background-box').classList.remove('animate-zoom-pulse');
                 
@@ -464,34 +645,22 @@
                      videoSplash.classList.remove('opacity-0');
                 }, 10);
                 
+                // 1. Attempt to play intro video (Muted permanently)
                 introVideo.play().catch(e => {
-                    console.warn("Autoplay prevented:", e);
-                    contentRevealHandler(); 
+                    console.warn("Video Autoplay prevented:", e);
+                });
+
+                // 2. Attempt to play background music (NOW UNMUTED)
+                bgMusic.muted = false; 
+                bgMusic.play().catch(e => {
+                    console.warn("Music Autoplay prevented or failed:", e);
+                    bgMusic.muted = true; // Set to muted if it failed to play
                 });
                 
                 document.body.style.overflow = 'hidden';
             });
             
-            // When the video is loaded, hide "Loading..." text
-            introVideo.addEventListener('loadeddata', () => {
-                loadingText.style.display = 'none'; 
-            });
-            
-            // Toggle Sound on Icon Click
-            soundToggle.addEventListener('click', () => {
-                if (introVideo.muted) {
-                    introVideo.muted = false;
-                    speakerOff.classList.add('hidden');
-                    speakerOn.classList.remove('hidden');
-                } else {
-                    introVideo.muted = true;
-                    speakerOff.classList.remove('hidden');
-                    speakerOn.classList.add('hidden');
-                }
-            });
-
-
-            // --- Function to define and start the observer (MODIFIED) ---
+            // --- Function to define and start the observer (UNCHANGED) ---
             const startObserver = () => {
                 if (observer) {
                     observer.disconnect();

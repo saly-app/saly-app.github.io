@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Saly & Kimbouy's Wedding</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -11,10 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Khmer:wght@400;600;700&display=swap" rel="stylesheet">
     
     <style>
-        /* * 1. FONT FACE DECLARATIONS 
-         * We are using multiple source URLs here to check for both the 'font/' folder 
-         * path and the root directory path for maximum compatibility.
-         */
+        /* * 1. FONT FACE DECLARATIONS */
         @font-face {
             font-family: 'AKbalthomKhmerHand';
             /* Try loading from the root and then from the font/ folder */
@@ -32,14 +29,13 @@
             font-style: normal;
         }
 
-        /* * 2. TAILWIND CONFIGURATION 
-         */
+        /* * 2. TAILWIND CONFIGURATION */
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
                         'sage': '#6a8273', /* Primary Color */
-                        'off-white': '#fdfdfa', /* Background Color (used for transparent overlays) */
+                        'off-white': '#fdfdfa', /* Background Color */
                         'text-dark': '#333',
                     },
                     fontFamily: {
@@ -58,12 +54,7 @@
             scroll-behavior: smooth;
         }
         
-        body {
-            /* Ensure the body stays scrollable after content reveal */
-        }
-
-
-        /* Custom Timeline Styles for the Khmer Schedule Section */
+        /* Custom Timeline Styles (Kept for completeness, though not heavily used in this layout) */
         .timeline-container:before {
             content: '';
             position: absolute;
@@ -71,10 +62,9 @@
             top: 0;
             bottom: 0;
             width: 2px;
-            background: rgba(255, 255, 255, 0.4); /* Light white line */
+            background: rgba(255, 255, 255, 0.4); 
             transform: translateX(-50%);
         }
-        /* Style for the icons/dots on the timeline */
         .timeline-item-icon {
             position: absolute;
             left: 50%;
@@ -82,7 +72,6 @@
             transform: translate(-50%, -50%);
             z-index: 10;
         }
-        /* Gallery modal style */
         .modal-content-wrapper {
             max-width: 90vw;
             max-height: 90vh;
@@ -91,7 +80,7 @@
             justify-content: center;
         }
 
-        /* 3. BUTTON ANIMATION KEYFRAMES (NEW) */
+        /* 3. BUTTON ANIMATION KEYFRAMES */
         @keyframes pulseZoom {
             0% {
                 transform: scale(1);
@@ -107,45 +96,109 @@
         .animate-zoom-pulse {
             animation: pulseZoom 2s infinite ease-in-out; /* 2s duration, repeats forever */
         }
+        
+        /* 4. CUSTOM MENU STYLES */
+        #menu-overlay {
+            z-index: 150; /* Higher than other content */
+        }
+        .menu-item {
+            cursor: pointer;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            transition: background-color 0.2s;
+        }
+        .menu-item:hover {
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+        .menu-item:last-child {
+            border-bottom: none;
+        }
     </style>
 </head>
 
 <body class="font-body text-text-dark leading-relaxed">
     
+    <audio id="background-music" loop muted preload="auto">
+        <source src="./music/song1.wav" type="audio/wav">
+        Your browser does not support the audio element.
+    </audio>
+
     <div id="video-splash" class="fixed inset-0 z-[100] bg-black flex flex-col justify-center items-center opacity-0 transition-opacity duration-1000 hidden">
-        <video id="intro-video" muted playsinline preload="auto" class="w-full h-full object-cover">
-            <source src="./video/wedding.mov" type="video/mp4">
+        <video id="intro-video" muted autoplay playsinline preload="auto" class="w-full h-full object-cover">
+            <source src="./video/intro.mov" type="video/mp4">
             Your browser does not support the video tag.
         </video>
-        
-        <button id="skip-button" class="absolute bottom-10 right-10 z-10 bg-white/20 backdrop-blur-sm px-6 py-2 rounded-full text-sm text-white font-semibold hover:bg-white/40 transition duration-300">
-            Skip Intro
-        </button>
-        <p id="loading-text" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white font-header text-2xl italic animate-pulse">Loading...</p>
     </div>
 
     <div id="website-content" class="transition-opacity duration-1000 ease-in">
+        
+        <div id="floating-menu-btn" class="fixed bottom-10 right-10 p-3 rounded-full bg-sage/80 cursor-pointer z-50 hidden transition-opacity duration-500 opacity-0 shadow-lg hover:bg-sage">
+            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+        </div>
+        
+        <div id="menu-overlay" class="fixed inset-0 bg-black bg-opacity-90 backdrop-blur-sm z-[150] hidden flex flex-col items-center justify-center p-6 text-white text-center transition-opacity duration-300 opacity-0">
+            
+            <button id="close-menu-btn" class="absolute top-6 right-6 text-white text-5xl font-light hover:text-gray-300 transition duration-200 p-2 leading-none" aria-label="Close Menu">
+                ×
+            </button>
+
+            <h2 class="font-header text-4xl mb-8 border-b-2 border-white/50 pb-2 w-full max-w-sm">Menu</h2>
+
+            <div id="music-control" class="flex items-center justify-center space-x-4 mb-10 p-4 border rounded-xl w-full max-w-sm">
+                <p class="font-body text-lg">Background Music:</p>
+                <button id="music-toggle-btn" class="flex items-center space-x-2 bg-sage px-4 py-2 rounded-full hover:bg-sage/80 transition">
+                    <img id="speaker-icon" src="./images/volume.png" alt="Sound On" class="w-6 h-6">
+                    <span id="music-status">Playing</span>
+                </button>
+            </div>
+            
+            <nav id="menu-nav" class="w-full max-w-sm text-2xl font-khmer text-white">
+                <div class="menu-item" data-target="khmer-invite">
+                    <span class="font-khmer-script text-3xl">ប័ណ្ណ​អញ្ជើញ</span><br>
+                    <span class="text-sm opacity-70">(Invitation)</span>
+                </div>
+                <div class="menu-item" data-target="program">
+                    <span class="font-khmer-script text-3xl">កម្មវិធី</span><br>
+                    <span class="text-sm opacity-70">(Program)</span>
+                </div>
+                <div class="menu-item" data-target="venue">
+                    <span class="font-khmer-script text-3xl">ទីតាំង</span><br>
+                    <span class="text-sm opacity-70">(Venue)</span>
+                </div>
+                <div class="menu-item" data-target="bank">
+                    <span class="font-khmer-script text-3xl">ចំណងដៃ</span><br>
+                    <span class="text-sm opacity-70">(Gift/ABA)</span>
+                </div>
+                <div class="menu-item" data-target="gallery">
+                    <span class="font-khmer-script text-3xl">រូបថត</span><br>
+                    <span class="text-sm opacity-70">(Gallery)</span>
+                </div>
+            </nav>
+
+        </div>
         
         <header id="hero-header" class="relative min-h-screen bg-transparent flex flex-col justify-center items-center text-center p-6 border-b border-black-100">
                     
             <div class="absolute inset-0 z-[0] after:content-[''] after:absolute after:inset-0 after:bg-black/0"> 
                 <video id="hero-background-video" autoplay loop muted playsinline class="w-full h-full object-cover">
-                    <source src="./video/bg_vdo_04.mp4" type="video/mp4">
+                    <source src="./video/bg_vdo_02.mp4" type="video/mp4">
                     Your browser does not support the video tag.
                 </video>
             </div>
-            
+
             <section id="invite" class="relative z-10 py-0 max-w-xl mx-auto mb-12">
                 
-                <img src="./images/Invite_new_2.png" 
+                <img src="./images/Invite_new.png" 
                     style="width: 100%; height: 100%; display: block; object-fit: cover; border-radius: inherit;" 
                     alt="Invitation Image">
 
                 <div class="absolute inset-0 flex flex-col items-center p-6 text-center">
                     <div id="names-background-box" 
-                        class="absolute top-1/2 left-1/2 h-24 sm:h-24 w-full mx-auto flex items-center justify-center text-center"
+                        class="absolute top-1/2 left-1/2 h-24 w-full mx-auto flex items-center justify-center text-center"
                         style="
-                            background-image: url('./images/btn_namecard.png'); 
+                            background-image: url('./images/btn_namecard2.png'); 
                             background-size: contain; 
                             background-repeat: no-repeat; 
                             background-position: center;
@@ -159,7 +212,7 @@
                         </p>
                     </div>
                     <div id="button-background-box"
-                        class="mt-auto flex items-center justify-center w-4/5 max-w-sm h-16 sm:h-20 relative animate-zoom-pulse"
+                        class="mt-auto flex items-center justify-center w-4/5 max-w-sm h-16 relative animate-zoom-pulse"
                         style="
                             background-image: url('./images/btn_open.png');
                             background-size: contain; 
@@ -167,7 +220,7 @@
                             background-position: center;
                             filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
                         ">
-                        <button  id="unlock-sections-button" class="cta-button inline-block bg-transparent text-sm sm:text-base text-white px-6 py-2 rounded-full font-semibold transition duration-300 ease-in-out hover:bg-transparent shadow-none" background-color: transparent !important; color: #5b5b5b; padding: 0;">
+                        <button  id="unlock-sections-button" class="cta-button inline-block bg-transparent text-sm text-white px-6 py-2 rounded-full font-semibold transition duration-300 ease-in-out hover:bg-transparent shadow-none" background-color: transparent !important; color: #5b5b5b; padding: 0;">
                         </button>
                     </div>
                 </div>
@@ -183,17 +236,17 @@
             <div class="absolute inset-0 bg-black opacity-30"></div>
         </div>
 
-        <main class="p-4 sm:p-8 relative z-10 hidden">
+        <main class="p-4 relative z-10 hidden">
 
 
-        <section id="khmer-invite" class="relative max-w-xl mx-auto bg-black/10 backdrop-blur-sm rounded-1xl shadow-xl mb-12 opacity-0 translate-y-8 transition-all duration-700 ease-out" data-animate="fade-up">
+        <section id="khmer-invite" class="relative max-w-xl mx-auto bg-black/10 backdrop-blur-sm rounded-1xl shadow-xl mb-12 opacity-0 translate-y-8 transition-all duration-1000 ease-in-out" data-animate="fade-up">
                 
                 <img src="./images/wedding_card2.png" style="width: 100%; height: 100%; display: block; object-fit: cover;">
 
                 <div class="absolute inset-x-0 bottom-0 flex justify-center items-center p-6 pt-0">
                     
                     <div id="button-background-box2"
-                        class="flex items-center justify-center w-4/5 max-w-sm h-16 sm:h-20 relative animate-zoom-pulse"
+                        class="flex items-center justify-center w-4/5 max-w-sm h-16 relative animate-zoom-pulse"
                         style="
                             background-image: url('./images/btn_save.png');
                             background-size: contain; 
@@ -210,7 +263,7 @@
                             <button  
                                 id="save-date-button" 
                                 aria-label="Save the date to Google Calendar"
-                                class="cta-button inline-block bg-transparent text-sm sm:text-base text-white rounded-full font-semibold shadow-none" 
+                                class="cta-button inline-block bg-transparent text-sm text-white rounded-full font-semibold shadow-none" 
                                 style="
                                     background-color: transparent !important; 
                                     border: none;
@@ -229,53 +282,14 @@
             </section>
 
 
-        <section id="countdown" class="py-12 sm:py-20 px-6 max-w-xl mx-auto bg-black/10 backdrop-blur-sm rounded-2xl shadow-xl mb-12 opacity-0 translate-y-8 transition-all duration-700 ease-out" data-animate="fade-up">
-            <div class="text-center font-khmer leading-loose text-white">
-                <h2 class="font-khmer-script text-3xl text-white mb-6" style="font-family:'AKbalthomKhmerHand'; color: darkgoldenrod;">ថ្ងៃរៀបអាពាហ៍ពិពាហ៍របស់ពួកយើងខ្ញុំ</h2>
-                <p class="mb-8 text-xl font-medium" style="font-family:'AKbalthomKhmerLer';">នៅសល់តែ...</p>
-
-                <div id="timer" class="flex justify-center space-x-4 sm:space-x-8 text-4xl font-bold font-header">
-                    
-                    <div class="flex flex-col items-center">
-                        <span id="days" class="text-5xl text-red-400">00</span>
-                        <span class="text-sm font-body font-medium mt-1">ថ្ងៃ</span>
-                    </div>
-
-                    <div class="text-gray-300 text-5xl">:</div>
-                    
-                    <div class="flex flex-col items-center">
-                        <span id="hours" class="text-5xl text-red-400">00</span>
-                        <span class="text-sm font-body font-medium mt-1">ម៉ោង</span>
-                    </div>
-                    
-                    <div class="text-gray-300 text-5xl">:</div>
-
-                    <div class="flex flex-col items-center">
-                        <span id="minutes" class="text-5xl text-red-400">00</span>
-                        <span class="text-sm font-body font-medium mt-1">នាទី</span>
-                    </div>
-                    
-                    <div class="text-gray-300 text-5xl hidden sm:block">:</div>
-                    
-                    <div class="flex flex-col items-center hidden sm:flex">
-                        <span id="seconds" class="text-5xl text-red-400">00</span>
-                        <span class="text-sm font-body font-medium mt-1">វិនាទី</span>
-                    </div>
-                </div>
-
-                <p id="timer-message" class="mt-8 text-lg font-body italic text-gray-300 hidden">We are married! Thank you for joining us.</p>
-            </div>
-        </section>
-
-
-        <section id="program" class="max-w-xl mx-auto bg-black/10 backdrop-blur-sm rounded-1xl shadow-xl mb-12 opacity-0 translate-y-8 transition-all duration-700 ease-out" data-animate="fade-up">
+        <section id="program" class="max-w-xl mx-auto bg-black/10 backdrop-blur-sm rounded-1xl shadow-xl mb-12 opacity-0 translate-y-8 transition-all duration-1000 ease-in-out" data-animate="fade-up">
                 <img src="./images/program_5.png" style="width: 100%; height: 100%; display: block; object-fit: cover;">
             </section> 
             
     
-        <section id="venue" class="py-12 sm:py-20 px-6 max-w-xl mx-auto border-b border-gray-200 bg-black/10 backdrop-blur-sm rounded-2xl shadow-xl mb-12 opacity-0 translate-y-8 transition-all duration-700 ease-out" data-animate="fade-up">
+        <section id="venue" class="py-12 px-6 max-w-xl mx-auto border-b border-gray-200 bg-black/10 backdrop-blur-sm rounded-2xl shadow-xl mb-12 opacity-0 translate-y-8 transition-all duration-1000 ease-in-out" data-animate="fade-up">
             <div class="text-center font-khmer leading-loose text-white">
-                <h2 class="font-khmer-script text-3xl text-white mb-4" style="font-family:'AKbalthomKhmerHand'; color: darkgoldenrod;">ទីតាំងកម្មវិធី</h2>
+                <h2 class="font-khmer-script text-3xl text-white mb-4" style="font-family:'AKbalthomKhmerHand'; color: darkgoldengold;">ទីតាំងកម្មវិធី</h2>
 
                 <img src="./images/map.jpg" alt="Map image of the venue" class="w-full h-auto object-cover rounded-xl shadow-lg transform hover:scale-105 transition duration-300 cursor-pointer" onclick="openModal(this.src)">
                 <br>
@@ -284,7 +298,7 @@
                 </div>
                 
                 <div id="button-openmap"
-                    class="mt-8 flex items-center justify-center w-4/5 max-w-sm h-16 sm:h-20 relative animate-zoom-pulse mx-auto"
+                    class="mt-8 flex items-center justify-center w-4/5 max-w-sm h-16 relative animate-zoom-pulse mx-auto"
                     style="
                         background-image: url('./images/btn_map.png');
                         background-size: contain; 
@@ -301,7 +315,7 @@
                         <button  
                             id="save-date-button" 
                             aria-label="Open googlemap."
-                            class="cta-button inline-block bg-transparent text-sm sm:text-base text-white rounded-full font-semibold shadow-none" 
+                            class="cta-button inline-block bg-transparent text-sm text-white rounded-full font-semibold shadow-none" 
                             style="
                                 background-color: transparent !important; 
                                 border: none;
@@ -317,9 +331,9 @@
             </div>
         </section>
 
-          <section id="bank" class="py-12 sm:py-20 px-6 max-w-xl mx-auto border-b border-gray-200 bg-black/10 backdrop-blur-sm rounded-2xl shadow-xl mb-12 opacity-0 translate-y-8 transition-all duration-700 ease-out" data-animate="fade-up">
+          <section id="bank" class="py-12 px-6 max-w-xl mx-auto border-b border-gray-200 bg-black/10 backdrop-blur-sm rounded-2xl shadow-xl mb-12 opacity-0 translate-y-8 transition-all duration-1000 ease-in-out" data-animate="fade-up">
                 <div class="flex flex-col items-center font-khmer leading-loose text-white">
-                    <h2 class="font-khmer-script text-3xl text-white mb-6" style="font-family:'AKbalthomKhmerHand'; color: darkgoldenrod;">គណនេយ្យ ABA</h2>
+                    <h2 class="font-khmer-script text-3xl text-white mb-6" style="font-family:'AKbalthomKhmerHand'; color: darkgoldengold;">គណនេយ្យ ABA</h2>
                     
                     <div class="flex justify-center items-center space-x-8 mb-6">
                         
@@ -337,12 +351,12 @@
                     </div>
             </section>
 
-            <section id="gallery" class="py-12 sm:py-20 px-6 max-w-4xl mx-auto border-b border-gray-200 bg-black/10 backdrop-blur-sm rounded-2xl shadow-xl mb-12 opacity-0 translate-y-8 transition-all duration-700 ease-out" data-animate="fade-up">
+            <section id="gallery" class="py-12 px-6 max-w-4xl mx-auto border-b border-gray-200 bg-black/10 backdrop-blur-sm rounded-2xl shadow-xl mb-12 opacity-0 translate-y-8 transition-all duration-1000 ease-in-out" data-animate="fade-up">
                 <div class="text-center font-khmer leading-loose text-white">
-                    <h2 class="font-khmer-script text-3xl text-white mb-6" style="font-family:'AKbalthomKhmerHand'; color: darkgoldenrod;">រូបថតអនុស្សាវរីយ៍</h2>
+                    <h2 class="font-khmer-script text-3xl text-white mb-6" style="font-family:'AKbalthomKhmerHand'; color: darkgoldengold;">រូបថតអនុស្សាវរីយ៍</h2>
                     <p class="mb-8 text-xl font-medium" style="font-family:'AKbalthomKhmerLer';">ដំណើរកម្សាន្តរបស់យើង</p>
                     
-                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                    <div class="grid grid-cols-2 gap-4">
                         <img src="./images/img_001.JPG" alt="Gallery Photo 1" class="w-full h-auto object-cover rounded-xl shadow-lg transform hover:scale-105 transition duration-300 cursor-pointer" onclick="openModal(this.src)">
                         <img src="./images/img_002.jpeg" alt="Gallery Photo 2" class="w-full h-auto object-cover rounded-xl shadow-lg transform hover:scale-105 transition duration-300 cursor-pointer" onclick="openModal(this.src)">
                         <img src="./images/img_03.jpeg" alt="Gallery Photo 3" class="w-full h-auto object-cover rounded-xl shadow-lg transform hover:scale-105 transition duration-300 cursor-pointer" onclick="openModal(this.src)">
@@ -375,27 +389,41 @@
 
     <script>
         // --- DATA AND INITIAL SETUP ---
-        // Set the wedding date to January 11, 2026. I've assumed 10:00 AM (10:00:00) as a default time.
-        const WEDDING_DATE = new Date('2026-01-11T10:00:00').getTime(); 
-        const GUEST_DATA_FILE = './guests.csv'; // Path to your CSV file
-
+        const GUEST_DATA_FILE = './guests.csv'; 
 
         document.addEventListener('DOMContentLoaded', () => {
             const videoSplash = document.getElementById('video-splash');
             const introVideo = document.getElementById('intro-video');
             const websiteContent = document.getElementById('website-content');
-            const skipButton = document.getElementById('skip-button');
-            const loadingText = document.getElementById('loading-text');
+            
+            // Reference to the background music audio element
+            const bgMusic = document.getElementById('background-music');
 
-            // New references
+            // References
             const unlockButton = document.getElementById('unlock-sections-button');
             const mainContent = document.querySelector('main'); 
             const heroHeader = document.querySelector('#hero-header'); 
             const videoBgPage2 = document.getElementById('video-bg-page2'); 
-            const tagNameList = document.getElementById('tag_name_list'); // Reference to the P tag
+            const tagNameList = document.getElementById('tag_name_list'); 
+            
+            // NEW Menu References
+            const floatingMenuBtn = document.getElementById('floating-menu-btn');
+            const menuOverlay = document.getElementById('menu-overlay');
+            const closeMenuBtn = document.getElementById('close-menu-btn');
+            const musicToggleBtn = document.getElementById('music-toggle-btn');
+            const speakerIcon = document.getElementById('speaker-icon');
+            const musicStatus = document.getElementById('music-status');
+            const menuNav = document.getElementById('menu-nav');
+            
+            // References for sections to show immediately
+            const khmerInviteSection = document.getElementById('khmer-invite');
+            const programSection = document.getElementById('program');
             
             let observer = null; 
 
+            // **INITIALIZATION STEP:** Ensure the video is muted permanently
+            introVideo.muted = true;
+            
             // =========================================================================
             // CORE FUNCTION: LOAD GUEST NAME
             // =========================================================================
@@ -403,166 +431,185 @@
                 // 1. Get the Code from the URL Hash (e.g., #0002 -> 0002)
                 let guestCode = window.location.hash.substring(1).trim();
                 
-                // If there is no hash or the hash is empty, use a default code or text
-                if (!guestCode) {
-                    tagNameList.innerHTML = ' '; 
-                    console.log('No guest code found in URL hash. Using default text.');
-                    return;
-                }
+                let foundNameText = ' '; 
+                let unlockButtonText = ' '; 
 
-                // 2. Fetch the CSV file
-                try {
-                    const response = await fetch(GUEST_DATA_FILE);
-                    
-                    if (!response.ok) {
-                        throw new Error(`Failed to load CSV: ${response.statusText}`);
-                    }
-                    
-                    const csvText = await response.text();
-                    
-                    // 3. Parse CSV and find the name
-                    const lines = csvText.trim().split('\n');
-                    let foundName = null;
-
-                    for (const line of lines) {
-                        // Split by comma. This assumes the Khmer name does not contain a comma.
-                        const parts = line.trim().split(',', 2); 
+                // If a guest code is present, attempt to load the name
+                if (guestCode) {
+                    try {
+                        const response = await fetch(GUEST_DATA_FILE);
                         
-                        // Ensure we have both parts before comparing
-                        if (parts.length === 2 && parts[0].trim() === guestCode) {
-                            foundName = parts[1].trim();
-                            break;
+                        if (!response.ok) {
+                            console.error(`Failed to load CSV: ${response.statusText}`);
+                        } else {
+                            const csvText = await response.text();
+                            
+                            // 3. Parse CSV and find the name
+                            const lines = csvText.trim().split('\n');
+                            let foundName = null;
+
+                            for (const line of lines) {
+                                const parts = line.trim().split(',', 2); 
+                                
+                                if (parts.length === 2 && parts[0].trim() === guestCode) {
+                                    foundName = parts[1].trim();
+                                    break;
+                                }
+                            }
+
+                            if (foundName) {
+                                foundNameText = foundName;
+                                unlockButtonText = ' '; 
+                            }
                         }
-                    }
 
-                    // 4. Update the Invitation Name Tag
-                    if (foundName) {
-                        tagNameList.innerHTML = foundName;
-                    } else {
-                        // Name not found for the given code
-                        tagNameList.innerHTML = ''; // Fallback
-                        console.warn(`Guest code ${guestCode} not found in CSV. Using fallback text.`);
+                    } catch (error) {
+                        console.error('Error processing guest data:', error);
                     }
-
-                } catch (error) {
-                    console.error('Error processing guest data:', error);
-                    // Critical error (e.g., file not found), show fallback text
-                    tagNameList.innerHTML = ' ';
                 }
-            }
-
-            // =========================================================================
-            // CORE FUNCTION: COUNTDOWN TIMER
-            // =========================================================================
-            function startCountdown() {
-                const timerElement = document.getElementById('timer');
-                const messageElement = document.getElementById('timer-message');
-
-                const updateTimer = () => {
-                    const now = new Date().getTime();
-                    const distance = WEDDING_DATE - now;
-
-                    // Time calculations for days, hours, minutes and seconds
-                    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-                    if (distance < 0) {
-                        clearInterval(interval);
-                        timerElement.innerHTML = `<span class="text-4xl text-red-400">អបអរសាទរ!</span>`;
-                        messageElement.textContent = "It's today! We are so excited to celebrate with you.";
-                        messageElement.classList.remove('hidden');
-                        return;
-                    }
-
-                    // Pad numbers with leading zero if less than 10
-                    document.getElementById('days').innerText = String(days).padStart(2, '0');
-                    document.getElementById('hours').innerText = String(hours).padStart(2, '0');
-                    document.getElementById('minutes').innerText = String(minutes).padStart(2, '0');
-                    document.getElementById('seconds').innerText = String(seconds).padStart(2, '0');
-                };
-
-                // Update the timer every 1 second
-                updateTimer(); // Initial call to prevent flicker
-                const interval = setInterval(updateTimer, 1000);
+                
+                // 4. Update the Invitation Name Tag and Button Text
+                tagNameList.innerHTML = foundNameText;
+                unlockButton.innerHTML = unlockButtonText; 
+                tagNameList.style.marginTop = guestCode ? '30px' : '0'; 
             }
             
             // =========================================================================
-            // PAGE FLOW HANDLERS 
+            // MUSIC CONTROL LOGIC
+            // =========================================================================
+            function updateMusicToggleUI() {
+                if (bgMusic.muted) {
+                    speakerIcon.src = './images/silence.png'; // Assuming you have a silence.png
+                    speakerIcon.alt = 'Sound Off';
+                    musicStatus.textContent = 'Muted';
+                    bgMusic.pause();
+                } else {
+                    speakerIcon.src = './images/volume.png'; // Assuming you have a volume.png
+                    speakerIcon.alt = 'Sound On';
+                    musicStatus.textContent = 'Playing';
+                    bgMusic.play().catch(e => console.warn("Music play failed:", e));
+                }
+            }
+
+            musicToggleBtn.addEventListener('click', () => {
+                bgMusic.muted = !bgMusic.muted;
+                updateMusicToggleUI();
+            });
+
+            // =========================================================================
+            // MENU NAVIGATION LOGIC
+            // =========================================================================
+            function openMenu() {
+                menuOverlay.classList.remove('hidden', 'opacity-0');
+                document.body.style.overflow = 'hidden';
+                updateMusicToggleUI(); // Ensure the music status is correct when opening
+                setTimeout(() => menuOverlay.classList.remove('opacity-0'), 10);
+            }
+
+            function closeMenu() {
+                menuOverlay.classList.add('opacity-0');
+                document.body.style.overflow = 'auto'; 
+                setTimeout(() => menuOverlay.classList.add('hidden'), 300);
+            }
+
+            function navigateToSection(targetId) {
+                const targetElement = document.getElementById(targetId);
+                if (targetElement) {
+                    closeMenu();
+                    setTimeout(() => {
+                        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }, 350); // Wait for menu to close
+                }
+            }
+
+            floatingMenuBtn.addEventListener('click', openMenu);
+            closeMenuBtn.addEventListener('click', closeMenu);
+            
+            // Event delegation for navigation links
+            menuNav.addEventListener('click', (event) => {
+                const targetDiv = event.target.closest('.menu-item');
+                if (targetDiv && targetDiv.dataset.target) {
+                    navigateToSection(targetDiv.dataset.target);
+                }
+            });
+
+            // =========================================================================
+            // PAGE FLOW HANDLER 
             // =========================================================================
 
             const contentRevealHandler = () => {
                 // 1. Fade out and hide the video splash screen
                 videoSplash.classList.add('opacity-0');
+                introVideo.pause(); 
                 
                 setTimeout(() => {
-                    videoSplash.style.display = 'none';
                     videoSplash.classList.add('hidden'); 
+                    document.body.style.overflow = 'auto'; // Re-enable scrolling
                     videoSplash.classList.remove('opacity-0');
-                    document.body.style.overflow = 'auto'; 
                 }, 1000); 
                 
                 // 2. Hide the hero header (the invite)
                 heroHeader.classList.add('hidden');
                 
-                // 3. Show the main content area (which contains khmer-invite)
+                // 3. Show the main content area
                 mainContent.classList.remove('hidden');
 
                 // 4. Show the fixed background video for page 2
                 videoBgPage2.classList.remove('hidden');
 
-                // 5. Start the intersection observer for fade-up animations
+                // 5. Force show KHMEER-INVITE and PROGRAM SECTIONS
+                khmerInviteSection.classList.remove('opacity-0', 'translate-y-8');
+                programSection.classList.remove('opacity-0', 'translate-y-8');
+
+                // 6. Show the floating menu button
+                floatingMenuBtn.classList.remove('hidden', 'opacity-0');
+                
+                // 7. Start the intersection observer for the remaining fade-up animations
                 startObserver();
                 
-                // 6. Scroll to the beginning of the new content
+                // 8. Scroll to the beginning of the new content
                  setTimeout(() => {
                     window.scrollTo({ top: 0, behavior: 'smooth' }); 
                  }, 50);
             };
 
-            const videoStartHandler = () => {
-                 // 1. Show the video splash and remove the hidden class
+            // --- Event Listeners ---
+            
+            introVideo.addEventListener('ended', contentRevealHandler);
+
+            // 🌟 MUSIC START ON CLICK: The moment the user interacts
+            unlockButton.addEventListener('click', () => {
+                document.getElementById('button-background-box').classList.remove('animate-zoom-pulse');
+                
                 videoSplash.classList.remove('hidden');
-                videoSplash.style.display = 'flex';
                 
                 setTimeout(() => {
                      videoSplash.classList.remove('opacity-0');
                 }, 10);
                 
-                // 2. Play the video
+                // 1. Attempt to play intro video (Muted permanently)
                 introVideo.play().catch(e => {
-                    console.log("Autoplay prevented:", e);
-                    skipButton.textContent = 'Start Viewing';
+                    console.warn("Video Autoplay prevented:", e);
+                });
+
+                // 2. Attempt to play background music (NOW UNMUTED)
+                bgMusic.muted = false; 
+                bgMusic.play().catch(e => {
+                    console.warn("Music Autoplay prevented or failed:", e);
+                    bgMusic.muted = true; // Set to muted if it failed to play
                 });
                 
-                 // 3. Disable body scrolling while video is playing
                 document.body.style.overflow = 'hidden';
-            };
-
-
-            // --- Event Listeners ---
-            introVideo.addEventListener('ended', contentRevealHandler);
-
-            skipButton.addEventListener('click', () => {
-                introVideo.pause();
-                contentRevealHandler();
             });
             
-            unlockButton.addEventListener('click', videoStartHandler);
-            
-            introVideo.addEventListener('loadeddata', () => {
-                loadingText.style.display = 'none';
-            });
-
-
-            // --- Function to define and start the observer (for fade-up animations) ---
+            // --- Function to define and start the observer (UNCHANGED) ---
             const startObserver = () => {
                 if (observer) {
                     observer.disconnect();
                 }
 
-                const animatedSections = document.querySelectorAll('[data-animate="fade-up"]');
+                // Select all sections with data-animate="fade-up" *except* the two we showed immediately
+                const animatedSections = document.querySelectorAll('[data-animate="fade-up"]:not(#khmer-invite):not(#program)');
                 
                 observer = new IntersectionObserver((entries) => {
                     entries.forEach(entry => {
@@ -579,7 +626,7 @@
                 }, {
                     root: null, 
                     rootMargin: '0px',
-                    threshold: 0.1 
+                    threshold: 0.2
                 });
 
                 animatedSections.forEach(section => {
@@ -587,10 +634,9 @@
                 });
             };
 
-            // --- Gallery Modal Logic (remains the same) ---
+            // --- Gallery Modal Logic (UNCHANGED) ---
             const modal = document.getElementById('gallery-modal');
             const modalImg = document.getElementById('modal-image');
-            const closeModalBtn = document.getElementById('close-modal-btn');
 
             window.openModal = function(imageSrc) {
                 modalImg.src = imageSrc;
@@ -604,28 +650,11 @@
                      document.body.style.overflow = 'auto'; 
                 }
             };
-
-            if (closeModalBtn) {
-                closeModalBtn.addEventListener('click', window.closeModal);
-            }
-
-            if (modal) {
-                modal.addEventListener('click', (e) => {
-                    if (e.target === modal) {
-                        window.closeModal();
-                    }
-                });
-            }
-
-            // --- Initial Load Setup: RUN THE NAME LOADER AND COUNTDOWN ---
-            // This is the first thing that happens after the DOM is ready.
-            loadGuestName(); 
-            startCountdown(); // <-- Countdown is initialized here
             
+            // --- Initial Load Setup (UNCHANGED) ---
+            loadGuestName(); 
             document.body.style.overflow = 'auto'; 
-            websiteContent.classList.remove('opacity-0', 'pointer-events-none');
-            videoSplash.style.display = 'none';
-
+            websiteContent.classList.remove('opacity-0');
         });
     </script>
 </body>
