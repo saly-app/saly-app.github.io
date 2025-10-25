@@ -147,6 +147,10 @@
             text-align: right;
             cursor: pointer;
         }
+        .menu-button:hover {
+            background-color: #5b6e61; /* Darker sage on hover */
+            transform: translateX(-5px); /* Slight hover effect */
+        }
         .menu-button img, .menu-button svg {
             margin-left: 10px; /* Space between text and icon */
             filter: brightness(1.2); /* Make icons brighter */
@@ -180,8 +184,6 @@
             transform: rotate(135deg); /* Rotate the + to become an X */
             background-color: #d1b04a; /* Slightly darker gold when active */
         }
-
-  
     </style>
 </head>
 
@@ -218,24 +220,14 @@
                 </button>
 
                 
-
-                    <div class="flex items-center justify-center w-[200px] h-16 relative hover:scale-[1.03] transition-transform duration-200"
-                        style="
-                            background-image: url('./images/btn_map.png'); /* Using map image for background here */
-                            background-size: contain; 
-                            background-repeat: no-repeat; 
-                            background-position: center;
-                            /* Removed drop-shadow here as it's added on the wrapper now */
-                        ">
-                        <button data-target="program" class="menu-button w-full h-full bg-transparent text-sm text-white rounded-full font-semibold shadow-none" ></button>
-                    </div>
-         
-                
-
-                <!-- <button class="menu-button" data-target="program">
+                <!-- <button class="menu-button" data-target="khmer-invite">
+                    <span class="font-khmer text-lg">ប័ណ្ណ​អញ្ជើញ</span>
+                    <img src="./images/icon_invite.png" alt="Invite Icon" class="w-6 h-6">
+                </button> -->
+                <button class="menu-button" data-target="program">
                     <span class="font-khmer text-lg">កម្មវិធី</span>
                     <img src="./images/btn_map.png" alt="Program Icon" class="w-6 h-6">
-                </button> -->
+                </button>
                 <button class="menu-button" data-target="venue">
                     <span class="font-khmer text-lg">ទីតាំង</span>
                     <img src="./images/map2.png" alt="Venue Icon" class="w-6 h-6">

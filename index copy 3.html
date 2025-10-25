@@ -133,6 +133,7 @@
             visibility: visible;
         }
 
+        /* Style for simple buttons (Music/Close) */
         .menu-button {
             display: flex;
             align-items: center;
@@ -147,10 +148,15 @@
             text-align: right;
             cursor: pointer;
         }
+        .menu-button:hover {
+            background-color: #5b6e61; /* Darker sage on hover */
+            transform: translateX(-5px); /* Slight hover effect */
+        }
         .menu-button img, .menu-button svg {
             margin-left: 10px; /* Space between text and icon */
             filter: brightness(1.2); /* Make icons brighter */
         }
+        
         /* Specific style for the Close button */
         #close-menu-button {
             background-color: #f87171; /* A reddish color for attention */
@@ -180,8 +186,13 @@
             transform: rotate(135deg); /* Rotate the + to become an X */
             background-color: #d1b04a; /* Slightly darker gold when active */
         }
-
-  
+        
+        /* New wrapper style for image-backed menu buttons */
+        .menu-button-wrapper {
+            cursor: pointer; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            /* This is where the navigation logic lives for the image buttons */
+        }
     </style>
 </head>
 
@@ -202,23 +213,23 @@
     <div id="website-content" class="transition-opacity duration-1000 ease-in">
         
         
-<div id="floating-menu-btn" class="fixed bottom-10 right-10 p-3 rounded-full cursor-pointer z-50 hidden transition-all duration-300 opacity-0">
+        <div id="floating-menu-btn" class="fixed bottom-10 right-10 p-3 rounded-full cursor-pointer z-50 hidden transition-all duration-300 opacity-0">
             <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
             </svg>
         </div>
         
         
-<div id="menu-overlay" class="fixed inset-0 z-[150] hidden">
+        <div id="menu-overlay" class="fixed inset-0 z-[150] hidden">
             <div id="menu-content">
                 
-<button id="music-toggle-btn" class="menu-button">
+                <button id="music-toggle-btn" class="menu-button">
                     <span id="music-status" class="font-khmer text-lg">កំពុងចាក់</span>
                     <img id="speaker-icon" src="./images/volume.png" alt="Sound Icon" class="w-6 h-6">
                 </button>
 
                 
-
+                <div class="menu-button-wrapper" data-target="program">
                     <div class="flex items-center justify-center w-[200px] h-16 relative hover:scale-[1.03] transition-transform duration-200"
                         style="
                             background-image: url('./images/btn_map.png'); /* Using map image for background here */
@@ -227,36 +238,53 @@
                             background-position: center;
                             /* Removed drop-shadow here as it's added on the wrapper now */
                         ">
-                        <button data-target="program" class="menu-button w-full h-full bg-transparent text-sm text-white rounded-full font-semibold shadow-none" ></button>
+                        <button class="cta-button w-full h-full bg-transparent text-sm text-white rounded-full font-semibold shadow-none" aria-label="Program Section"></button>
                     </div>
-         
+                </div>
                 
-
-                <!-- <button class="menu-button" data-target="program">
-                    <span class="font-khmer text-lg">កម្មវិធី</span>
-                    <img src="./images/btn_map.png" alt="Program Icon" class="w-6 h-6">
-                </button> -->
-                <button class="menu-button" data-target="venue">
-                    <span class="font-khmer text-lg">ទីតាំង</span>
-                    <img src="./images/map2.png" alt="Venue Icon" class="w-6 h-6">
-                </button>
-                <button class="menu-button" data-target="bank">
-                    <span class="font-khmer text-lg">ចំណងដៃ</span>
-                    <img src="./images/money.png" alt="Bank Icon" class="w-6 h-6">
-                </button>
-                <button class="menu-button" data-target="gallery">
-                    <span class="font-khmer text-lg">រូបថត</span>
-                    <img src="./images/image-gallery.png" alt="Gallery Icon" class="w-6 h-6">
-                </button>
+                <div class="menu-button-wrapper" data-target="venue">
+                    <div class="flex items-center justify-center w-[200px] h-16 relative hover:scale-[1.03] transition-transform duration-200"
+                        style="
+                            background-image: url('./images/map2.png'); /* Using map2 image for background here */
+                            background-size: contain; 
+                            background-repeat: no-repeat; 
+                            background-position: center;
+                        ">
+                        <button class="cta-button w-full h-full bg-transparent text-sm text-white rounded-full font-semibold shadow-none" aria-label="Venue Section"></button>
+                    </div>
+                </div>
+                
+                <div class="menu-button-wrapper" data-target="bank">
+                    <div class="flex items-center justify-center w-[200px] h-16 relative hover:scale-[1.03] transition-transform duration-200"
+                        style="
+                            background-image: url('./images/money.png'); /* Using money image for background here */
+                            background-size: contain; 
+                            background-repeat: no-repeat; 
+                            background-position: center;
+                        ">
+                        <button class="cta-button w-full h-full bg-transparent text-sm text-white rounded-full font-semibold shadow-none" aria-label="Bank Section"></button>
+                    </div>
+                </div>
+                
+                <div class="menu-button-wrapper" data-target="gallery">
+                    <div class="flex items-center justify-center w-[200px] h-16 relative hover:scale-[1.03] transition-transform duration-200"
+                        style="
+                            background-image: url('./images/image-gallery.png'); /* Using image-gallery for background here */
+                            background-size: contain; 
+                            background-repeat: no-repeat; 
+                            background-position: center;
+                        ">
+                        <button class="cta-button w-full h-full bg-transparent text-sm text-white rounded-full font-semibold shadow-none" aria-label="Gallery Section"></button>
+                    </div>
+                </div>
                 
                 <button id="close-menu-button" class="menu-button">
-                    <span class="font-khmer text-lg">បិទ</span>
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                     </svg>
                 </button>
                 
-</div>
+            </div>
         </div>
         
         <header id="hero-header" class="relative min-h-screen bg-transparent flex flex-col justify-center items-center text-center p-6 border-b border-black-100">
@@ -629,140 +657,183 @@
                 }
             });
             
-            // Event delegation for navigation links (using menu-button class)
+            // **MODIFIED** Event delegation for navigation: checks for both simple and image-backed buttons
             menuContent.addEventListener('click', (event) => {
-                const targetButton = event.target.closest('.menu-button');
-                if (targetButton && targetButton.dataset.target) {
-                    navigateToSection(targetButton.dataset.target);
+                // Check for the new image-backed wrapper
+                const wrapper = event.target.closest('.menu-button-wrapper');
+                // Check for the old simple button (Music/Close)
+                const simpleButton = event.target.closest('.menu-button');
+                
+                let target = null;
+                
+                if (wrapper) {
+                    target = wrapper;
+                } else if (simpleButton && simpleButton.dataset.target) {
+                    // Only simple buttons with a data-target attribute should navigate
+                    target = simpleButton;
+                }
+                
+                if (target && target.dataset.target) {
+                    navigateToSection(target.dataset.target);
                 }
             });
-
-            // =========================================================================
-            // PAGE FLOW HANDLER 
-            // =========================================================================
-
-            const contentRevealHandler = () => {
-                // 1. Fade out and hide the video splash screen
-                videoSplash.classList.add('opacity-0');
-                introVideo.pause(); 
-                
-                setTimeout(() => {
-                    videoSplash.classList.add('hidden'); 
-                    document.body.style.overflow = 'auto'; // Re-enable scrolling
-                    videoSplash.classList.remove('opacity-0');
-                }, 1000); 
-                
-                // 2. Hide the hero header (the invite)
-                heroHeader.classList.add('hidden');
-                
-                // 3. Show the main content area
-                mainContent.classList.remove('hidden');
-
-                // 4. Show the fixed background video for page 2
-                videoBgPage2.classList.remove('hidden');
-
-                // 5. Force show KHMEER-INVITE and PROGRAM SECTIONS
-                khmerInviteSection.classList.remove('opacity-0', 'translate-y-8');
-                programSection.classList.remove('opacity-0', 'translate-y-8');
-
-                // 6. Show the floating menu button
-                floatingMenuBtn.classList.remove('hidden');
-                // Use a slight delay to ensure the content is loaded before starting the fade-in of the button
-                setTimeout(() => {
-                    floatingMenuBtn.classList.remove('opacity-0');
-                }, 500);
-
-                // 7. Start the intersection observer for the remaining fade-up animations
-                startObserver();
-                
-                // 8. Scroll to the beginning of the new content
-                 setTimeout(() => {
-                    window.scrollTo({ top: 0, behavior: 'smooth' }); 
-                 }, 50);
-            };
-
-            // --- Event Listeners ---
             
-            introVideo.addEventListener('ended', contentRevealHandler);
-
-            // 🌟 MUSIC START ON CLICK: The moment the user interacts
-            unlockButton.addEventListener('click', () => {
-                document.getElementById('button-background-box').classList.remove('animate-zoom-pulse');
-                
-                videoSplash.classList.remove('hidden');
-                
-                setTimeout(() => {
-                     videoSplash.classList.remove('opacity-0');
-                }, 10);
-                
-                // 1. Attempt to play intro video (Muted permanently)
-                introVideo.play().catch(e => {
-                    console.warn("Video Autoplay prevented:", e);
-                });
-
-                // 2. Attempt to play background music (NOW UNMUTED)
-                bgMusic.muted = false; 
-                bgMusic.play().catch(e => {
-                    console.warn("Music Autoplay prevented or failed:", e);
-                    bgMusic.muted = true; // Set to muted if it failed to play
-                });
-                
-                document.body.style.overflow = 'hidden';
-            });
-            
-            // --- Function to define and start the observer (UNCHANGED) ---
-            const startObserver = () => {
+            // =========================================================================
+            // SCROLL ANIMATION (Fade-Up) LOGIC - Intersection Observer
+            // =========================================================================
+            function setupIntersectionObserver() {
+                // Remove existing observer if any to prevent duplicates on reload/unlock
                 if (observer) {
                     observer.disconnect();
                 }
 
-                // Select all sections with data-animate="fade-up" *except* the two we showed immediately
-                const animatedSections = document.querySelectorAll('[data-animate="fade-up"]:not(#khmer-invite):not(#program)');
-                
-                observer = new IntersectionObserver((entries) => {
-                    entries.forEach(entry => {
-                        const target = entry.target;
+                const options = {
+                    root: null, // viewport
+                    rootMargin: '0px',
+                    threshold: 0.1 // Trigger when 10% of the item is visible
+                };
 
-                        if (entry.isIntersecting) {
-                            target.classList.remove('opacity-0', 'translate-y-8');
-                        } else {
-                            if (heroHeader.classList.contains('hidden')) { 
-                                target.classList.add('opacity-0', 'translate-y-8');
-                            }
+                observer = new IntersectionObserver((entries, observer) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting && entry.target.dataset.animate === 'fade-up') {
+                            // Apply the visible state
+                            entry.target.classList.remove('opacity-0', 'translate-y-8');
+                            entry.target.classList.add('opacity-100', 'translate-y-0');
+                            // Stop observing after the animation has run
+                            observer.unobserve(entry.target);
                         }
                     });
-                }, {
-                    root: null, 
-                    rootMargin: '0px',
-                    threshold: 0.2
-                });
+                }, options);
 
-                animatedSections.forEach(section => {
+                // Target all sections in the main content for observation
+                document.querySelectorAll('main section[data-animate="fade-up"]').forEach(section => {
                     observer.observe(section);
                 });
-            };
+            }
 
-            // --- Gallery Modal Logic (UNCHANGED) ---
-            const modal = document.getElementById('gallery-modal');
-            const modalImg = document.getElementById('modal-image');
+
+            // =========================================================================
+            // INTRO/UNLOCK LOGIC
+            // =========================================================================
+
+            function unlockWebsite() {
+                // 1. Hide the hero-header contents (invitation card) and show main content
+                heroHeader.style.minHeight = 'auto'; // Collapse the hero section
+                heroHeader.style.padding = '0';
+                document.querySelector('#invite').style.display = 'none';
+
+                // 2. Hide hero video and show page 2 background video
+                document.getElementById('hero-background-video').pause();
+                document.getElementById('hero-background-video').style.display = 'none';
+                
+                videoBgPage2.classList.remove('hidden');
+                document.getElementById('background-video').play(); 
+
+                // 3. Show the main content and floating menu button
+                mainContent.classList.remove('hidden');
+                floatingMenuBtn.classList.remove('hidden', 'opacity-0');
+                floatingMenuBtn.classList.add('opacity-100');
+                
+                // 4. Start music (unmute and play)
+                bgMusic.muted = false;
+                bgMusic.play().catch(e => console.warn("Music auto-play failed, user interaction may be required."));
+                updateMusicToggleUI();
+
+                // 5. Initialize the fade-up animations for the newly visible sections
+                setupIntersectionObserver();
+
+                // 6. Scroll down to the first section (Khmer Invite Card)
+                setTimeout(() => {
+                    const firstSection = document.getElementById('khmer-invite');
+                    if (firstSection) {
+                        firstSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                }, 100); // Short delay to ensure sections are visible
+            }
+            
+            // Unlock button click handler
+            unlockButton.addEventListener('click', () => {
+                unlockWebsite();
+            });
+
+            // =========================================================================
+            // MODAL LOGIC (for Gallery/Map images)
+            // =========================================================================
+            const galleryModal = document.getElementById('gallery-modal');
+            const modalImage = document.getElementById('modal-image');
 
             window.openModal = function(imageSrc) {
-                modalImg.src = imageSrc;
-                modal.classList.remove('hidden');
-                document.body.style.overflow = 'hidden'; 
-            };
+                modalImage.src = imageSrc;
+                galleryModal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden'; // Prevent scrolling when modal is open
+            }
 
             window.closeModal = function() {
-                modal.classList.add('hidden');
-                if (heroHeader.classList.contains('hidden')) {
-                     document.body.style.overflow = 'auto'; 
+                galleryModal.classList.add('hidden');
+                document.body.style.overflow = 'auto'; 
+            }
+
+            // =========================================================================
+            // INTRO VIDEO LOGIC (Autoplay/Splash Screen)
+            // =========================================================================
+
+            // Function to handle the start of the website experience
+            function startWebsiteExperience() {
+                 // Check if video is loaded and ready to play
+                if (introVideo.readyState >= 3 || introVideo.error) {
+                    // Hide the splash/video overlay
+                    videoSplash.style.opacity = '0';
+                    setTimeout(() => {
+                        videoSplash.classList.add('hidden');
+                        document.body.style.overflow = 'auto'; // Re-enable scrolling
+                    }, 1000); 
+
+                    // Show the main content
+                    websiteContent.style.opacity = '1';
+
+                    // Start the music (muted initially as per the HTML attribute)
+                    bgMusic.play().catch(e => console.warn("Muted music play failed: ", e));
+
+                    // Load the custom guest name
+                    loadGuestName();
+                } else {
+                     // Wait for 'canplaythrough' or 'loadeddata'
+                    introVideo.addEventListener('canplaythrough', startWebsiteExperience, { once: true });
+                    introVideo.addEventListener('loadeddata', startWebsiteExperience, { once: true });
                 }
-            };
+            }
+
+
+            // This is the first thing that happens on DOMContentLoaded
+            // 1. Show the video splash and lock body scrolling
+            videoSplash.classList.remove('hidden');
+            document.body.style.overflow = 'hidden'; 
             
-            // --- Initial Load Setup (UNCHANGED) ---
-            loadGuestName(); 
-            document.body.style.overflow = 'auto'; 
-            websiteContent.classList.remove('opacity-0');
+            // 2. Play the video (it's muted and set to autoplay in HTML)
+            // Note: Mobile browsers might still block play until user interaction.
+            introVideo.play().catch(e => {
+                console.warn("Intro video autoplay blocked. Transitioning to static content.");
+                // Fallback if autoplay is blocked: directly start website experience
+                startWebsiteExperience(); 
+            });
+
+            // 3. Set a timeout to proceed after a few seconds even if video playback issues occur
+            // A hard time limit ensures the user isn't stuck waiting for a resource that might fail.
+            setTimeout(() => {
+                // Only execute if the splash is still visible (i.e., startWebsiteExperience hasn't run yet)
+                if (videoSplash.style.opacity !== '0') {
+                    startWebsiteExperience();
+                }
+            }, 4000); // 4 seconds delay max for the intro video
+
+            // 4. On video end, transition to the main content
+            introVideo.onended = () => {
+                startWebsiteExperience();
+            };
+
+            // Ensure website content starts fully transparent to fade in later
+            websiteContent.style.opacity = '0'; 
+
         });
     </script>
 </body>
