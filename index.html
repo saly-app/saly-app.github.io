@@ -102,13 +102,19 @@
 <body class="font-body text-text-dark leading-relaxed">
     
     <div id="video-splash" class="fixed inset-0 z-[100] bg-black flex flex-col justify-center items-center opacity-0 transition-opacity duration-1000 hidden">
-        <video id="intro-video" muted playsinline preload="auto" class="w-full h-full object-cover">
-            <source src="./video/wedding.mov" type="video/mp4">
+        <video id="intro-video" muted autoplay playsinline preload="auto" class="w-full h-full object-cover">
+            <source src="./video/intro_3.mov" type="video/mp4">
             Your browser does not support the video tag.
         </video>
         
         <p id="loading-text" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white font-header text-2xl italic animate-pulse">Loading...</p>
-    </div>
+        
+            <div id="sound-toggle" class="absolute bottom-10 right-10 text-white p-3 rounded-full bg-black/50 cursor-pointer z-110">
+                <img id="speaker-off" src="./images/silence.png" alt="Sound Off" class="w-8 h-8">
+                
+                <img id="speaker-on" src="./images/volume.png" alt="Sound On" class="w-8 h-8 hidden">
+            </div>
+        </div>
 
     <div id="website-content" class="transition-opacity duration-1000 ease-in">
         
@@ -328,7 +334,6 @@
             const videoSplash = document.getElementById('video-splash');
             const introVideo = document.getElementById('intro-video');
             const websiteContent = document.getElementById('website-content');
-            // const skipButton = document.getElementById('skip-button'); // Removed
             const loadingText = document.getElementById('loading-text');
 
             // New references
@@ -337,6 +342,15 @@
             const heroHeader = document.querySelector('#hero-header'); 
             const videoBgPage2 = document.getElementById('video-bg-page2'); 
             const tagNameList = document.getElementById('tag_name_list'); 
+            
+            // New references for sound toggle
+            const soundToggle = document.getElementById('sound-toggle');
+            const speakerOn = document.getElementById('speaker-on');
+            const speakerOff = document.getElementById('speaker-off');
+            
+            // References for sections to show immediately
+            const khmerInviteSection = document.getElementById('khmer-invite');
+            const programSection = document.getElementById('program');
             
             let observer = null; 
 
@@ -347,8 +361,8 @@
                 // 1. Get the Code from the URL Hash (e.g., #0002 -> 0002)
                 let guestCode = window.location.hash.substring(1).trim();
                 
-                let foundNameText = ' '; // Default text if no code or name is found
-                let unlockButtonText = ' '; // Default button text
+                let foundNameText = ' '; 
+                let unlockButtonText = ' '; 
 
                 // If a guest code is present, attempt to load the name
                 if (guestCode) {
@@ -365,7 +379,6 @@
                             let foundName = null;
 
                             for (const line of lines) {
-                                // Split by comma. This assumes the Khmer name does not contain a comma.
                                 const parts = line.trim().split(',', 2); 
                                 
                                 if (parts.length === 2 && parts[0].trim() === guestCode) {
@@ -374,7 +387,6 @@
                                 }
                             }
 
-                            // Update the name if found, otherwise use the default
                             if (foundName) {
                                 foundNameText = foundName;
                                 unlockButtonText = ' '; 
@@ -389,17 +401,17 @@
                 // 4. Update the Invitation Name Tag and Button Text
                 tagNameList.innerHTML = foundNameText;
                 unlockButton.innerHTML = unlockButtonText; 
-                // Adjust vertical position for default text by checking if a guest code was used
                 tagNameList.style.marginTop = guestCode ? '30px' : '0'; 
             }
             
             // =========================================================================
-            // PAGE FLOW HANDLERS 
+            // PAGE FLOW HANDLER (MODIFIED)
             // =========================================================================
 
             const contentRevealHandler = () => {
                 // 1. Fade out and hide the video splash screen
                 videoSplash.classList.add('opacity-0');
+                introVideo.pause(); 
                 
                 setTimeout(() => {
                     videoSplash.classList.add('hidden'); 
@@ -416,58 +428,69 @@
                 // 4. Show the fixed background video for page 2
                 videoBgPage2.classList.remove('hidden');
 
-                // 5. Start the intersection observer for fade-up animations
+                // 5. *** FORCE SHOW KHMEER-INVITE AND PROGRAM SECTIONS ***
+                // Remove the initial animation classes immediately for the top two sections
+                khmerInviteSection.classList.remove('opacity-0', 'translate-y-8');
+                programSection.classList.remove('opacity-0', 'translate-y-8');
+
+                // 6. Start the intersection observer for the *remaining* fade-up animations
                 startObserver();
                 
-                // 6. Scroll to the beginning of the new content
+                // 7. Scroll to the beginning of the new content
                  setTimeout(() => {
                     window.scrollTo({ top: 0, behavior: 'smooth' }); 
                  }, 50);
             };
 
-            const videoStartHandler = () => {
-                // Remove the pulsing animation immediately upon click
-                document.getElementById('button-background-box').classList.remove('animate-zoom-pulse');
+            // --- Event Listeners ---
+            
+            introVideo.addEventListener('ended', contentRevealHandler);
 
-                // 1. Show the video splash and remove the hidden class
+            // Click the main button to start the muted video splash
+            unlockButton.addEventListener('click', () => {
+                document.getElementById('button-background-box').classList.remove('animate-zoom-pulse');
+                
                 videoSplash.classList.remove('hidden');
                 
                 setTimeout(() => {
                      videoSplash.classList.remove('opacity-0');
                 }, 10);
                 
-                // 2. Play the video
                 introVideo.play().catch(e => {
                     console.warn("Autoplay prevented:", e);
-                    // If autoplay fails (common on mobile), skip the video and reveal content
-                    contentRevealHandler();
+                    contentRevealHandler(); 
                 });
                 
-                 // 3. Disable body scrolling while video is playing
                 document.body.style.overflow = 'hidden';
-            };
-
-
-            // --- Event Listeners ---
-            introVideo.addEventListener('ended', contentRevealHandler);
-
-            // Removed: skipButton.addEventListener('click', () => { introVideo.pause(); contentRevealHandler(); });
+            });
             
-            unlockButton.addEventListener('click', videoStartHandler);
-            
+            // When the video is loaded, hide "Loading..." text
             introVideo.addEventListener('loadeddata', () => {
-                loadingText.style.display = 'none'; // Hide loading text once data is loaded
-                introVideo.classList.remove('opacity-0'); 
+                loadingText.style.display = 'none'; 
+            });
+            
+            // Toggle Sound on Icon Click
+            soundToggle.addEventListener('click', () => {
+                if (introVideo.muted) {
+                    introVideo.muted = false;
+                    speakerOff.classList.add('hidden');
+                    speakerOn.classList.remove('hidden');
+                } else {
+                    introVideo.muted = true;
+                    speakerOff.classList.remove('hidden');
+                    speakerOn.classList.add('hidden');
+                }
             });
 
 
-            // --- Function to define and start the observer (for fade-up animations) ---
+            // --- Function to define and start the observer (MODIFIED) ---
             const startObserver = () => {
                 if (observer) {
                     observer.disconnect();
                 }
 
-                const animatedSections = document.querySelectorAll('[data-animate="fade-up"]');
+                // Select all sections with data-animate="fade-up" *except* the two we showed immediately
+                const animatedSections = document.querySelectorAll('[data-animate="fade-up"]:not(#khmer-invite):not(#program)');
                 
                 observer = new IntersectionObserver((entries) => {
                     entries.forEach(entry => {
@@ -476,7 +499,6 @@
                         if (entry.isIntersecting) {
                             target.classList.remove('opacity-0', 'translate-y-8');
                         } else {
-                            // Only re-hide if the main content has already been revealed
                             if (heroHeader.classList.contains('hidden')) { 
                                 target.classList.add('opacity-0', 'translate-y-8');
                             }
@@ -485,7 +507,7 @@
                 }, {
                     root: null, 
                     rootMargin: '0px',
-                    threshold: 0.2 // Trigger earlier for a smoother transition feel
+                    threshold: 0.2
                 });
 
                 animatedSections.forEach(section => {
@@ -493,7 +515,7 @@
                 });
             };
 
-            // --- Gallery Modal Logic ---
+            // --- Gallery Modal Logic (UNCHANGED) ---
             const modal = document.getElementById('gallery-modal');
             const modalImg = document.getElementById('modal-image');
 
@@ -505,18 +527,16 @@
 
             window.closeModal = function() {
                 modal.classList.add('hidden');
-                // Restore scroll if main content is visible
                 if (heroHeader.classList.contains('hidden')) {
                      document.body.style.overflow = 'auto'; 
                 }
             };
             
-            // --- Initial Load Setup: RUN THE NAME LOADER ---
+            // --- Initial Load Setup (UNCHANGED) ---
             loadGuestName(); 
-            
-            // Ensure initial body state allows scrolling until the video forces it off
             document.body.style.overflow = 'auto'; 
-            
             websiteContent.classList.remove('opacity-0');
         });
     </script>
+</body>
+</html>
