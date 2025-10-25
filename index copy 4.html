@@ -103,18 +103,13 @@
         /* 4. CUSTOM MENU STYLES - Adapted for the new design */
         #menu-overlay {
             z-index: 150; 
-            pointer-events: none;
-            background-color: transparent;
+            pointer-events: none; /* Allows clicks to pass through when hidden */
+            background-color: transparent; /* Keep background transparent until needed for click detection */
             transition: background-color 0.3s;
         }
         #menu-overlay.active {
-            pointer-events: auto;
-            /* Changed to a dark, semi-transparent black background */
-            background-color: rgba(0, 0, 0, 0.4); 
-            
-            /* ADDED: Stronger Backdrop Blur for a clear separation */
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px); /* For Safari support */
+            pointer-events: auto; /* Re-enable clicks when active */
+            background-color: rgba(0, 0, 0, 0.4); /* Add dark overlay when menu is open */
         }
 
         #menu-content {
@@ -142,7 +137,7 @@
             display: flex;
             align-items: center;
             justify-content: flex-end; /* Align text and icon to the right */
-            background-color: #ffff; /* Sage color */
+            background-color: #6a8273; /* Sage color */
             color: #efc455; /* Gold-like color for text/icons */
             padding: 0.75rem 1.25rem;
             border-radius: 9999px; /* Fully rounded corners */
@@ -150,12 +145,7 @@
             transition: background-color 0.2s, transform 0.2s;
             min-width: 180px; /* Ensure consistent width for buttons */
             text-align: right;
-            font-size: 12px;
             cursor: pointer;
-        }
-        .menu-button:hover {
-            background-color: #5b6e61; /* Darker sage on hover */
-            transform: translateX(-5px); /* Slight hover effect */
         }
         .menu-button img, .menu-button svg {
             margin-left: 10px; /* Space between text and icon */
@@ -190,6 +180,8 @@
             transform: rotate(135deg); /* Rotate the + to become an X */
             background-color: #d1b04a; /* Slightly darker gold when active */
         }
+
+  
     </style>
 </head>
 
@@ -220,30 +212,75 @@
 <div id="menu-overlay" class="fixed inset-0 z-[150] hidden">
             <div id="menu-content">
                 
-    <button id="music-toggle-btn" class="menu-button">
-                    <span id="music-status" style="font-family:'Moul';">កំពុងចាក់</span>
-                    <img id="speaker-icon" src="./images/silence.png" alt="Sound Icon" class="w-6 h-6">
+<button id="music-toggle-btn" class="menu-button">
+                    <span id="music-status" class="font-khmer text-lg">កំពុងចាក់</span>
+                    <img id="speaker-icon" src="./images/volume.png" alt="Sound Icon" class="w-6 h-6">
                 </button>
 
-                <button class="menu-button" data-target="program">
-                    <span style="font-family:'Moul';">កម្មវិធី មង្គលការ</span>
-                    <img src="./images/wedding-day.png" alt="Program Icon" class="w-6 h-6">
-                </button>
-                <button class="menu-button" data-target="venue">
-                    <span style="font-family:'Moul';">ទីតាំងកម្មវិធី(Map)</span>
+                
+
+                    <div class="flex items-center justify-center w-[200px] h-16 relative hover:scale-[1.03] transition-transform duration-200"
+                        style="
+                            background-image: url('./images/btn_map.png'); /* Using map image for background here */
+                            background-size: contain; 
+                            background-repeat: no-repeat; 
+                            background-position: center;
+                            /* Removed drop-shadow here as it's added on the wrapper now */
+                        ">
+                        <button data-target="program" class="menu-button w-full h-full bg-transparent text-sm text-white rounded-full font-semibold shadow-none" ></button>
+                    </div>
+
+                    <div class="flex items-center justify-center w-[200px] h-16 relative hover:scale-[1.03] transition-transform duration-200"
+                        style="
+                            background-image: url('./images/btn_map.png'); /* Using map image for background here */
+                            background-size: contain; 
+                            background-repeat: no-repeat; 
+                            background-position: center;
+                            /* Removed drop-shadow here as it's added on the wrapper now */
+                        ">
+                        <button data-target="venue" class="menu-button w-full h-full bg-transparent text-sm text-white rounded-full font-semibold shadow-none" ></button>
+                    </div>
+                     <div class="flex items-center justify-center w-[200px] h-16 relative hover:scale-[1.03] transition-transform duration-200"
+                        style="
+                            background-image: url('./images/btn_map.png'); /* Using map image for background here */
+                            background-size: contain; 
+                            background-repeat: no-repeat; 
+                            background-position: center;
+                            /* Removed drop-shadow here as it's added on the wrapper now */
+                        ">
+                        <button data-target="bank" class="menu-button w-full h-full bg-transparent text-sm text-white rounded-full font-semibold shadow-none" ></button>
+                    </div>
+                    <div class="flex items-center justify-center w-[200px] h-16 relative hover:scale-[1.03] transition-transform duration-200"
+                        style="
+                            background-image: url('./images/btn_map.png'); /* Using map image for background here */
+                            background-size: contain; 
+                            background-repeat: no-repeat; 
+                            background-position: center;
+                            /* Removed drop-shadow here as it's added on the wrapper now */
+                        ">
+                        <button data-target="gallery" class="menu-button w-full h-full bg-transparent text-sm text-white rounded-full font-semibold shadow-none" ></button>
+                    </div>
+         
+          
+                <!-- <button class="menu-button" data-target="program">
+                    <span class="font-khmer text-lg">កម្មវិធី</span>
+                    <img src="./images/btn_map.png" alt="Program Icon" class="w-6 h-6">
+                </button> -->
+                <!-- <button class="menu-button" data-target="venue">
+                    <span class="font-khmer text-lg">ទីតាំង</span>
                     <img src="./images/map2.png" alt="Venue Icon" class="w-6 h-6">
-                </button>
-                <button class="menu-button" data-target="bank">
-                    <span style="font-family:'Moul';">ផ្ញើរចំណងដៃ</span>
-                    <img src="./images/gift-box.png" alt="Bank Icon" class="w-6 h-6">
+                </button> -->
+                <!-- <button class="menu-button" data-target="bank">
+                    <span class="font-khmer text-lg">ចំណងដៃ</span>
+                    <img src="./images/money.png" alt="Bank Icon" class="w-6 h-6">
                 </button>
                 <button class="menu-button" data-target="gallery">
-                    <span style="font-family:'Moul';">រូបថត</span>
+                    <span class="font-khmer text-lg">រូបថត</span>
                     <img src="./images/image-gallery.png" alt="Gallery Icon" class="w-6 h-6">
-                </button>
+                </button> -->
                 
                 <button id="close-menu-button" class="menu-button">
-                    <span style="font-family:'Moul';">បិទ</span>
+                    <span class="font-khmer text-lg">បិទ</span>
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                     </svg>
@@ -552,14 +589,14 @@
             // =========================================================================
             function updateMusicToggleUI() {
                 if (bgMusic.muted) {
-                    speakerIcon.src = './images/volume.png'; // Assuming you have a silence.png
+                    speakerIcon.src = './images/silence.png'; // Assuming you have a silence.png
                     speakerIcon.alt = 'Sound Off';
-                    musicStatus.textContent = 'បើកសំឡេង'; // Muted in Khmer
+                    musicStatus.textContent = 'បិទសំឡេង'; // Muted in Khmer
                     bgMusic.pause();
                 } else {
-                    speakerIcon.src = './images/silence.png'; // Assuming you have a volume.png
+                    speakerIcon.src = './images/volume.png'; // Assuming you have a volume.png
                     speakerIcon.alt = 'Sound On';
-                    musicStatus.textContent = 'បិទសំឡេង'; // Playing in Khmer
+                    musicStatus.textContent = 'កំពុងចាក់'; // Playing in Khmer
                     bgMusic.play().catch(e => console.warn("Music play failed:", e));
                 }
             }
