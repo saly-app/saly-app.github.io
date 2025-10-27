@@ -326,7 +326,7 @@ i.box-circle-solid{
 .info-section{
 	float: left;
 	width:100%;
-	padding:5rem 0;
+	padding:3rem 0;
 	position: relative;
 	z-index: 1;
 }
@@ -355,7 +355,7 @@ i.box-circle-solid{
 }
 .info-section p {
     font-size: 1rem;
-    line-height: 1.3rem;
+    line-height: 1.8rem;
 }
 .info-section .box h2{
     font-size:24px;
@@ -576,6 +576,10 @@ transition:1s ease-in;
 }
 .testimonial-section h2{
 	font-size: 3rem;
+	line-height: 1.8rem;
+}
+.testimonial-section p{
+	line-height: 2.8rem;
 }
 .testimonial-section .single-testimonial .carousel-item {
     margin: 0 15%;
@@ -609,8 +613,6 @@ transition:1s ease-in;
 	background-color: #b47f41;
 	color: #fff;
 }
-
-
 /* ========== Footer Section ========== */
 .footer-section{
 	float: left;

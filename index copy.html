@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Digital Invite - Wedding Invitation Service</title>
-    <link href="https://fonts.googleapis.com/css2?family=Battambang:wght@100;300;400;700;900&display=swap" rel="stylesheet">
-</head>
+     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    </head>
 <link rel="stylesheet" href="css/bootstrap.min.css">
 <link rel="stylesheet" type="text/css" href="css/custom-style.css">
 <link rel="stylesheet" type="text/css" href="css/loaders.css"/>
@@ -61,6 +61,104 @@
         .service-block-bg h3 {
             font-size: 20px; 
         }
+
+        /* Target the main intro caption heading */
+        #home .intro-caption h2 {
+            font-size: 2.4rem; /* Large, bold heading size */
+            font-weight: 700;
+            line-height: 1.6;
+        }
+
+        /* Target the main intro caption paragraph */
+        #home .intro-caption p {
+            font-size: 1.4rem; /* Significantly larger paragraph text */
+            line-height: 1.6;
+            margin-bottom: 30px; /* Adjust spacing */
+        }
+
+        /* Ensure the button text is also prominent */
+        #home .intro-caption .btn {
+            font-size: 1.2rem;
+            padding: 12px 30px;
+        }
+
+        /* Styling for the New Professional Pricing Boxes */
+
+            /* Main Box Styling */
+            .price-box-pro {
+                background-color: #ffffff; /* Clean white background */
+                border: 1px solid #C39F78; /* Light Rose Gold border */
+                border-radius: 8px;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+                transition: all 0.3s ease;
+                height: 100%; /* Ensures all boxes are the same height */
+            }
+
+            /* Hover effect for professionalism */
+            .price-box-pro:hover {
+                box-shadow: 0 6px 20px rgba(195, 159, 120, 0.4); /* Accent color glow on hover */
+                transform: translateY(-5px); /* Lift slightly on hover */
+            }
+
+            /* Featured Package (Standard) */
+            .price-box-pro.standard-active {
+                background-color: #C39F78; /* Primary Rose Gold background */
+                color: #ffffff; /* White text for contrast */
+                border: none;
+                box-shadow: 0 8px 25px rgba(195, 159, 120, 0.6); /* Stronger shadow */
+                transform: scale(1.03);
+            }
+
+            /* Price Display Style Adjustments */
+            .price-box-pro .price-count {
+                font-size: 4rem; /* Make the price large */
+                font-weight: 700;
+                line-height: 1.6;
+                
+            }
+
+            /* Text color for lists inside the standard active box */
+            .price-box-pro.standard-active ul li {
+                color: #ffffff;
+            }
+            .price-box-pro ul li {
+                color: #444444; /* Darker text for readability */
+                padding-bottom: 5px;
+            }
+            .price-box-pro ul li .text-muted {
+                opacity: 0.6; /* Dim the excluded features */
+            }
+
+            /* Styling for the New Professional Service Boxes (Consistent with Pricing) */
+
+            .service-box-pro {
+                background-color: #ffffff; /* Clean white background */
+                border: 1px solid #E7E7E7; /* Very light gray border */
+                border-radius: 6px;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08); /* Subtle shadow */
+                transition: all 0.3s ease;
+                height: 100%; 
+            }
+
+            /* Hover effect to highlight the service */
+            .service-box-pro:hover {
+                box-shadow: 0 4px 15px rgba(195, 159, 120, 0.3); /* Rose Gold glow on hover */
+                transform: translateY(-3px); /* Lift slightly */
+                border-color: #C39F78; /* Rose Gold border on hover */
+            }
+
+            /* Ensure icons are displayed correctly and centered */
+            .service-box-pro .icon-box {
+                display: inline-block;
+                width: 60px;
+                height: 60px;
+            }
+            .service-box-pro .icon-box img {
+                max-width: 100%;
+                height: auto;
+            }
+
+            
     </style>
 
 <body>
@@ -89,9 +187,6 @@
                 <a class="nav-link" href="#services">សេវាកម្ម</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#about">អំពីយើង</a>
-              </li>
-              <li class="nav-item">
                 <a class="nav-link" href="#price">កញ្ចប់តម្លៃ</a>
               </li>
               <li class="nav-item">
@@ -110,129 +205,131 @@
     </div>
 </nav>
 
-<section id="home" class="intro intro-bg bg-overlay parallax">
+<section id="home" class="intro intro-bg bg-overlay-primary parallax">
     <div class="container">
         <div class="row">
-            <div class="col-lg-6 col-md-12 caption-two-panel ml-auto pt-5">
+            <div class="col-lg-8 col-md-10 caption-two-panel mx-auto pt-5 text-center">
                 <div class="intro-caption mt-5">
-                <h2 class="text-white mb-2">លើសពីការអញ្ជើញ គឺអនុស្សាវរីយ៍</h2>
-                <p class="text-white mb-4"> យើងផ្តល់ជូនកាតអញ្ជើញឌីជីថលដែលមានលក្ខណៈពិសេស ទំនើប និងស្រស់ស្អាត ដើម្បីធ្វើឱ្យថ្ងៃពិសេសរបស់លោកអ្នកកាន់តែអស្ចារ្យ។</p>
-                <a class="btn btn-primary text-white mr-3">ស្វែងយល់បន្ថែម</a>
+                    <h2 class="text-white mb-3">លើសពីការអញ្ជើញ គឺអនុស្សាវរីយ៍</h2>
+                    <p class="text-white mb-5"> យើងផ្តល់ជូនកាតអញ្ជើញឌីជីថលដែលមានលក្ខណៈពិសេស ទំនើប និងស្រស់ស្អាត ដើម្បីធ្វើឱ្យថ្ងៃពិសេសរបស់លោកអ្នកកាន់តែអស្ចារ្យ។</p>
+                    <a class="btn btn-primary text-white mx-auto">ស្វែងយល់បន្ថែម</a>
+                </div>
             </div>
         </div>
     </div>
 </section>
 
-<section id="services" class="info-section text-white bg-right bg-dark">
+<section id="services" class="info-section py-7 text-dark bg-light">
     <div class="container">
         <div class="row">
-            <div class="col-md-8">
-                <div class="head-box">
-                    <h2 class="font-abril ">សេវាកម្មរបស់យើង</h2>
+            <div class="col-md-12 mx-auto">
+                <div class="head-box text-center">
+                    <h2 class="font-abril text-inverse text-underline-primary">សេវាកម្មរបស់យើង</h2>
                 </div>
                 <div class="three-panel-block mt-5">
-                    <div class="row">
-                        <div class="col-lg-6 col-md-6 col-sm-6">
-                            <div class="service-block mb-5">
-                                <i class="icon-box mb-3 float-left w-100"><img src="img/icons/scissors.png" class="img-fluid"></i>
-                                <h3 class="text-primary">ឌីហ្សាញកាតឌីជីថល</h3>
-                                <p>យើងរចនាកាតអញ្ជើញដែលអាចមើលបានលើទូរស័ព្ទដៃ និងកុំព្យូទ័របានយ៉ាងស្រស់ស្អាត។</p>
+                    
+                    <div class="row justify-content-center"> 
+                        
+                        <div class="col-lg-4 col-md-6 col-sm-6 mb-4">
+                            <div class="service-box-pro text-center p-4">
+                                <i class="icon-box mb-3 w-100"><img src="img/icons/invitation-card.png" width="64" height="64" class="img-fluid"></i>
+                                <h3 class="text-primary mt-2">ឌីហ្សាញកាតឌីជីថល</h3>
+                                <p>យើងរចនាកាតអញ្ជើញដែលអាចមើលបានលើទូរស័ព្ទដៃ និងកុំព្យូទ័របានយ៉ាងស្រស់ស្អាត ជាមួយនឹងជម្រើស Themes ទំនើបៗ។</p>
                             </div>
                         </div>
-                        <div class="col-lg-6 col-md-6 col-sm-6">
-                            <div class="service-block mb-5">
-                                <i class="icon-box mb-3 float-left w-100"><img src="img/icons/razor-1.png" class="img-fluid"></i>
-                                <h3 class="text-primary">បន្ថែមវីដេអូ/រូបភាព</h3>
-                                <p>ដាក់បញ្ចូលរូបភាព Pre-Wedding និងវីដេអូខ្លីៗ ដើម្បីឱ្យភ្ញៀវទទួលបានបទពិសោធន៍ថ្មី។</p>
+                        
+                        <div class="col-lg-4 col-md-6 col-sm-6 mb-4">
+                            <div class="service-box-pro text-center p-4">
+                                <i class="icon-box mb-3 w-100"><img src="img/icons/video.png" width="64" height="64" class="img-fluid"></i>
+                                <h3 class="text-primary mt-2">បន្ថែមវីដេអូ/រូបភាព</h3>
+                                <p>ដាក់បញ្ចូលរូបភាព Pre-Wedding និងវីដេអូខ្លីៗ ដើម្បីឱ្យភ្ញៀវទទួលបានបទពិសោធន៍ថ្មី និងមានអនុស្សាវរីយ៍។</p>
                             </div>
                         </div>
-                        <div class="col-lg-6 col-md-6 col-sm-6">
-                            <div class="service-block mb-5">
-                                <i class="icon-box mb-3 float-left w-100"><img src="img/icons/brush.png" class="img-fluid"></i>
-                                <h3 class="text-primary">ប្រព័ន្ធ RSVP ឆ្លាតវៃ</h3>
-                                <p>គ្រប់គ្រងបញ្ជីភ្ញៀវ និងការឆ្លើយតបយ៉ាងងាយស្រួលតាមរយៈប្រព័ន្ធរបស់យើង។</p>
+                        
+                        <div class="col-lg-4 col-md-6 col-sm-6 mb-4">
+                            <div class="service-box-pro text-center p-4">
+                                <i class="icon-box mb-3 w-100"><img src="img/icons/software.png" width="64" height="64" class="img-fluid"></i>
+                                <h3 class="text-primary mt-2">ប្រព័ន្ធ RSVP ឆ្លាតវៃ</h3>
+                                <p>គ្រប់គ្រងបញ្ជីភ្ញៀវ និងការឆ្លើយតបយ៉ាងងាយស្រួលតាមរយៈប្រព័ន្ធរបស់យើង ដោយទទួលបានរបាយការណ៍ច្បាស់លាស់។</p>
                             </div>
                         </div>
-                        <div class="col-lg-6 col-md-6 col-sm-6">
-                            <div class="service-block">
-                                <i class="icon-box mb-3 float-left w-100"><img src="img/icons/hair-clip.png" class="img-fluid"></i>
-                                <h3 class="text-primary">ផែនទី និងទីតាំង</h3>
-                                <p>ភ្ជាប់ជាមួយផែនទី Google Map ច្បាស់លាស់សម្រាប់ណែនាំភ្ញៀវទៅកាន់ទីតាំងពិធី។</p>
-                            </div>
+                        
                         </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="price" class="info-section bg-light"> <div class="container"> <div class="head-box text-center mb-5">
+            <h2 class="font-abril text-inverse text-underline-primary">កញ្ចប់តម្លៃពិសេស</h2>
+        </div>
+        
+        <div class="three-panel-block my-4">
+            <div class="row">
+                <div class="col-lg-4 col-md-4 col-sm-12 pl-md-5 mb-4">
+                    <div class="price-box-pro text-center p-4"> <h3 class="text-primary mt-2">មូលដ្ឋាន (Basic)</h3>
+                        <div class="price-count font-abril mt-3 mb-4">
+                            <span class="text-dark">$</span><span class="text-dark">99</span>
+                        </div>
+                        <ul class="px-2 text-left" style="list-style-type: none; padding-left: 0;">
+                            <li>✅ Link ទៅកាន់សំបុត្រ Digital</li>
+                            <li>✅ ឈ្មោះកូនកំលោះ កូនក្រមុំ</li>
+                            <li>✅ ព័ត៌មានកម្មវិធី & ពេលវេលា</li>
+                            <li>✅ ភ្លេង Auto Play Music Background</li>
+                            <li>✅ Quote សម្រាប់គូស្នេហា</li>
+                            <li class="text-muted">❌ ផែនទីទីតាំង (Google Map)</li>
+                            <li class="text-muted">❌ វីដេអូ Pre-Wedding</li>
+                            <li class="text-muted">❌ ប្រព័ន្ធ RSVP & ឈ្មោះភ្ញៀវ</li>
+                        </ul>
+                        <a class="btn btn-primary btn-capsul mt-3">ជ្រើសរើស</a>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-4 col-sm-12 mb-4">
+                    <div class="price-box-pro text-center p-4 standard-active"> <h3 class="mt-2 text-white">ស្តង់ដារ (Standard)</h3>
+                        <div class="price-count font-abril mt-3 mb-4">
+                            <span class="text-white">$</span><span class="text-white">199</span>
+                        </div>
+                         <ul class="px-2 text-left" style="list-style-type: none; padding-left: 0;">
+                            <li>✅ Link ទៅកាន់សំបុត្រ Digital</li>
+                            <li>✅ ឈ្មោះកូនកំលោះ កូនក្រមុំ</li>
+                            <li>✅ ព័ត៌មានកម្មវិធី & ពេលវេលា</li>
+                            <li>✅ ភ្លេង Auto Play Music Background</li>
+                            <li>✅ Quote សម្រាប់គូស្នេហា</li>
+                            <li>✅ ផែនទីទីតាំង (Google Map)</li>
+                            <li>✅ រូបភាព Pre-Wedding (រហូតដល់ 10)</li>
+                            <li class="text-muted">❌ វីដេអូ Pre-Wedding</li>
+                            <li class="text-muted">❌ ប្រព័ន្ធ RSVP & ឈ្មោះភ្ញៀវ</li>
+                        </ul>
+                        <a class="btn btn-primary btn-capsul mt-3 bg-white text-primary">ជ្រើសរើស</a> </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-4 col-sm-12 pr-md-5 mb-4">
+                    <div class="price-box-pro text-center p-4"> <h3 class="text-primary mt-2">ពិសេស (Exclusive)</h3>
+                        <div class="price-count font-abril mt-3 mb-4">
+                            <span class="text-dark">$</span><span class="text-dark">399</span>
+                        </div>
+                         <ul class="px-2 text-left" style="list-style-type: none; padding-left: 0;">
+                            <li>✅ Link ទៅកាន់សំបុត្រ Digital</li>
+                            <li>✅ ឈ្មោះកូនកំលោះ កូនក្រមុំ</li>
+                            <li>✅ ព័ត៌មានកម្មវិធី & ពេលវេលា</li>
+                            <li>✅ ភ្លេង Auto Play Music Background</li>
+                            <li>✅ Quote សម្រាប់គូស្នេហា</li>
+                            <li>✅ ផែនទីទីតាំង (Google Map)</li>
+                            <li>✅ រូបភាព Pre-Wedding (គ្មានដែនកំណត់)</li>
+                            <li>✅ វីដេអូ Pre-Wedding (1 វីដេអូ)</li>
+                            <li>✅ ប្រព័ន្ធ RSVP & ឈ្មោះភ្ញៀវផ្ទាល់ខ្លួន</li>
+                        </ul>
+                        <a class="btn btn-primary btn-capsul mt-3">ជ្រើសរើស</a>
                     </div>
                 </div>
             </div>
         </div>
-        
     </div>
 </section>
 
-
-<section id="price" class="info-section sec-bg-03 bg-overlay">
-    <div class="container text-white">
-        <div class="head-box text-center mb-5">
-            <h2 class="font-abril">កញ្ចប់តម្លៃពិសេស</h2>
-        </div>
-        
-        <div class="three-panel-block my-4">
-    <div class="row">
-        <div class="col-lg-4 col-md-4 col-sm-12 pl-md-5 mb-4">
-            <div class="service-block-bg text-center p-3">
-                <div class="price-count font-abril"><span>$</span>39</div>
-                <h3>កាតឌីជីថល (Premium Package)</h3>
-                <ul class="px-2 text-left" style="list-style-type: none; padding-left: 0;">
-                    <li>✅ Link ទៅកាន់សំបុត្រ Digital</li>
-                    <li>✅ ឈ្មោះកូនកំលោះ កូនក្រមុំ</li>
-                    <li>✅ ព័ត៌មានកម្មវិធី</li>
-                    <li>✅ ភ្លេង Auto Play Music Background</li>
-                    <li>✅ Quote សម្រាប់គូស្នេហា</li>
-                    <li>✅ 5 រូបភាព Pre Wedding</li>
-                    <li>✅ 1 Videos Pre Wedding</li>
-                </ul>
-            </div>
-        </div>
-        
-        <div class="col-lg-4 col-md-4 col-sm-12 mb-4">
-            <div class="service-block-bg text-center p-3">
-                <div class="price-count font-abril"><span>$</span>27</div>
-                <h3>កាតឌីជីថល (Standard Package)</h3>
-                 <ul class="px-2 text-left" style="list-style-type: none; padding-left: 0;">
-                    <li>✅ Link ទៅកាន់សំបុត្រ Digital</li>
-                    <li>✅ ឈ្មោះកូនកំលោះ កូនក្រមុំ</li>
-                    <li>✅ ព័ត៌មានកម្មវិធី</li>
-                    <li>✅ ភ្លេង Auto Play Music Background</li>
-                    <li>✅ Quote សម្រាប់គូស្នេហា</li>
-                    <li>✅ 5 រូបភាព Pre Wedding</li>
-                    <li>✅ 1 Videos Pre Wedding</li>
-                </ul>
-            </div>
-        </div>
-        
-        <div class="col-lg-4 col-md-4 col-sm-12 pr-md-5 mb-4">
-            <div class="service-block-bg text-center p-3">
-                <div class="price-count font-abril"><span>$</span>50</div>
-                <h3>ឌីហ្សាញបោះពុម្ព (Print Design)</h3>
-                 <ul class="px-2 text-left" style="list-style-type: none; padding-left: 0;">
-                    <li>✅ Link ទៅកាន់សំបុត្រ Digital</li>
-                    <li>✅ ឈ្មោះកូនកំលោះ កូនក្រមុំ</li>
-                    <li>✅ ព័ត៌មានកម្មវិធី</li>
-                    <li>✅ ភ្លេង Auto Play Music Background</li>
-                    <li>✅ Quote សម្រាប់គូស្នេហា</li>
-                    <li>✅ 5 រូបភាព Pre Wedding</li>
-                    <li>✅ 1 Videos Pre Wedding</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-    </div>
-</section>
-
-
-<section id="testimonial" class="testimonial-section sec-bg-04 py-5 h-100">
+<section id="testimonial" class="testimonial-section sec-bg-04 py-5">
     <div class="container">
         <div class="row">
             <div class="head-box text-center mb-3 col-md-12 mt-5">
@@ -282,12 +379,24 @@
     </div>
 </section>
 
-<section id="contact" class="contact-section h-100 bg-dark">
-    <div id="map" class="bg-overlay"></div>
-    <div class="container py-5">
-        <div class="col-lg-8 col-md-6 col-sm-10 form-sec bg-white my-5 p-5 mx-auto">
+<section id="contact" class="info-section bg-white">
+    <div class="container">
+        
+        <div class="row">
+            <div class="col-md-12 head-box text-center">
+                <h2 class="font-abril text-inverse text-underline-primary">ទំនាក់ទំនងមកយើងខ្ញុំ!</h2>
+            </div>
+        </div>
+        
+        <div class="row mt-4 justify-content-center">
+             <div class="col-md-10 text-center">
+                <p>យើងរីករាយនឹងស្តាប់គំនិត និងសំណួររបស់លោកអ្នក។ សូមបំពេញព័ត៌មានខាងក្រោម ហើយយើងនឹងឆ្លើយតបទៅវិញឱ្យបានឆាប់តាមដែលអាចធ្វើទៅបាន។</p>
+            </div>
+        </div>
+        
+        <div class="row justify-content-center">
+            <div class="col-12 col-lg-8 form-sec bg-white my-4 p-4 mx-auto">
                 <form>
-                  <h2 class="mb-4">ទំនាក់ទំនងមកយើងខ្ញុំ!</h2>
                   <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
@@ -322,13 +431,14 @@
                             <label class="sr-only" for="formGroupExampleInput2">សារ</label>
                             <textarea class="form-control" placeholder="បញ្ចូលសាររបស់លោកអ្នកនៅទីនេះ!" rows="4" onfocus="this.placeholder=''" onblur="this.placeholder='បញ្ចូលសាររបស់លោកអ្នកនៅទីនេះ!'"></textarea>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group text-center">
                             <button class="btn btn-primary btn-capsul px-4">បញ្ជូន</button>
                         </div>      
                     </div>
                   </div>
-              </form>
+                </form>
             </div>
+        </div>
     </div>
 </section>
 
@@ -339,11 +449,8 @@
 </div>
 
 
-
 <script  src="https://code.jquery.com/jquery-3.2.1.min.js" ></script>
 <script src="js/bootstrap.min.js" ></script>
-<script async deffer type="text/javascript" src="https://maps.google.com/maps/api/js?key= AIzaSyB52BfJHBtqiqYBn_D4ZUqujiWxAOiRyTc&callback=initMap"></script>
-<script src="js/gmap-custom.js" ></script>
 <script src="js/core.js"></script>
 </body>
 </html>
