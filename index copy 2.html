@@ -1,761 +1,541 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Saly & Kimbouy's Wedding</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:ital,wght@1,500;1,700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Khmer:wght@400;600;700&display=swap" rel="stylesheet">
-    
-    <style>
-        /* * 1. FONT FACE DECLARATIONS */
+    <title>Digital Invite - Wedding Invitation Service</title>
+     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    </head>
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="css/custom-style.css">
+<link rel="stylesheet" type="text/css" href="css/loaders.css"/>
+<link rel="stylesheet" type="text/css" href="font-awesome/css/font-awesome.min.css">
+
+<style>
+        /* 1. Define the KhmerOS font for general text */
         @font-face {
-            font-family: 'AKbalthomKhmerHand';
-            /* Try loading from the root and then from the font/ folder */
-            src: url('AKbalthomKhmerHand.ttf') format('truetype'),
-                 url('font/AKbalthomKhmerHand.ttf') format('truetype'); 
+            font-family: 'KhmerOS';
+            src: url('fonts/Battambang-Regular.ttf') format('truetype'); 
             font-weight: normal;
             font-style: normal;
         }
+
+        /* 2. Define the Moul font for headings/titles */
         @font-face {
             font-family: 'Moul';
-            /* Assuming 'Moul.ttf' is also in your font folder for the names in the first invitation */
-            src: url('Moul.ttf') format('truetype'),
-                 url('font/Moul.ttf') format('truetype'); 
+            src: url('fonts/Moul.ttf') format('opentype'); 
             font-weight: normal;
             font-style: normal;
         }
 
-        /* * 2. TAILWIND CONFIGURATION */
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'sage': '#6a8273', /* Primary Color */
-                        'off-white': '#fdfdfa', /* Background Color */
-                        'text-dark': '#333',
-                        /* Custom color for menu items based on the image */
-                        'menu-gold': '#efc455', 
-                        'menu-bg': 'rgba(106, 130, 115, 0.7)', /* Sage with transparency */
-                    },
-                    fontFamily: {
-                        'header': ['"Playfair Display"', 'serif'],
-                        'body': ['Montserrat', 'sans-serif'],
-                        /* Custom local font for the main Khmer header */
-                        'khmer-script': ['Moulpali','AKbalthomKhmerHand','AKbalthomFreehand','AKbalthomKhmerLer','Moul', 'serif', 'system-ui'],
-                        /* Noto Sans Khmer web font for the body text */
-                        'khmer': ['"Noto Sans Khmer"', 'sans-serif', 'system-ui'], 
-                    },
-                },
-            }
+        /* 3. Apply KhmerOS as the default body font */
+        body {
+            font-family: 'KhmerOS', sans-serif !important;
         }
-        /* Custom styles to ensure smooth scrolling and responsive hero background */
-        html {
-            scroll-behavior: smooth;
+
+        /* 4. Apply the bolder Moul font to all main headings and titles */
+        h1, h2, h3, h4, h5, h6, .font-abril, .price-count {
+            font-family: 'Moul', sans-serif !important;
         }
         
-        /* Custom Timeline Styles (Kept for completeness, though not heavily used in this layout) */
-        .timeline-container:before {
-            content: '';
-            position: absolute;
-            left: 50%;
-            top: 0;
-            bottom: 0;
-            width: 2px;
-            background: rgba(255, 255, 255, 0.4); 
-            transform: translateX(-50%);
-        }
-        .timeline-item-icon {
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 10;
-        }
-        .modal-content-wrapper {
-            max-width: 90vw;
-            max-height: 90vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
 
-        /* 3. BUTTON ANIMATION KEYFRAMES */
-        @keyframes pulseZoom {
-            0% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.05); /* Zooms in 5% */
-            }
-            100% {
-                transform: scale(1); /* Zooms back out */
-            }
+        /* 5. NAVBAR FONT SIZING FOR KHMER READABILITY */
+        /* Brand/Logo Text */
+        .navbar-brand strong {
+            font-size: 20px !important; /* Larger for logo/brand name */
+            font-family: 'Moul', sans-serif !important;
         }
-
-        .animate-zoom-pulse {
-            animation: pulseZoom 2s infinite ease-in-out; /* 2s duration, repeats forever */
+        /* Navigation Links */
+        .top-nav .nav-link {
+            font-size: 18px !important; /* Clearer size for links */
+            font-family: 'KhmerOS', sans-serif !important;
         }
-        
-        /* 4. CUSTOM MENU STYLES - Adapted for the new design */
-        #menu-overlay {
-            z-index: 150; 
-            pointer-events: none; /* Allows clicks to pass through when hidden */
-            background-color: transparent; /* Keep background transparent until needed for click detection */
-            transition: background-color 0.3s;
-        }
-        #menu-overlay.active {
-            pointer-events: auto; /* Re-enable clicks when active */
-            background-color: rgba(0, 0, 0, 0.4); /* Add dark overlay when menu is open */
-        }
-
-        #menu-content {
-            position: absolute;
-            right: 2.5rem; /* Matches bottom-10 right-10 for the floating button */
-            bottom: 2.5rem;
-            transform: scale(0.8) translate(20%, 20%); /* Start smaller and offset */
-            transform-origin: bottom right;
-            transition: transform 0.3s ease-out, opacity 0.3s ease-out;
-            opacity: 0;
-            visibility: hidden; /* Hide initially */
-            display: flex; /* Flex container for buttons */
-            flex-direction: column; /* Stack buttons vertically */
-            align-items: flex-end; /* Align to the right */
-            gap: 10px; /* Space between menu buttons */
-        }
-
-        #menu-overlay.active #menu-content {
-            transform: scale(1) translate(0, 0); /* Scale to 1 and no offset */
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .menu-button {
-            display: flex;
-            align-items: center;
-            justify-content: flex-end; /* Align text and icon to the right */
-            background-color: #6a8273; /* Sage color */
-            color: #efc455; /* Gold-like color for text/icons */
-            padding: 0.75rem 1.25rem;
-            border-radius: 9999px; /* Fully rounded corners */
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-            transition: background-color 0.2s, transform 0.2s;
-            min-width: 180px; /* Ensure consistent width for buttons */
-            text-align: right;
+        /* Language Switch Button Style */
+        .lang-switch-btn {
             cursor: pointer;
+            padding: 5px 10px;
+            border: 1px solid #ffffff;
+            background: none; /* Make it transparent */
+            border-radius: 4px;
+            color: #ffffff;
+            font-size: 14px;
+            margin-left: 10px;
+            transition: all 0.3s;
         }
-        .menu-button:hover {
-            background-color: #5b6e61; /* Darker sage on hover */
-            transform: translateX(-5px); /* Slight hover effect */
-        }
-        .menu-button img, .menu-button svg {
-            margin-left: 10px; /* Space between text and icon */
-            filter: brightness(1.2); /* Make icons brighter */
-        }
-        /* Specific style for the Close button */
-        #close-menu-button {
-            background-color: #f87171; /* A reddish color for attention */
-            color: white;
-        }
-        #close-menu-button:hover {
-            background-color: #ef4444; 
-        }
-        #close-menu-button img, #close-menu-button svg {
-             filter: none; /* Keep the icon color clean */
-             transform: rotate(45deg); /* Rotate the + icon to X */
+        .lang-switch-btn:hover {
+            background-color: rgba(255, 255, 255, 0.2);
         }
 
+        /* Minor adjustments for better Khmer display in packages */
+        .service-block-bg ul {
+            font-size: 16px !important;
+            line-height: 1.8;
+            /* Ensure the list text stays readable with KhmerOS */
+            font-family: 'KhmerOS', sans-serif !important;
+        }
+        .service-block-bg h3 {
+            font-size: 20px; 
+        }
 
-        /* Specific style for the + button */
-        #floating-menu-btn {
-            background-color: #efc455; /* Gold color */
-            box-shadow: 0 6px 10px rgba(0,0,0,0.4);
-            transition: transform 0.3s ease-in-out, background-color 0.2s;
-            cursor: pointer;
+        /* Target the main intro caption heading */
+        #home .intro-caption h2 {
+            font-size: 2.4rem; /* Large, bold heading size */
+            font-weight: 700;
+            line-height: 1.6;
         }
-        #floating-menu-btn svg {
-            color: white; /* Plus icon is white */
-            stroke: white;
+
+        /* Target the main intro caption paragraph */
+        #home .intro-caption p {
+            font-size: 1.4rem; /* Significantly larger paragraph text */
+            line-height: 1.6;
+            margin-bottom: 30px; /* Adjust spacing */
         }
-        #floating-menu-btn.active {
-            transform: rotate(135deg); /* Rotate the + to become an X */
-            background-color: #d1b04a; /* Slightly darker gold when active */
+
+        /* Ensure the button text is also prominent */
+        #home .intro-caption .btn {
+            font-size: 1.2rem;
+            padding: 12px 30px;
         }
+
+        /* Styling for the New Professional Pricing Boxes (existing styles retained) */
+            .price-box-pro {
+                background-color: #ffffff; 
+                border: 1px solid #C39F78; 
+                border-radius: 8px;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); 
+                transition: all 0.3s ease;
+                height: 100%; 
+            }
+            .price-box-pro:hover {
+                box-shadow: 0 6px 20px rgba(195, 159, 120, 0.4); 
+                transform: translateY(-5px); 
+            }
+            .price-box-pro.standard-active {
+                background-color: #C39F78; 
+                color: #ffffff; 
+                border: none;
+                box-shadow: 0 8px 25px rgba(195, 159, 120, 0.6); 
+                transform: scale(1.03);
+            }
+            .price-box-pro .price-count {
+                font-size: 4rem; 
+                font-weight: 700;
+                line-height: 1.6;
+            }
+            .price-box-pro.standard-active ul li {
+                color: #ffffff;
+            }
+            .price-box-pro ul li {
+                color: #444444; 
+                padding-bottom: 5px;
+            }
+            .price-box-pro ul li .text-muted {
+                opacity: 0.6; 
+            }
+
+        /* Styling for the New Professional Service Boxes (existing styles retained) */
+            .service-box-pro {
+                background-color: #ffffff; 
+                border: 1px solid #E7E7E7; 
+                border-radius: 6px;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08); 
+                transition: all 0.3s ease;
+                height: 100%; 
+            }
+            .service-box-pro:hover {
+                box-shadow: 0 4px 15px rgba(195, 159, 120, 0.3); 
+                transform: translateY(-3px); 
+                border-color: #C39F78; 
+            }
+            .service-box-pro .icon-box {
+                display: inline-block;
+                width: 60px;
+                height: 60px;
+            }
+            .service-box-pro .icon-box img {
+                max-width: 100%;
+                height: auto;
+            }
+
+            
     </style>
-</head>
 
-<body class="font-body text-text-dark leading-relaxed">
-    
-    <audio id="background-music" loop muted preload="auto">
-        <source src="./music/song1.wav" type="audio/wav">
-        Your browser does not support the audio element.
-    </audio>
+<body>
 
-    <div id="video-splash" class="fixed inset-0 z-[100] bg-black flex flex-col justify-center items-center opacity-0 transition-opacity duration-1000 hidden">
-        <video id="intro-video" muted autoplay playsinline preload="auto" class="w-full h-full object-cover">
-            <source src="./video/intro.mov" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
+<div class="loader loader-bg">
+    <div class="loader-inner ball-pulse">
+        <div></div>
+        <div></div>
+        <div></div>
     </div>
-
-    <div id="website-content" class="transition-opacity duration-1000 ease-in">
-        
-        
-<div id="floating-menu-btn" class="fixed bottom-10 right-10 p-3 rounded-full cursor-pointer z-50 hidden transition-all duration-300 opacity-0">
-            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-            </svg>
-        </div>
-        
-        
-<div id="menu-overlay" class="fixed inset-0 z-[150] hidden">
-            <div id="menu-content">
-                
-<button id="music-toggle-btn" class="menu-button">
-                    <span id="music-status" class="font-khmer text-lg">កំពុងចាក់</span>
-                    <img id="speaker-icon" src="./images/volume.png" alt="Sound Icon" class="w-6 h-6">
-                </button>
-
-                
-                <!-- <button class="menu-button" data-target="khmer-invite">
-                    <span class="font-khmer text-lg">ប័ណ្ណ​អញ្ជើញ</span>
-                    <img src="./images/icon_invite.png" alt="Invite Icon" class="w-6 h-6">
-                </button> -->
-                <button class="menu-button" data-target="program">
-                    <span class="font-khmer text-lg">កម្មវិធី</span>
-                    <img src="./images/btn_map.png" alt="Program Icon" class="w-6 h-6">
-                </button>
-                <button class="menu-button" data-target="venue">
-                    <span class="font-khmer text-lg">ទីតាំង</span>
-                    <img src="./images/map2.png" alt="Venue Icon" class="w-6 h-6">
-                </button>
-                <button class="menu-button" data-target="bank">
-                    <span class="font-khmer text-lg">ចំណងដៃ</span>
-                    <img src="./images/money.png" alt="Bank Icon" class="w-6 h-6">
-                </button>
-                <button class="menu-button" data-target="gallery">
-                    <span class="font-khmer text-lg">រូបថត</span>
-                    <img src="./images/image-gallery.png" alt="Gallery Icon" class="w-6 h-6">
-                </button>
-                
-                <button id="close-menu-button" class="menu-button">
-                    <span class="font-khmer text-lg">បិទ</span>
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                    </svg>
-                </button>
-                
 </div>
+
+<nav class="navbar navbar-expand-md fixed-top top-nav">
+    <div class="container-fluid">
+          <a class="navbar-brand" href="index.html"><strong data-i18n-key="Brand/Logo Name">ឌីជីថលអ៊ិនវ៉ាយ</strong></a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"><img src="img/icons/menu.png"></span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav m-auto text-sm-center text-md-center">
+              <li class="nav-item">
+                <a class="nav-link" href="#home" data-i18n-key="Navigation Link 1">ទំព័រដើម <span class="sr-only">(current)</span></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#services" data-i18n-key="Navigation Link 2">សេវាកម្ម</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#price" data-i18n-key="Navigation Link 3">កញ្ចប់តម្លៃ</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#testimonial" data-i18n-key="Navigation Link 4">មតិអតិថិជន</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#contact" data-i18n-key="Navigation Link 5">ទំនាក់ទំនង</a>
+              </li>
+            </ul>
+          </div>    
+          <ul class="navbar-nav ml-auto search-box align-items-center">
+            <li class="nav-item">
+              <a class="nav-link" href="#"><i class="fa fa-search text-white"></i></a>
+            </li>
+            <li class="nav-item">
+                <button id="lang-switch" class="lang-switch-btn" onclick="toggleLanguage()">EN</button>
+            </li>
+          </ul>
+    </div>
+</nav>
+
+<section id="home" class="intro intro-bg bg-overlay-primary parallax">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-md-10 caption-two-panel mx-auto pt-5 text-center">
+                <div class="intro-caption mt-5">
+                    <h2 class="text-white mb-3" data-i18n-key="Main Heading/Slogan">លើសពីការអញ្ជើញ គឺអនុស្សាវរីយ៍</h2>
+                    <p class="text-white mb-5" data-i18n-key="Intro Paragraph"> យើងផ្តល់ជូនកាតអញ្ជើញឌីជីថលដែលមានលក្ខណៈពិសេស ទំនើប និងស្រស់ស្អាត ដើម្បីធ្វើឱ្យថ្ងៃពិសេសរបស់លោកអ្នកកាន់តែអស្ចារ្យ។</p>
+                    <a class="btn btn-primary text-white mx-auto" data-i18n-key="Button Text 1">ស្វែងយល់បន្ថែម</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="services" class="info-section py-7 text-dark bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 mx-auto">
+                <div class="head-box text-center">
+                    <h2 class="font-abril text-inverse text-underline-primary" data-i18n-key="Section Heading 1">សេវាកម្មរបស់យើង</h2>
+                </div>
+                <div class="three-panel-block mt-5">
+                    
+                    <div class="row justify-content-center"> 
+                        
+                        <div class="col-lg-4 col-md-6 col-sm-6 mb-4">
+                            <div class="service-box-pro text-center p-4">
+                                <i class="icon-box mb-3 w-100"><img src="img/icons/invitation-card.png" width="64" height="64" class="img-fluid"></i>
+                                <h3 class="text-primary mt-2" data-i18n-key="Service Title 1">ឌីហ្សាញកាតឌីជីថល</h3>
+                                <p data-i18n-key="Service Description 1">យើងរចនាកាតអញ្ជើញដែលអាចមើលបានលើទូរស័ព្ទដៃ និងកុំព្យូទ័របានយ៉ាងស្រស់ស្អាត ជាមួយនឹងជម្រើស Themes ទំនើបៗ។</p>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-4 col-md-6 col-sm-6 mb-4">
+                            <div class="service-box-pro text-center p-4">
+                                <i class="icon-box mb-3 w-100"><img src="img/icons/video.png" width="64" height="64" class="img-fluid"></i>
+                                <h3 class="text-primary mt-2" data-i18n-key="Service Title 2">បន្ថែមវីដេអូ/រូបភាព</h3>
+                                <p data-i18n-key="Service Description 2">ដាក់បញ្ចូលរូបភាព Pre-Wedding និងវីដេអូខ្លីៗ ដើម្បីឱ្យភ្ញៀវទទួលបានបទពិសោធន៍ថ្មី និងមានអនុស្សាវរីយ៍។</p>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-4 col-md-6 col-sm-6 mb-4">
+                            <div class="service-box-pro text-center p-4">
+                                <i class="icon-box mb-3 w-100"><img src="img/icons/software.png" width="64" height="64" class="img-fluid"></i>
+                                <h3 class="text-primary mt-2" data-i18n-key="Service Title 3">ប្រព័ន្ធ RSVP ឆ្លាតវៃ</h3>
+                                <p data-i18n-key="Service Description 3">គ្រប់គ្រងបញ្ជីភ្ញៀវ និងការឆ្លើយតបយ៉ាងងាយស្រួលតាមរយៈប្រព័ន្ធរបស់យើង ដោយទទួលបានរបាយការណ៍ច្បាស់លាស់។</p>
+                            </div>
+                        </div>
+                        
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="price" class="info-section bg-light"> <div class="container"> <div class="head-box text-center mb-5">
+            <h2 class="font-abril text-inverse text-underline-primary" data-i18n-key="Section Heading 2">កញ្ចប់តម្លៃពិសេស</h2>
         </div>
         
-        <header id="hero-header" class="relative min-h-screen bg-transparent flex flex-col justify-center items-center text-center p-6 border-b border-black-100">
-                    
-            <div class="absolute inset-0 z-[0] after:content-[''] after:absolute after:inset-0 after:bg-black/0"> 
-                <video id="hero-background-video" autoplay loop muted playsinline class="w-full h-full object-cover">
-                    <source src="./video/bg_vdo_02.mp4" type="video/mp4">
-                    Your browser does not support the video tag.
-                </video>
+        <div class="three-panel-block my-4">
+            <div class="row">
+                <div class="col-lg-4 col-md-4 col-sm-12 pl-md-5 mb-4">
+                    <div class="price-box-pro text-center p-4"> <h3 class="text-primary mt-2" data-i18n-key="Package Name 1">មូលដ្ឋាន</h3>
+                        <div class="price-count font-abril mt-3 mb-4">
+                            <span class="text-dark">$</span><span class="text-dark">99</span>
+                        </div>
+                        <ul class="px-2 text-left" style="list-style-type: none; padding-left: 0;">
+                            <li data-i18n-key="Feature 1">✅ Link ទៅកាន់សំបុត្រ Digital</li>
+                            <li data-i18n-key="Feature 2">✅ ឈ្មោះកូនកំលោះ កូនក្រមុំ</li>
+                            <li data-i18n-key="Feature 3">✅ ព័ត៌មានកម្មវិធី & ពេលវេលា</li>
+                            <li data-i18n-key="Feature 4">✅ ភ្លេង Auto Play Music Background</li>
+                            <li data-i18n-key="Feature 5">✅ Quote សម្រាប់គូស្នេហា</li>
+                            <li class="text-muted" data-i18n-key="Feature 6-Excluded">❌ ផែនទីទីតាំង (Google Map)</li>
+                            <li class="text-muted" data-i18n-key="Feature 7-Excluded">❌ វីដេអូ Pre-Wedding</li>
+                            <li class="text-muted" data-i18n-key="Feature 8-Excluded">❌ ប្រព័ន្ធ RSVP & ឈ្មោះភ្ញៀវ</li>
+                        </ul>
+                        <a class="btn btn-primary btn-capsul mt-3" data-i18n-key="Button Text 2">ជ្រើសរើស</a>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-4 col-sm-12 mb-4">
+                    <div class="price-box-pro text-center p-4 standard-active"> <h3 class="mt-2 text-white" data-i18n-key="Package Name 2">ស្តង់ដារ</h3>
+                        <div class="price-count font-abril mt-3 mb-4">
+                            <span class="text-white">$</span><span class="text-white">199</span>
+                        </div>
+                         <ul class="px-2 text-left" style="list-style-type: none; padding-left: 0;">
+                            <li data-i18n-key="Feature 1">✅ Link ទៅកាន់សំបុត្រ Digital</li>
+                            <li data-i18n-key="Feature 2">✅ ឈ្មោះកូនកំលោះ កូនក្រមុំ</li>
+                            <li data-i18n-key="Feature 3">✅ ព័ត៌មានកម្មវិធី & ពេលវេលា</li>
+                            <li data-i18n-key="Feature 4">✅ ភ្លេង Auto Play Music Background</li>
+                            <li data-i18n-key="Feature 5">✅ Quote សម្រាប់គូស្នេហា</li>
+                            <li data-i18n-key="Feature 6-Included">✅ ផែនទីទីតាំង (Google Map)</li>
+                            <li data-i18n-key="Feature 7-Standard">✅ រូបភាព Pre-Wedding (រហូតដល់ 10)</li>
+                            <li class="text-muted" data-i18n-key="Feature 7-Excluded">❌ វីដេអូ Pre-Wedding</li>
+                            <li class="text-muted" data-i18n-key="Feature 8-Excluded">❌ ប្រព័ន្ធ RSVP & ឈ្មោះភ្ញៀវ</li>
+                        </ul>
+                        <a class="btn btn-primary btn-capsul mt-3 bg-white text-primary" data-i18n-key="Button Text 2">ជ្រើសរើស</a> </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-4 col-sm-12 pr-md-5 mb-4">
+                    <div class="price-box-pro text-center p-4"> <h3 class="text-primary mt-2" data-i18n-key="Package Name 3">ពិសេស</h3>
+                        <div class="price-count font-abril mt-3 mb-4">
+                            <span class="text-dark">$</span><span class="text-dark">399</span>
+                        </div>
+                         <ul class="px-2 text-left" style="list-style-type: none; padding-left: 0;">
+                            <li data-i18n-key="Feature 1">✅ Link ទៅកាន់សំបុត្រ Digital</li>
+                            <li data-i18n-key="Feature 2">✅ ឈ្មោះកូនកំលោះ កូនក្រមុំ</li>
+                            <li data-i18n-key="Feature 3">✅ ព័ត៌មានកម្មវិធី & ពេលវេលា</li>
+                            <li data-i18n-key="Feature 4">✅ ភ្លេង Auto Play Music Background</li>
+                            <li data-i18n-key="Feature 5">✅ Quote សម្រាប់គូស្នេហា</li>
+                            <li data-i18n-key="Feature 6-Included">✅ ផែនទីទីតាំង (Google Map)</li>
+                            <li data-i18n-key="Feature 7-Exclusive-Image">✅ រូបភាព Pre-Wedding (គ្មានដែនកំណត់)</li>
+                            <li data-i18n-key="Feature 7-Exclusive-Video">✅ វីដេអូ Pre-Wedding (1 វីដេអូ)</li>
+                            <li data-i18n-key="Feature 8-Exclusive-Included">✅ ប្រព័ន្ធ RSVP & ឈ្មោះភ្ញៀវផ្ទាល់ខ្លួន</li>
+                        </ul>
+                        <a class="btn btn-primary btn-capsul mt-3" data-i18n-key="Button Text 2">ជ្រើសរើស</a>
+                    </div>
+                </div>
             </div>
-
-            <section id="invite" class="relative z-10 py-0 max-w-xl mx-auto mb-12">
-                
-                <img src="./images/Invite_new.png" 
-                    style="width: 100%; height: 100%; display: block; object-fit: cover; border-radius: inherit;" 
-                    alt="Invitation Image">
-
-                <div class="absolute inset-0 flex flex-col items-center p-6 text-center">
-                    <div id="names-background-box" 
-                        class="absolute top-1/2 left-1/2 h-24 w-full mx-auto flex items-center justify-center text-center"
-                        style="
-                            background-image: url('./images/btn_namecard2.png'); 
-                            background-size: contain; 
-                            background-repeat: no-repeat; 
-                            background-position: center;
-                            transform: translate(-50%, -50%); 
-                            margin: 0;
-                            max-width: 80%;
-                        ">
-
-                        <p id="tag_name_list" style="font-family:'Moul'; color: #efc455; margin-top: 30px; font-size: 13px;">
-                            កំពុងផ្ទុក...
-                        </p>
-                    </div>
-                    <div id="button-background-box"
-                        class="mt-auto flex items-center justify-center w-4/5 max-w-sm h-16 relative animate-zoom-pulse"
-                        style="
-                            background-image: url('./images/btn_open.png');
-                            background-size: contain; 
-                            background-repeat: no-repeat; 
-                            background-position: center;
-                            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
-                        ">
-                        <button  id="unlock-sections-button" class="cta-button inline-block bg-transparent text-sm text-white px-6 py-2 rounded-full font-semibold transition duration-300 ease-in-out hover:bg-transparent shadow-none" background-color: transparent !important; color: #5b5b5b; padding: 0;">
-                        </button>
-                    </div>
-                </div>
-                
-            </section>
-        </header>
-
-        <div id="video-bg-page2" class="fixed inset-0 z-0 hidden"> 
-            <video id="background-video" autoplay loop muted playsinline class="w-full h-full object-cover">
-                <source src="./video/3.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-            </video>
-            <div class="absolute inset-0 bg-black opacity-30"></div>
-        </div>
-
-        <main class="p-4 relative z-10 hidden">
-
-
-        <section id="khmer-invite" class="relative max-w-xl mx-auto bg-black/10 backdrop-blur-sm rounded-1xl shadow-xl mb-12 opacity-0 translate-y-8 transition-all duration-1000 ease-in-out" data-animate="fade-up">
-                
-                <img src="./images/wedding_card2.png" style="width: 100%; height: 100%; display: block; object-fit: cover;">
-
-                <div class="absolute inset-x-0 bottom-0 flex justify-center items-center p-6 pt-0">
-                    
-                    <div id="button-background-box2"
-                        class="flex items-center justify-center w-4/5 max-w-sm h-16 relative animate-zoom-pulse"
-                        style="
-                            background-image: url('./images/btn_save.png');
-                            background-size: contain; 
-                            background-repeat: no-repeat; 
-                            background-position: center;
-                            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
-                        ">
-                        
-                        <a href="https://calendar.google.com/calendar/event?action=TEMPLATE&tmeid=NTFia241cW1rMzZvcjFmczZ0dmlhc29yaDdfMjAyNjAxMTFUMTAwMDAwWiBrZW9zYXR5QG0&tmsrc=keosaly%40gmail.com&scp=ALL" 
-                        target="_blank" 
-                        rel="noopener noreferrer" 
-                        style="text-decoration: none; display: block; width: 100%; height: 100%;">
-                            
-                            <button  
-                                id="save-date-button" 
-                                aria-label="Save the date to Google Calendar"
-                                class="cta-button inline-block bg-transparent text-sm text-white rounded-full font-semibold shadow-none" 
-                                style="
-                                    background-color: transparent !important; 
-                                    border: none;
-                                    width: 100%;
-                                    height: 100%;
-                                    padding: 0;
-                                    margin: 0;
-                                ">
-                            </button>
-                        </a>
-                        
-                    </div>
-                    
-                </div>
-                
-            </section>
-
-
-        <section id="program" class="max-w-xl mx-auto bg-black/10 backdrop-blur-sm rounded-1xl shadow-xl mb-12 opacity-0 translate-y-8 transition-all duration-1000 ease-in-out" data-animate="fade-up">
-                <img src="./images/program_5.png" style="width: 100%; height: 100%; display: block; object-fit: cover;">
-            </section> 
-            
-    
-        <section id="venue" class="py-12 px-6 max-w-xl mx-auto border-b border-gray-200 bg-black/10 backdrop-blur-sm rounded-2xl shadow-xl mb-12 opacity-0 translate-y-8 transition-all duration-1000 ease-in-out" data-animate="fade-up">
-            <div class="text-center font-khmer leading-loose text-white">
-                <h2 class="font-khmer-script text-3xl text-white mb-4" style="font-family:'AKbalthomKhmerHand'; color: darkgoldengold;">ទីតាំងកម្មវិធី</h2>
-
-                <img src="./images/map.jpg" alt="Map image of the venue" class="w-full h-auto object-cover rounded-xl shadow-lg transform hover:scale-105 transition duration-300 cursor-pointer" onclick="openModal(this.src)">
-                <br>
-                <div class="text-lg text-white" style="font-family:'AKbalthomKhmerLer';">
-                    <p>ស្ថិតនៅ បុរីលឹមឈៀងហាក់ គីឡូ6 ផ្ទះលេខ 48i 46i ផ្លូវលេខ2 កែង3A រាជធានីភ្នំពេញ!</p>
-                </div>
-                
-                <div id="button-openmap"
-                    class="mt-8 flex items-center justify-center w-4/5 max-w-sm h-16 relative animate-zoom-pulse mx-auto"
-                    style="
-                        background-image: url('./images/btn_map.png');
-                        background-size: contain; 
-                        background-repeat: no-repeat; 
-                        background-position: center;
-                        filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
-                    ">
-
-                    <a href="https://maps.app.goo.gl/3DtryAv9kyWQXQoP8?g_st=ipc" 
-                        target="_blank" 
-                        rel="noopener noreferrer" 
-                        style="text-decoration: none; display: block; width: 100%; height: 100%;">
-                            
-                        <button  
-                            id="save-date-button" 
-                            aria-label="Open googlemap."
-                            class="cta-button inline-block bg-transparent text-sm text-white rounded-full font-semibold shadow-none" 
-                            style="
-                                background-color: transparent !important; 
-                                border: none;
-                                width: 100%;
-                                height: 100%;
-                                padding: 0;
-                                margin: 0;
-                            ">
-                        </button>
-                    </a>
-                </div>
-
-            </div>
-        </section>
-
-          <section id="bank" class="py-12 px-6 max-w-xl mx-auto border-b border-gray-200 bg-black/10 backdrop-blur-sm rounded-2xl shadow-xl mb-12 opacity-0 translate-y-8 transition-all duration-1000 ease-in-out" data-animate="fade-up">
-                <div class="flex flex-col items-center font-khmer leading-loose text-white">
-                    <h2 class="font-khmer-script text-3xl text-white mb-6" style="font-family:'AKbalthomKhmerHand'; color: darkgoldengold;">គណនេយ្យ ABA</h2>
-                    
-                    <div class="flex justify-center items-center space-x-8 mb-6">
-                        
-                        <a href="./images/aba.JPG" target="_blank" title="View ABA QR Code for Saly" class="rounded-lg overflow-hidden shadow-lg border-4 border-white transform hover:scale-[1.02] transition duration-300 ease-in-out">
-                            <img src="./images/aba.JPG" alt="ABA Bank QR Code 1" class="block w-34">
-                        </a>
-
-                        <a href="./images/aba.JPG" target="_blank" title="View ABA QR Code for Kimbouy" class="rounded-lg overflow-hidden shadow-lg border-4 border-white transform hover:scale-[1.02] transition duration-300 ease-in-out">
-                            <img src="./images/aba2.JPG" alt="ABA Bank QR Code 2" class="block w-34">
-                        </a>
-
-                    </div>
-                    <p class="mb-6 text-xl font-medium" style="font-family:'AKbalthomKhmerLer';">សម្រាប់ ចំណង់ដៃរតាមរយៈ ធនាគារ</p>
-                    
-                    </div>
-            </section>
-
-            <section id="gallery" class="py-12 px-6 max-w-4xl mx-auto border-b border-gray-200 bg-black/10 backdrop-blur-sm rounded-2xl shadow-xl mb-12 opacity-0 translate-y-8 transition-all duration-1000 ease-in-out" data-animate="fade-up">
-                <div class="text-center font-khmer leading-loose text-white">
-                    <h2 class="font-khmer-script text-3xl text-white mb-6" style="font-family:'AKbalthomKhmerHand'; color: darkgoldengold;">រូបថតអនុស្សាវរីយ៍</h2>
-                    <p class="mb-8 text-xl font-medium" style="font-family:'AKbalthomKhmerLer';">ដំណើរកម្សាន្តរបស់យើង</p>
-                    
-                    <div class="grid grid-cols-2 gap-4">
-                        <img src="./images/img_001.JPG" alt="Gallery Photo 1" class="w-full h-auto object-cover rounded-xl shadow-lg transform hover:scale-105 transition duration-300 cursor-pointer" onclick="openModal(this.src)">
-                        <img src="./images/img_002.jpeg" alt="Gallery Photo 2" class="w-full h-auto object-cover rounded-xl shadow-lg transform hover:scale-105 transition duration-300 cursor-pointer" onclick="openModal(this.src)">
-                        <img src="./images/img_03.jpeg" alt="Gallery Photo 3" class="w-full h-auto object-cover rounded-xl shadow-lg transform hover:scale-105 transition duration-300 cursor-pointer" onclick="openModal(this.src)">
-                        <img src="./images/img_004.JPG" alt="Gallery Photo 4" class="w-full h-auto object-cover rounded-xl shadow-lg transform hover:scale-105 transition duration-300 cursor-pointer" onclick="openModal(this.src)">
-                        <img src="./images/us_01.png" alt="Gallery Photo 5" class="w-full h-auto object-cover rounded-xl shadow-lg transform hover:scale-105 transition duration-300 cursor-pointer" onclick="openModal(this.src)">
-                        <img src="./images/us_01.png" alt="Gallery Photo 6" class="w-full h-auto object-cover rounded-xl shadow-lg transform hover:scale-105 transition duration-300 cursor-pointer" onclick="openModal(this.src)">
-                    </div>
-
-                    <a href="#gallery" class="inline-block mt-8 bg-sage text-white px-8 py-3 rounded-full font-semibold transition duration-300 hover:bg-sage/80 shadow-md">
-                        មើលរូបភាពទាំងអស់ (View All Photos)
-                    </a>
-                </div>
-            </section>
-
-          
-        </main>
-
-    </div>
-    
-    <div id="gallery-modal" class="fixed inset-0 bg-black bg-opacity-90 z-[100] hidden flex items-center justify-center p-4" onclick="closeModal()">
-        <div class="modal-content-wrapper relative">
-            <img id="modal-image" src="" alt="Zoomed Gallery Image" class="max-w-full max-h-full object-contain rounded-lg shadow-2xl">
-            
-            <button id="close-modal-btn" class="absolute top-4 right-4 text-white text-4xl font-light hover:text-gray-300 transition duration-200 p-2 leading-none" aria-label="Close Modal" onclick="closeModal()">
-                ×
-            </button>
         </div>
     </div>
+</section>
+
+<section id="testimonial" class="testimonial-section sec-bg-04 py-5">
+    <div class="container">
+        <div class="row">
+            <div class="head-box text-center mb-3 col-md-12 mt-5">
+                <h2 class="font-abril" data-i18n-key="Section Heading 3">មតិយោបល់ពីអតិថិជន</h2>
+            </div>
+        </div>
+        <div class="single-testimonial">
+          <div id="carouselExampleCaptions" class="carousel slide" data-ride="carousel">
+            <div class="carousel-inner pt-5" role="listbox">
+              <div class="carousel-item active">
+                <div class="testimonial-box text-center">
+                    <div class="testimonial-content w-100 bg-faded">
+                        <p class="mb-0"><i class="fa fa-quote-left fa-3x" aria-hidden="true"></i></p>
+                        <p class="lead font-abril" data-i18n-key="Testimonial Quote 1">“កាតអញ្ជើញឌីជីថលគឺងាយស្រួលផ្ញើណាស់ ហើយភ្ញៀវក៏ចូលចិត្តដែលមានវីដេអូ Pre-Wedding នៅក្នុងនោះ។ សេវាកម្មរហ័សទាន់ចិត្ត!”</p>
+                        <div class="testimonial-footer">
+                            <h4 class="mt-2 mb-0 text-primary" data-i18n-key="Testimonial Name 1">លោក កុសល និង អ្នកនាង រតនា</h4>
+                            <p data-i18n-key="Testimonial Location 1">- ភ្នំពេញ, កម្ពុជា</p>
+                        </div>
+                    </div>
+                </div>
+              </div>
+              <div class="carousel-item">
+                <div class="testimonial-box text-center">
+                    <div class="testimonial-content w-100 bg-faded">
+                        <p class="mb-0"><i class="fa fa-quote-left fa-3x" aria-hidden="true"></i></p>
+                        <p class="lead font-abril" data-i18n-key="Testimonial Quote 2">“មុខងារផែនទី Google Map គឺសំខាន់ណាស់ ព្រោះភ្ញៀវរបស់ខ្ញុំរកឃើញទីតាំងបានយ៉ាងងាយ។ សូមអរគុណ ឌីជីថលអ៊ិនវ៉ាយ!”</p>
+                        <div class="testimonial-footer">
+                            <h4 class="mt-2 mb-0 text-primary" data-i18n-key="Testimonial Name 2">លោក សុភាព និង អ្នកនាង ដាលីស</h4>
+                            <p data-i18n-key="Testimonial Location 2">- សៀមរាប, កម្ពុជា</p>
+                        </div>
+                    </div>
+                </div>
+              </div>
+            </div>
+            <div class="navigator-box">
+                <a class="carousel-control-prev" href="#carouselExampleCaptions" role="button" data-slide="prev">
+                  <span class="fa fa-angle-left" aria-hidden="true"></span>
+                  <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#carouselExampleCaptions" role="button" data-slide="next">
+                  <span class="fa fa-angle-right" aria-hidden="true"></span>
+                  <span class="sr-only">Next</span>
+                </a>
+            </div>
+          </div>
+        </div>
+    </div>
+</section>
+
+<section id="contact" class="info-section bg-white">
+    <div class="container">
+        
+        <div class="row">
+            <div class="col-md-12 head-box text-center">
+                <h2 class="font-abril text-inverse text-underline-primary" data-i18n-key="Section Heading 4">ទំនាក់ទំនងមកយើងខ្ញុំ!</h2>
+            </div>
+        </div>
+        
+        <div class="row mt-4 justify-content-center">
+             <div class="col-md-10 text-center">
+                <p data-i18n-key="Contact Intro Paragraph">យើងរីករាយនឹងស្តាប់គំនិត និងសំណួររបស់លោកអ្នក។ សូមបំពេញព័ត៌មានខាងក្រោម ហើយយើងនឹងឆ្លើយតបទៅវិញឱ្យបានឆាប់តាមដែលអាចធ្វើទៅបាន។</p>
+            </div>
+        </div>
+        
+        <div class="row justify-content-center">
+            <div class="col-12 col-lg-8 form-sec bg-white my-4 p-4 mx-auto">
+                <form>
+                  <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="sr-only" for="formGroupExampleInput" data-i18n-key="Form Placeholder 1">ឈ្មោះពេញ</label>
+                            <input class="form-control" id="formGroupExampleInput" data-i18n-placeholder-key="Form Placeholder 1" placeholder="ឈ្មោះពេញ" onfocus="this.placeholder=''" onblur="this.placeholder='ឈ្មោះពេញ'" type="text">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="sr-only" for="formGroupExampleInput2" data-i18n-key="Form Placeholder 2">លេខទូរស័ព្labelទ</label>
+                            <input class="form-control" id="formGroupExampleInput2" data-i18n-placeholder-key="Form Placeholder 2" placeholder="លេខទូរស័ព្ទ" onfocus="this.placeholder=''" onblur="this.placeholder='លេខទូរស័ព្ទ'" type="text">
+                        </div>      
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="sr-only" for="formGroupExampleInput2" data-i18n-key="Form Placeholder 3-Label">អ៊ីម៉ែល</label>
+                            <input class="form-control" id="formGroupExampleInput2" data-i18n-placeholder-key="Form Placeholder 3" placeholder="អាសយដ្ឋានអ៊ីម៉ែល" onfocus="this.placeholder=''" onblur="this.placeholder='អាសយដ្ឋានអ៊ីម៉ែល'" type="email">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="sr-only" for="formGroupExampleInput2" data-i18n-key="Form Placeholder 4-Label">អាសយដ្ឋាន</label>
+                            <input class="form-control" id="formGroupExampleInput2" data-i18n-placeholder-key="Form Placeholder 4" placeholder="បញ្ចូលអាសយដ្ឋាន" onfocus="this.placeholder=''" onblur="this.placeholder='បញ្ចូលអាសយដ្ឋាន'" type="email">
+                        </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="sr-only" for="formGroupExampleInput2" data-i18n-key="Form Placeholder 5-Label">សារ</label>
+                            <textarea class="form-control" data-i18n-placeholder-key="Form Placeholder 5" placeholder="បញ្ចូលសាររបស់លោកអ្នកនៅទីនេះ!" rows="4" onfocus="this.placeholder=''" onblur="this.placeholder='បញ្ចូលសាររបស់លោកអ្នកនៅទីនេះ!'"></textarea>
+                        </div>
+                        <div class="form-group text-center">
+                            <button class="btn btn-primary btn-capsul px-4" data-i18n-key="Button Text 3">បញ្ជូន</button>
+                        </div>      
+                    </div>
+                  </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="copy-footer bg-primary py-2">
+    <div class="container text-center text-light">
+        © <span data-i18n-key="Brand/Logo Name">ឌីជីថលអ៊ិនវ៉ាយ</span> <span id="year"></span>. <span data-i18n-key="Footer Text">រក្សាសិទ្ធិគ្រប់យ៉ាង។</span>
+    </div>
+</div>
 
 
-    <script>
-        // --- DATA AND INITIAL SETUP ---
-        const GUEST_DATA_FILE = './guests.csv'; 
+<script  src="https://code.jquery.com/jquery-3.2.1.min.js" ></script>
+<script src="js/bootstrap.min.js" ></script>
+<script src="js/core.js"></script>
 
-        document.addEventListener('DOMContentLoaded', () => {
-            const videoSplash = document.getElementById('video-splash');
-            const introVideo = document.getElementById('intro-video');
-            const websiteContent = document.getElementById('website-content');
-            
-            // Reference to the background music audio element
-            const bgMusic = document.getElementById('background-music');
+<script>
+    let currentLang = 'KH'; // Default language is Khmer
+    let translations = {}; // Object to hold the JSON data
 
-            // References
-            const unlockButton = document.getElementById('unlock-sections-button');
-            const mainContent = document.querySelector('main'); 
-            const heroHeader = document.querySelector('#hero-header'); 
-            const videoBgPage2 = document.getElementById('video-bg-page2'); 
-            const tagNameList = document.getElementById('tag_name_list'); 
-            
-            // NEW Menu References
-            const floatingMenuBtn = document.getElementById('floating-menu-btn');
-            const menuOverlay = document.getElementById('menu-overlay');
-            const menuContent = document.getElementById('menu-content');
-            const musicToggleBtn = document.getElementById('music-toggle-btn');
-            const speakerIcon = document.getElementById('speaker-icon');
-            const musicStatus = document.getElementById('music-status');
-            const closeMenuButton = document.getElementById('close-menu-button'); 
-            
-            // References for sections to show immediately
-            const khmerInviteSection = document.getElementById('khmer-invite');
-            const programSection = document.getElementById('program');
-            
-            let observer = null; 
-
-            // **INITIALIZATION STEP:** Ensure the video is muted permanently
-            introVideo.muted = true;
-            
-            // =========================================================================
-            // CORE FUNCTION: LOAD GUEST NAME
-            // =========================================================================
-            async function loadGuestName() {
-                // 1. Get the Code from the URL Hash (e.g., #0002 -> 0002)
-                let guestCode = window.location.hash.substring(1).trim();
-                
-                let foundNameText = ' '; 
-                let unlockButtonText = ' '; 
-
-                // If a guest code is present, attempt to load the name
-                if (guestCode) {
-                    try {
-                        const response = await fetch(GUEST_DATA_FILE);
-                        
-                        if (!response.ok) {
-                            console.error(`Failed to load CSV: ${response.statusText}`);
-                        } else {
-                            const csvText = await response.text();
-                            
-                            // 3. Parse CSV and find the name
-                            const lines = csvText.trim().split('\n');
-                            let foundName = null;
-
-                            for (const line of lines) {
-                                const parts = line.trim().split(',', 2); 
-                                
-                                if (parts.length === 2 && parts[0].trim() === guestCode) {
-                                    foundName = parts[1].trim();
-                                    break;
-                                }
-                            }
-
-                            if (foundName) {
-                                foundNameText = foundName;
-                                unlockButtonText = ' '; 
-                            }
-                        }
-
-                    } catch (error) {
-                        console.error('Error processing guest data:', error);
-                    }
+    // Function to fetch the JSON file
+    function fetchTranslations(callback) {
+        // Assuming translations.json is in the same directory
+        fetch('translations.json')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to load translations.json: Network response was not ok');
                 }
-                
-                // 4. Update the Invitation Name Tag and Button Text
-                tagNameList.innerHTML = foundNameText;
-                unlockButton.innerHTML = unlockButtonText; 
-                tagNameList.style.marginTop = guestCode ? '30px' : '0'; 
-            }
-            
-            // =========================================================================
-            // MUSIC CONTROL LOGIC
-            // =========================================================================
-            function updateMusicToggleUI() {
-                if (bgMusic.muted) {
-                    speakerIcon.src = './images/silence.png'; // Assuming you have a silence.png
-                    speakerIcon.alt = 'Sound Off';
-                    musicStatus.textContent = 'បិទសំឡេង'; // Muted in Khmer
-                    bgMusic.pause();
+                return response.json();
+            })
+            .then(data => {
+                translations = data;
+                callback(); // Execute the callback after data is loaded
+            })
+            .catch(error => {
+                console.error("Error loading translation file. Ensure 'translations.json' exists:", error);
+                // Handle case where translations fail to load (e.g., use default content)
+            });
+    }
+
+    // Function to update the content based on the language
+    function updateContent(lang) {
+        const langData = translations[lang];
+        if (!langData) {
+            console.error(`Language data for ${lang} not found.`);
+            return; 
+        }
+
+        // 1. Update all standard text content
+        document.querySelectorAll('[data-i18n-key]').forEach(element => {
+            const key = element.getAttribute('data-i18n-key');
+            if (langData[key]) {
+                 // Handle elements like the nav link that wraps the sr-only span
+                if (element.tagName === 'A' && element.querySelector('.sr-only')) {
+                    const srOnly = element.querySelector('.sr-only').outerHTML;
+                    // Replace the whole innerHTML but preserve the screen-reader-only content
+                    element.innerHTML = langData[key] + ' ' + srOnly; 
                 } else {
-                    speakerIcon.src = './images/volume.png'; // Assuming you have a volume.png
-                    speakerIcon.alt = 'Sound On';
-                    musicStatus.textContent = 'កំពុងចាក់'; // Playing in Khmer
-                    bgMusic.play().catch(e => console.warn("Music play failed:", e));
+                    element.textContent = langData[key];
                 }
             }
-
-            musicToggleBtn.addEventListener('click', (event) => {
-                event.stopPropagation(); // Prevent navigation/closing menu when toggling music
-                bgMusic.muted = !bgMusic.muted;
-                updateMusicToggleUI();
-            });
-
-            // =========================================================================
-            // MENU NAVIGATION LOGIC
-            // =========================================================================
-            function openMenu() {
-                floatingMenuBtn.classList.add('active'); // Rotate + icon
-                menuOverlay.classList.remove('hidden');
-                // Use a short delay to ensure the element is visible before adding 'active' for smooth transition
-                setTimeout(() => {
-                    menuOverlay.classList.add('active'); // Add transparent background and enable pointer events
-                    document.body.style.overflow = 'hidden';
-                    updateMusicToggleUI(); // Ensure the music status is correct when opening
-                }, 10);
-            }
-
-            window.closeMenu = function() { // Expose globally for other elements if needed
-                floatingMenuBtn.classList.remove('active'); // Rotate + icon back
-                menuOverlay.classList.remove('active'); // Remove background and disable pointer events
-                document.body.style.overflow = 'auto'; 
-                setTimeout(() => menuOverlay.classList.add('hidden'), 300); // Wait for transition to complete before hiding
-            }
-
-            function navigateToSection(targetId) {
-                const targetElement = document.getElementById(targetId);
-                if (targetElement) {
-                    closeMenu();
-                    setTimeout(() => {
-                        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }, 350); // Wait for menu to close
-                }
-            }
-
-            // Toggle floating menu button click handler
-            floatingMenuBtn.addEventListener('click', (event) => {
-                event.stopPropagation();
-                if (menuOverlay.classList.contains('active')) {
-                    closeMenu();
-                } else {
-                    openMenu();
-                }
-            });
-            
-            // Dedicated close button click handler
-            closeMenuButton.addEventListener('click', closeMenu);
-            
-            // Reinstated: Close menu if clicking anywhere on the transparent background
-            menuOverlay.addEventListener('click', (event) => {
-                // Check if the click target is exactly the overlay itself, and not a child element (like a button)
-                if (event.target === menuOverlay && menuOverlay.classList.contains('active')) {
-                    closeMenu();
-                }
-            });
-            
-            // Event delegation for navigation links (using menu-button class)
-            menuContent.addEventListener('click', (event) => {
-                const targetButton = event.target.closest('.menu-button');
-                if (targetButton && targetButton.dataset.target) {
-                    navigateToSection(targetButton.dataset.target);
-                }
-            });
-
-            // =========================================================================
-            // PAGE FLOW HANDLER 
-            // =========================================================================
-
-            const contentRevealHandler = () => {
-                // 1. Fade out and hide the video splash screen
-                videoSplash.classList.add('opacity-0');
-                introVideo.pause(); 
-                
-                setTimeout(() => {
-                    videoSplash.classList.add('hidden'); 
-                    document.body.style.overflow = 'auto'; // Re-enable scrolling
-                    videoSplash.classList.remove('opacity-0');
-                }, 1000); 
-                
-                // 2. Hide the hero header (the invite)
-                heroHeader.classList.add('hidden');
-                
-                // 3. Show the main content area
-                mainContent.classList.remove('hidden');
-
-                // 4. Show the fixed background video for page 2
-                videoBgPage2.classList.remove('hidden');
-
-                // 5. Force show KHMEER-INVITE and PROGRAM SECTIONS
-                khmerInviteSection.classList.remove('opacity-0', 'translate-y-8');
-                programSection.classList.remove('opacity-0', 'translate-y-8');
-
-                // 6. Show the floating menu button
-                floatingMenuBtn.classList.remove('hidden');
-                // Use a slight delay to ensure the content is loaded before starting the fade-in of the button
-                setTimeout(() => {
-                    floatingMenuBtn.classList.remove('opacity-0');
-                }, 500);
-
-                // 7. Start the intersection observer for the remaining fade-up animations
-                startObserver();
-                
-                // 8. Scroll to the beginning of the new content
-                 setTimeout(() => {
-                    window.scrollTo({ top: 0, behavior: 'smooth' }); 
-                 }, 50);
-            };
-
-            // --- Event Listeners ---
-            
-            introVideo.addEventListener('ended', contentRevealHandler);
-
-            // 🌟 MUSIC START ON CLICK: The moment the user interacts
-            unlockButton.addEventListener('click', () => {
-                document.getElementById('button-background-box').classList.remove('animate-zoom-pulse');
-                
-                videoSplash.classList.remove('hidden');
-                
-                setTimeout(() => {
-                     videoSplash.classList.remove('opacity-0');
-                }, 10);
-                
-                // 1. Attempt to play intro video (Muted permanently)
-                introVideo.play().catch(e => {
-                    console.warn("Video Autoplay prevented:", e);
-                });
-
-                // 2. Attempt to play background music (NOW UNMUTED)
-                bgMusic.muted = false; 
-                bgMusic.play().catch(e => {
-                    console.warn("Music Autoplay prevented or failed:", e);
-                    bgMusic.muted = true; // Set to muted if it failed to play
-                });
-                
-                document.body.style.overflow = 'hidden';
-            });
-            
-            // --- Function to define and start the observer (UNCHANGED) ---
-            const startObserver = () => {
-                if (observer) {
-                    observer.disconnect();
-                }
-
-                // Select all sections with data-animate="fade-up" *except* the two we showed immediately
-                const animatedSections = document.querySelectorAll('[data-animate="fade-up"]:not(#khmer-invite):not(#program)');
-                
-                observer = new IntersectionObserver((entries) => {
-                    entries.forEach(entry => {
-                        const target = entry.target;
-
-                        if (entry.isIntersecting) {
-                            target.classList.remove('opacity-0', 'translate-y-8');
-                        } else {
-                            if (heroHeader.classList.contains('hidden')) { 
-                                target.classList.add('opacity-0', 'translate-y-8');
-                            }
-                        }
-                    });
-                }, {
-                    root: null, 
-                    rootMargin: '0px',
-                    threshold: 0.2
-                });
-
-                animatedSections.forEach(section => {
-                    observer.observe(section);
-                });
-            };
-
-            // --- Gallery Modal Logic (UNCHANGED) ---
-            const modal = document.getElementById('gallery-modal');
-            const modalImg = document.getElementById('modal-image');
-
-            window.openModal = function(imageSrc) {
-                modalImg.src = imageSrc;
-                modal.classList.remove('hidden');
-                document.body.style.overflow = 'hidden'; 
-            };
-
-            window.closeModal = function() {
-                modal.classList.add('hidden');
-                if (heroHeader.classList.contains('hidden')) {
-                     document.body.style.overflow = 'auto'; 
-                }
-            };
-            
-            // --- Initial Load Setup (UNCHANGED) ---
-            loadGuestName(); 
-            document.body.style.overflow = 'auto'; 
-            websiteContent.classList.remove('opacity-0');
         });
-    </script>
+
+        // 2. Update all placeholder text content
+        document.querySelectorAll('[data-i18n-placeholder-key]').forEach(element => {
+            const key = element.getAttribute('data-i18n-placeholder-key');
+            if (langData[key]) {
+                const newPlaceholder = langData[key];
+                element.setAttribute('placeholder', newPlaceholder);
+                // Update the onblur/onfocus handlers to maintain the placeholder effect
+                element.setAttribute('onblur', `this.placeholder='${newPlaceholder}'`);
+            }
+        });
+        
+        // 3. Update the language button text
+        document.getElementById('lang-switch').textContent = (lang === 'KH' ? 'EN' : 'KH');
+        
+        currentLang = lang;
+    }
+
+    // Function to toggle the language (called by the button click)
+    function toggleLanguage() {
+        const newLang = (currentLang === 'KH' ? 'EN' : 'KH');
+        updateContent(newLang);
+    }
+
+    // INITIALIZATION: Fetch data and then set default language on page load
+    document.addEventListener('DOMContentLoaded', () => {
+        // Expose the function globally so the inline onclick handler can call it
+        window.toggleLanguage = toggleLanguage; 
+        
+        fetchTranslations(() => {
+            // After data is successfully loaded, set the default language
+            updateContent('KH'); 
+        });
+    });
+
+</script>
+
 </body>
 </html>
