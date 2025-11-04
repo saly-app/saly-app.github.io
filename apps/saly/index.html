@@ -1,773 +1,167 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="km">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Saly & Kimbouy's Wedding</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:ital,wght@1,500;1,700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Khmer:wght@400;600;700&display=swap" rel="stylesheet">
-    
-    <style>
-        /* * 1. FONT FACE DECLARATIONS */
-        @font-face {
-            font-family: 'AKbalthomKhmerHand';
-            /* Try loading from the root and then from the font/ folder */
-            src: url('AKbalthomKhmerHand.ttf') format('truetype'),
-                 url('font/AKbalthomKhmerHand.ttf') format('truetype'); 
-            font-weight: normal;
-            font-style: normal;
-        }
-        @font-face {
-            font-family: 'Moul';
-            /* Assuming 'Moul.ttf' is also in your font folder for the names in the first invitation */
-            src: url('Moul.ttf') format('truetype'),
-                 url('font/Moul.ttf') format('truetype'); 
-            font-weight: normal;
-            font-style: normal;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Mobile-Only Wedding Invitation</title>
 
-        /* * 2. TAILWIND CONFIGURATION */
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'sage': '#6a8273', /* Primary Color */
-                        'off-white': '#fdfdfa', /* Background Color */
-                        'text-dark': '#333',
-                        /* Custom color for menu items based on the image */
-                        'menu-gold': '#efc455', 
-                        'menu-bg': 'rgba(106, 130, 115, 0.7)', /* Sage with transparency */
-                    },
-                    fontFamily: {
-                        'header': ['"Playfair Display"', 'serif'],
-                        'body': ['Montserrat', 'sans-serif'],
-                        /* Custom local font for the main Khmer header */
-                        'khmer-script': ['Moulpali','AKbalthomKhmerHand','AKbalthomFreehand','AKbalthomKhmerLer','Moul', 'serif', 'system-ui'],
-                        /* Noto Sans Khmer web font for the body text */
-                        'khmer': ['"Noto Sans Khmer"', 'sans-serif', 'system-ui'], 
-                    },
-                },
-            }
-        }
-        /* Custom styles to ensure smooth scrolling and responsive hero background */
-        html {
-            scroll-behavior: smooth;
-        }
-        
-        /* Custom Timeline Styles (Kept for completeness, though not heavily used in this layout) */
-        .timeline-container:before {
-            content: '';
-            position: absolute;
-            left: 50%;
-            top: 0;
-            bottom: 0;
-            width: 2px;
-            background: rgba(255, 255, 255, 0.4); 
-            transform: translateX(-50%);
-        }
-        .timeline-item-icon {
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 10;
-        }
-        .modal-content-wrapper {
-            max-width: 90vw;
-            max-height: 90vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+  <!-- Load Moul font -->
+  <link href="https://fonts.googleapis.com/css2?family=Moul&display=swap" rel="stylesheet" />
 
-        /* 3. BUTTON ANIMATION KEYFRAMES */
-        @keyframes pulseZoom {
-            0% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.05); /* Zooms in 5% */
-            }
-            100% {
-                transform: scale(1); /* Zooms back out */
-            }
-        }
+  <!-- Preload assets -->
+  <link rel="preload" as="video" href="./video/bg_vdo_02.webm" type="video/webm" />
+  <link rel="preload" as="video" href="./video/bg_program.webm" type="video/webm" />
+  <link rel="preload" as="video" href="./video/intro.mov" type="video/quicktime" />
 
-        .animate-zoom-pulse {
-            animation: pulseZoom 2s infinite ease-in-out; /* 2s duration, repeats forever */
-        }
-        
-        /* 4. CUSTOM MENU STYLES - Adapted for the new design */
-        #menu-overlay {
-            z-index: 150; 
-            pointer-events: none;
-            background-color: transparent;
-            transition: background-color 0.3s;
-        }
-        #menu-overlay.active {
-            pointer-events: auto;
-            /* Changed to a dark, semi-transparent black background */
-            background-color: rgba(0, 0, 0, 0.4); 
-            
-            /* ADDED: Stronger Backdrop Blur for a clear separation */
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px); /* For Safari support */
-        }
-
-        #menu-content {
-            position: absolute;
-            right: 2.5rem; /* Matches bottom-10 right-10 for the floating button */
-            bottom: 2.5rem;
-            transform: scale(0.8) translate(20%, 20%); /* Start smaller and offset */
-            transform-origin: bottom right;
-            transition: transform 0.3s ease-out, opacity 0.3s ease-out;
-            opacity: 0;
-            visibility: hidden; /* Hide initially */
-            display: flex; /* Flex container for buttons */
-            flex-direction: column; /* Stack buttons vertically */
-            align-items: flex-end; /* Align to the right */
-            gap: 10px; /* Space between menu buttons */
-        }
-
-        #menu-overlay.active #menu-content {
-            transform: scale(1) translate(0, 0); /* Scale to 1 and no offset */
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .menu-button {
-            display: flex;
-            align-items: center;
-            justify-content: flex-end; /* Align text and icon to the right */
-            background-color: #ffff; /* Sage color */
-            color: #efc455; /* Gold-like color for text/icons */
-            padding: 0.75rem 1.25rem;
-            border-radius: 9999px; /* Fully rounded corners */
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-            transition: background-color 0.2s, transform 0.2s;
-            min-width: 180px; /* Ensure consistent width for buttons */
-            text-align: right;
-            font-size: 12px;
-            cursor: pointer;
-        }
-        .menu-button:hover {
-            background-color: #fff; /* Darker sage on hover */
-            transform: translateX(-5px); /* Slight hover effect */
-        }
-        .menu-button img, .menu-button svg {
-            margin-left: 10px; /* Space between text and icon */
-            filter: brightness(1.2); /* Make icons brighter */
-        }
-        /* Specific style for the Close button */
-        #close-menu-button {
-            background-color: #f87171; /* A reddish color for attention */
-            color: white;
-        }
-        #close-menu-button:hover {
-            background-color: #ef4444; 
-        }
-        #close-menu-button img, #close-menu-button svg {
-             filter: none; /* Keep the icon color clean */
-             transform: rotate(45deg); /* Rotate the + icon to X */
-        }
-
-
-        /* Specific style for the + button */
-        #floating-menu-btn {
-            background-color: #efc455; /* Gold color */
-            box-shadow: 0 6px 10px rgba(0,0,0,0.4);
-            transition: transform 0.3s ease-in-out, background-color 0.2s;
-            cursor: pointer;
-        }
-        #floating-menu-btn svg {
-            color: white; /* Plus icon is white */
-            stroke: white;
-        }
-        #floating-menu-btn.active {
-            transform: rotate(135deg); /* Rotate the + to become an X */
-            background-color: #d1b04a; /* Slightly darker gold when active */
-        }
-    </style>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 
-<body class="font-body text-text-dark leading-relaxed">
-    
-    <audio id="background-music" loop muted preload="auto">
-        <source src="./music/song2.wav" type="audio/wav">
-        Your browser does not support the audio element.
-    </audio>
-
-    <div id="video-splash" class="fixed inset-0 z-[100] bg-black flex flex-col justify-center items-center opacity-0 transition-opacity duration-1000 hidden">
-        <video id="intro-video" muted autoplay playsinline preload="auto" class="w-full h-full object-cover">
-            <source src="./video/intro.webm" type="video/webm">
+<body>
+  <!-- Stage centers and scales the phone on desktop -->
+  <div id="stage">
+    <div id="mobile-wrapper">
+      <!-- ============== PAGE 1: HERO (tap to open) ============== -->
+      <header id="hero-header" class="relative">
+        <div id="video-wrapper" aria-hidden="true">
+          <video id="bg-video" autoplay loop muted playsinline preload="auto" poster="./images/video_poster.jpg">
+            <source src="./video/bg_003.mp4" type="video/webm" />
             Your browser does not support the video tag.
+          </video>
+        </div>
+
+        <section id="invite">
+          <img src="./images/Invite_new.png" alt="Invitation cover" loading="eager" />
+
+          <div id="content-overlay" role="button" tabindex="0" aria-label="Open invitation">
+            <div id="names-background-box" aria-live="polite">
+              <p id="tag_name_list">កំពុងផ្ទុក...</p>
+            </div>
+
+            <div  style="margin-bottom: -25px;" id="button-background-box" class="animate-zoom-pulse" aria-hidden="true"></div>
+          </div>
+        </section>
+      </header>
+
+      <!-- ============== INTRO VIDEO LAYER (appears after first click) ============== -->
+      <div id="intro-video-layer" class="hidden">
+        <video id="intro-video" playsinline preload="auto">
+          <source src="./video/intro.mov" type="video/mp4" />
+          Your browser does not support the video tag.
         </video>
-    </div>
+        <button id="intro-skip" aria-label="Skip intro">Skip ›</button>
+      </div>
 
-    <div id="website-content" class="transition-opacity duration-1000 ease-in">
-        
-        
-<div id="floating-menu-btn" class="fixed bottom-10 right-10 p-3 rounded-full cursor-pointer z-50 hidden transition-all duration-300 opacity-0">
-            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-            </svg>
-        </div>
-        
-        
-<div id="menu-overlay" class="fixed inset-0 z-[150] hidden">
-            <div id="menu-content">
-                
-    <button id="music-toggle-btn" class="menu-button">
-                    <span id="music-status" style="font-family:'Moul';">កំពុងចាក់</span>
-                    <img id="speaker-icon" src="./images/silence.png" alt="Sound Icon" class="w-6 h-6">
-                </button>
+      <!-- ============== PAGE 2: FIXED VIDEO BACKDROP (NON-SCROLLING) ============== -->
+      <div id="video-bg-page2" class="hidden">
+        <video id="background-video" autoplay loop muted playsinline>
+          <source src="./video/bg_003.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+        <div class="overlay"></div>
+      </div>
 
-                <button class="menu-button" data-target="program">
-                    <span style="font-family:'Moul';">កម្មវិធី មង្គលការ</span>
-                    <img src="./images/wedding-day.png" alt="Program Icon" class="w-6 h-6">
-                </button>
-                <button class="menu-button" data-target="venue">
-                    <span style="font-family:'Moul';">ទីតាំងកម្មវិធី(Map)</span>
-                    <img src="./images/map2.png" alt="Venue Icon" class="w-6 h-6">
-                </button>
-                <button class="menu-button" data-target="bank">
-                    <span style="font-family:'Moul';">ផ្ញើរចំណងដៃ</span>
-                    <img src="./images/gift-box.png" alt="Bank Icon" class="w-6 h-6">
-                </button>
-                <button class="menu-button" data-target="gallery">
-                    <span style="font-family:'Moul';">រូបថត</span>
-                    <img src="./images/image-gallery.png" alt="Gallery Icon" class="w-6 h-6">
-                </button>
-                
-                <button id="close-menu-button" class="menu-button">
-                    <span style="font-family:'Moul';">បិទ</span>
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                    </svg>
-                </button>
-                
-</div>
+      <!-- ============== PAGE 2: TOP HERO (kept but skipped) ============== -->
+      <header id="hero-header-2" class="relative hidden">
+        <div class="absolute-fill" aria-hidden="true">
+          <video id="hero-background-video" autoplay loop muted playsinline class="cover">
+            <source src="./video/bg_003.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
         </div>
-        
-        <header id="hero-header" class="relative min-h-screen bg-transparent flex flex-col justify-center items-center text-center p-6 border-b border-black-100">
-                    
-            <div class="absolute inset-0 z-[0] after:content-[''] after:absolute after:inset-0 after:bg-black/0"> 
-                <video id="hero-background-video" autoplay loop muted playsinline class="w-full h-full object-cover">
-                    <source src="./video/bg_vdo_02.webm" type="video/webm">
-                    Your browser does not support the video tag.
-                </video>
+
+        <section id="invite-2" class="relative-layer">
+          <img src="./images/Invite_new.png" alt="Invitation Image" />
+          <div class="overlay-stack">
+            <div id="names-background-box-2" class="namecard" style="max-width:80%;">
+              <p id="tag_name_list_2" class="name-text">កំពុងផ្ទុក...</p>
             </div>
-
-            <section id="invite" class="relative z-10 py-0 max-w-xl mx-auto mb-12">
-                
-                <img src="./images/Invite_new.png" 
-                    style="width: 100%; height: 100%; display: block; object-fit: cover; border-radius: inherit;" 
-                    alt="Invitation Image">
-
-                <div class="absolute inset-0 flex flex-col items-center p-6 text-center">
-                    <div id="names-background-box" 
-                        class="absolute top-1/2 left-1/2 h-24 w-full mx-auto flex items-center justify-center text-center"
-                        style="
-                            background-image: url('./images/btn_namecard2.png'); 
-                            background-size: contain; 
-                            background-repeat: no-repeat; 
-                            background-position: center;
-                            transform: translate(-50%, -50%); 
-                            margin: 0;
-                            max-width: 80%;
-                        ">
-
-                        <p id="tag_name_list" style="font-family:'Moul'; color: #efc455; margin-top: 30px; font-size: 13px;">
-                            កំពុងផ្ទុក...
-                        </p>
-                    </div>
-                    <div id="button-background-box"
-                        class="mt-auto flex items-center justify-center w-4/5 max-w-sm h-16 relative animate-zoom-pulse"
-                        style="
-                            background-image: url('./images/btn_open.png');
-                            background-size: contain; 
-                            background-repeat: no-repeat; 
-                            background-position: center;
-                            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
-                        ">
-                        <button  id="unlock-sections-button" class="cta-button inline-block bg-transparent text-sm text-white px-6 py-2 rounded-full font-semibold transition duration-300 ease-in-out hover:bg-transparent shadow-none" background-color: transparent !important; color: #5b5b5b; padding: 0;">
-                        </button>
-                    </div>
-                </div>
-                
-            </section>
-        </header>
-
-        <div id="video-bg-page2" class="fixed inset-0 z-0 hidden"> 
-            <video id="background-video" autoplay loop muted playsinline class="w-full h-full object-cover">
-                <source src="./video/bg_program.webm" type="video/webm">
-                Your browser does not support the video tag.
-            </video>
-            <div class="absolute inset-0 bg-black opacity-30"></div>
-        </div>
-
-        <main class="p-4 relative z-10 hidden">
-
-
-        <section id="khmer-invite" class="relative max-w-xl mx-auto bg-black/10 backdrop-blur-sm rounded-1xl shadow-xl mb-12 opacity-0 translate-y-8 transition-all duration-1000 ease-in-out" data-animate="fade-up">
-                
-                <img src="./images/wedding_update.png" style="width: 100%; height: 100%; display: block; object-fit: cover;">
-
-                <div class="absolute inset-x-0 bottom-0 flex justify-center items-center p-6 pt-0">
-                    
-                    <div id="button-background-box2"
-                        class="flex items-center justify-center w-4/5 max-w-sm h-16 relative animate-zoom-pulse"
-                        style="
-                            background-image: url('./images/btn_save.png');
-                            background-size: contain; 
-                            background-repeat: no-repeat; 
-                            background-position: center;
-                            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
-                        ">
-                        
-                        <a href="https://calendar.google.com/calendar/event?action=TEMPLATE&tmeid=NTFia241cW1rMzZvcjFmczZ0dmlhc29yaDdfMjAyNjAxMTFUMTAwMDAwWiBrZW9zYXR5QG0&tmsrc=keosaly%40gmail.com&scp=ALL" 
-                        target="_blank" 
-                        rel="noopener noreferrer" 
-                        style="text-decoration: none; display: block; width: 100%; height: 100%;">
-                            
-                            <button  
-                                id="save-date-button" 
-                                aria-label="Save the date to Google Calendar"
-                                class="cta-button inline-block bg-transparent text-sm text-white rounded-full font-semibold shadow-none" 
-                                style="
-                                    background-color: transparent !important; 
-                                    border: none;
-                                    width: 100%;
-                                    height: 100%;
-                                    padding: 0;
-                                    margin: 0;
-                                ">
-                            </button>
-                        </a>
-                        
-                    </div>
-                    
-                </div>
-                
-            </section>
-
-
-        <section id="program" class="max-w-xl mx-auto bg-black/10 backdrop-blur-sm rounded-1xl shadow-xl mb-12 opacity-0 translate-y-8 transition-all duration-1000 ease-in-out" data-animate="fade-up">
-                <img src="./images/program_update.png" style="width: 100%; height: 100%; display: block; object-fit: cover;">
-            </section> 
-            
-    
-        <section id="venue" class="relative max-w-xl mx-auto bg-black/10 backdrop-blur-sm rounded-1xl shadow-xl mb-12 opacity-0 translate-y-8 transition-all duration-1000 ease-in-out" data-animate="fade-up">
-            <img src="./images/map_card.png" style="width: 100%; height: 100%; display: block; object-fit: cover;">
-
-            <div class="absolute inset-x-0 bottom-4 flex justify-center items-center p-1 pt-0">
-                
-                <div id="button-background-box2"
-                    class="flex items-center justify-center w-4/5 max-w-sm h-16 relative animate-zoom-pulse"
-                    style="
-                        background-image: url('./images/btn_map.png');
-                        background-size: contain; 
-                        background-repeat: no-repeat; 
-                        background-position: center;
-                        filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
-                    ">
-                    
-                    <a href="https://maps.app.goo.gl/3DtryAv9kyWQXQoP8?g_st=ipc" 
-                    target="_blank" 
-                    rel="noopener noreferrer" 
-                    style="text-decoration: none; display: block; width: 100%; height: 100%;">
-                        
-                        <button  
-                            id="save-date-btn_map" 
-                            aria-label="Open GoogleMap"
-                            class="cta-button inline-block bg-transparent text-sm text-white rounded-full font-semibold shadow-none" 
-                            style="
-                                background-color: transparent !important; 
-                                border: none;
-                                width: 100%;
-                                height: 100%;
-                                padding: 0;
-                                margin: 0;
-                            ">
-                        </button>
-                    </a>
-                    
-                </div>
-                
+            <div id="button-background-box-2" class="cta-big animate-zoom-pulse">
+              <button id="unlock-sections-button" aria-label="Show details"></button>
             </div>
+          </div>
+        </section>
+      </header>
+
+      <!-- ============== PAGE 2: MAIN CONTENT (THIS SCROLLS) ============== -->
+      <main id="page2-main" class="hidden">
+        <!-- Section 2.1 Khmer Invite -->
+        <section id="khmer-invite" class="invite-card" data-reveal>
+          <img src="./images/wedding_update.png" alt="សំបុត្រអញ្ជើញ" loading="lazy" />
+          <div class="cta-row">
+            <div class="cta-big animate-zoom-pulse" style="background-image:url('./images/btn_save.png')">
+              <a
+                href="https://calendar.google.com/calendar/event?action=TEMPLATE&tmeid=NTFia241cW1rMzZvcjFmczZ0dmlhc29yaDdfMjAyNjAxMTFUMTAwMDAwWiBrZW9zYXR5QG0&tmsrc=keosaly%40gmail.com&scp=ALL"
+                target="_blank" rel="noopener noreferrer"
+              >
+                <button id="save-date-button" aria-label="Save the date to Google Calendar"></button>
+              </a>
+            </div>
+          </div>
         </section>
 
-        <section id="bank" class="relative max-w-xl mx-auto bg-black/10 backdrop-blur-sm rounded-1xl shadow-xl mb-12 opacity-0 translate-y-8 transition-all duration-1000 ease-in-out" data-animate="fade-up">
-
-            <img src="./images/aba_card.png" style="width: 100%; height: 100%; display: block; object-fit: cover;">
-
-            <div class="absolute inset-0 flex justify-center items-center" style="padding: 20px;"> 
-                
-                <a href="./images/aba.JPG" target="_blank" title="View ABA QR Code for Saly" class="rounded-lg overflow-hidden shadow-lg border-4 border-white transform hover:scale-[1.02] transition duration-300 ease-in-out mx-2"> <img src="./images/aba.JPG" alt="ABA Bank QR Code 1" class="block w-34">
-                </a>
-
-                <a href="./images/aba.JPG" target="_blank" title="View ABA QR Code for Kimbouy" class="rounded-lg overflow-hidden shadow-lg border-4 border-white transform hover:scale-[1.02] transition duration-300 ease-in-out mx-2"> <img src="./images/aba2.JPG" alt="ABA Bank QR Code 2" class="block w-34">
-                </a>
-                
-            </div>
+        <!-- Section 2.2 Program -->
+        <section id="program" class="invite-card" data-reveal>
+          <img src="./images/program_update.png" alt="Program" loading="lazy" />
         </section>
 
-          <!-- <section id="bank" class="py-12 px-6 max-w-xl mx-auto border-b border-gray-200 bg-black/10 backdrop-blur-sm rounded-2xl shadow-xl mb-12 opacity-0 translate-y-8 transition-all duration-1000 ease-in-out" data-animate="fade-up">
-                <div class="flex flex-col items-center font-khmer leading-loose text-white">
-                    <h2 class="font-khmer-script text-3xl text-white mb-6" style="font-family:'AKbalthomKhmerHand'; color: darkgoldengold;">គណនេយ្យ ABA</h2>
-                    
-                    <div class="flex justify-center items-center space-x-8 mb-6">
-                        
-                        <a href="./images/aba.JPG" target="_blank" title="View ABA QR Code for Saly" class="rounded-lg overflow-hidden shadow-lg border-4 border-white transform hover:scale-[1.02] transition duration-300 ease-in-out">
-                            <img src="./images/aba.JPG" alt="ABA Bank QR Code 1" class="block w-34">
-                        </a>
+        <!-- Section 2.3 Venue (Map) -->
+        <section id="venue" class="invite-card" data-reveal>
+          <img src="./images/map_card.png" alt="Map Card" loading="lazy" />
+          <div class="cta-row bottom-tight">
+            <div class="cta-big animate-zoom-pulse" style="background-image:url('./images/btn_map.png')">
+              <a href="https://maps.app.goo.gl/3DtryAv9kyWQXQoP8?g_st=ipc" target="_blank" rel="noopener noreferrer">
+                <button id="open-map-button" aria-label="Open Google Map"></button>
+              </a>
+            </div>
+          </div>
+        </section>
 
-                        <a href="./images/aba.JPG" target="_blank" title="View ABA QR Code for Kimbouy" class="rounded-lg overflow-hidden shadow-lg border-4 border-white transform hover:scale-[1.02] transition duration-300 ease-in-out">
-                            <img src="./images/aba2.JPG" alt="ABA Bank QR Code 2" class="block w-34">
-                        </a>
+        <!-- Section 2.4 Bank (ABAs) -->
+        <section id="bank" class="invite-card" data-reveal>
+          <img src="./images/aba_card.png" alt="ABA Card" loading="lazy" />
+          <div class="aba-inline">
+            <a href="./images/aba.JPG" target="_blank" title="View ABA QR Code 1" class="qr-thumb">
+              <img src="./images/aba.JPG" alt="ABA QR 1" />
+            </a>
+            <a href="./images/aba2.JPG" target="_blank" title="View ABA QR Code 2" class="qr-thumb">
+              <img src="./images/aba2.JPG" alt="ABA QR 2" />
+            </a>
+          </div>
+        </section>
 
-                    </div>
-                    <p class="mb-6 text-xl font-medium" style="font-family:'AKbalthomKhmerLer';">សម្រាប់ ចំណង់ដៃរតាមរយៈ ធនាគារ</p>
-                    
-                    </div>
-            </section> -->
+        <!-- Section 2.5 Gallery -->
+        <section id="gallery" class="gallery-card" data-reveal>
+          <div class="gallery-inner">
+            <h2 class="gallery-title">រូបថតអនុស្សាវរីយ៍</h2>
+            <p class="gallery-sub">ដំណើរកម្សាន្តរបស់យើង</p>
 
-            <section id="gallery" class="py-12 px-6 max-w-4xl mx-auto border-b border-gray-200 bg-black/10 backdrop-blur-sm rounded-2xl shadow-xl mb-12 opacity-0 translate-y-8 transition-all duration-1000 ease-in-out" data-animate="fade-up">
-                <div class="text-center font-khmer leading-loose text-white">
-                    <h2 class="font-khmer-script text-3xl text-white mb-6" style="font-family:'AKbalthomKhmerHand'; color: darkgoldengold;">រូបថតអនុស្សាវរីយ៍</h2>
-                    <p class="mb-8 text-xl font-medium" style="font-family:'AKbalthomKhmerLer';">ដំណើរកម្សាន្តរបស់យើង</p>
-                    
-                    <div class="grid grid-cols-2 gap-4">
-                        <img src="./images/img_001.JPG" alt="Gallery Photo 1" class="w-full h-auto object-cover rounded-xl shadow-lg transform hover:scale-105 transition duration-300 cursor-pointer" onclick="openModal(this.src)">
-                        <img src="./images/img_002.jpeg" alt="Gallery Photo 2" class="w-full h-auto object-cover rounded-xl shadow-lg transform hover:scale-105 transition duration-300 cursor-pointer" onclick="openModal(this.src)">
-                        <img src="./images/img_03.jpeg" alt="Gallery Photo 3" class="w-full h-auto object-cover rounded-xl shadow-lg transform hover:scale-105 transition duration-300 cursor-pointer" onclick="openModal(this.src)">
-                        <img src="./images/img_004.JPG" alt="Gallery Photo 4" class="w-full h-auto object-cover rounded-xl shadow-lg transform hover:scale-105 transition duration-300 cursor-pointer" onclick="openModal(this.src)">
-                        <img src="./images/us_01.png" alt="Gallery Photo 5" class="w-full h-auto object-cover rounded-xl shadow-lg transform hover:scale-105 transition duration-300 cursor-pointer" onclick="openModal(this.src)">
-                        <img src="./images/us_01.png" alt="Gallery Photo 6" class="w-full h-auto object-cover rounded-xl shadow-lg transform hover:scale-105 transition duration-300 cursor-pointer" onclick="openModal(this.src)">
-                    </div>
+            <div class="gallery-grid">
+              <img src="./images/img_001.JPG"  alt="Gallery Photo 1" class="gallery-thumbnail" />
+              <img src="./images/img_002.jpeg" alt="Gallery Photo 2" class="gallery-thumbnail" />
+              <img src="./images/img_03.jpeg"  alt="Gallery Photo 3" class="gallery-thumbnail" />
+              <img src="./images/img_004.JPG"  alt="Gallery Photo 4" class="gallery-thumbnail" />
+              <img src="./images/us_01.png"   alt="Gallery Photo 5" class="gallery-thumbnail" />
+              <img src="./images/us_01.png"   alt="Gallery Photo 6" class="gallery-thumbnail" />
+            </div>
 
-                    <a href="#gallery" class="inline-block mt-8 bg-sage text-white px-8 py-3 rounded-full font-semibold transition duration-300 hover:bg-sage/80 shadow-md">
-                        មើលរូបភាពទាំងអស់ (View All Photos)
-                    </a>
-                </div>
-            </section>
-
-          
-        </main>
-
+            <a href="#gallery" class="gallery-more">មើលរូបភាពទាំងអស់ (View All Photos)</a>
+          </div>
+        </section>
+      </main>
     </div>
-    
-    <div id="gallery-modal" class="fixed inset-0 bg-black bg-opacity-90 z-[100] hidden flex items-center justify-center p-4" onclick="closeModal()">
-        <div class="modal-content-wrapper relative">
-            <img id="modal-image" src="" alt="Zoomed Gallery Image" class="max-w-full max-h-full object-contain rounded-lg shadow-2xl">
-            
-            <button id="close-modal-btn" class="absolute top-4 right-4 text-white text-4xl font-light hover:text-gray-300 transition duration-200 p-2 leading-none" aria-label="Close Modal" onclick="closeModal()">
-                ×
-            </button>
-        </div>
+  </div>
+
+  <!-- Gallery Modal -->
+  <div id="gallery-modal" class="modal hidden" onclick="closeModal()">
+    <div class="modal-content" onclick="event.stopPropagation()">
+      <img id="modal-image" src="" alt="Zoomed Gallery Image" />
+      <button id="close-modal-btn" class="modal-close" aria-label="Close Modal" onclick="closeModal()">×</button>
+      <button id="prev-btn" class="modal-nav left" aria-label="Previous Image">‹</button>
+      <button id="next-btn" class="modal-nav right" aria-label="Next Image">›</button>
     </div>
+  </div>
 
-
-    <script>
-        // --- DATA AND INITIAL SETUP ---
-        const GUEST_DATA_FILE = './guests.csv'; 
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const videoSplash = document.getElementById('video-splash');
-            const introVideo = document.getElementById('intro-video');
-            const websiteContent = document.getElementById('website-content');
-            
-            // Reference to the background music audio element
-            const bgMusic = document.getElementById('background-music');
-
-            // References
-            const unlockButton = document.getElementById('unlock-sections-button');
-            const mainContent = document.querySelector('main'); 
-            const heroHeader = document.querySelector('#hero-header'); 
-            const videoBgPage2 = document.getElementById('video-bg-page2'); 
-            const tagNameList = document.getElementById('tag_name_list'); 
-            
-            // NEW Menu References
-            const floatingMenuBtn = document.getElementById('floating-menu-btn');
-            const menuOverlay = document.getElementById('menu-overlay');
-            const menuContent = document.getElementById('menu-content');
-            const musicToggleBtn = document.getElementById('music-toggle-btn');
-            const speakerIcon = document.getElementById('speaker-icon');
-            const musicStatus = document.getElementById('music-status');
-            const closeMenuButton = document.getElementById('close-menu-button'); 
-            
-            // References for sections to show immediately
-            const khmerInviteSection = document.getElementById('khmer-invite');
-            const programSection = document.getElementById('program');
-            
-            let observer = null; 
-
-            // **INITIALIZATION STEP:** Ensure the video is muted permanently
-            introVideo.muted = true;
-            
-            // =========================================================================
-            // CORE FUNCTION: LOAD GUEST NAME
-            // =========================================================================
-            async function loadGuestName() {
-                // 1. Get the Code from the URL Hash (e.g., #0002 -> 0002)
-                let guestCode = window.location.hash.substring(1).trim();
-                
-                let foundNameText = ' '; 
-                let unlockButtonText = ' '; 
-
-                // If a guest code is present, attempt to load the name
-                if (guestCode) {
-                    try {
-                        const response = await fetch(GUEST_DATA_FILE);
-                        
-                        if (!response.ok) {
-                            console.error(`Failed to load CSV: ${response.statusText}`);
-                        } else {
-                            const csvText = await response.text();
-                            
-                            // 3. Parse CSV and find the name
-                            const lines = csvText.trim().split('\n');
-                            let foundName = null;
-
-                            for (const line of lines) {
-                                const parts = line.trim().split(',', 2); 
-                                
-                                if (parts.length === 2 && parts[0].trim() === guestCode) {
-                                    foundName = parts[1].trim();
-                                    break;
-                                }
-                            }
-
-                            if (foundName) {
-                                foundNameText = foundName;
-                                unlockButtonText = ' '; 
-                            }
-                        }
-
-                    } catch (error) {
-                        console.error('Error processing guest data:', error);
-                    }
-                }
-                
-                // 4. Update the Invitation Name Tag and Button Text
-                tagNameList.innerHTML = foundNameText;
-                unlockButton.innerHTML = unlockButtonText; 
-                tagNameList.style.marginTop = guestCode ? '30px' : '0'; 
-            }
-            
-            // =========================================================================
-            // MUSIC CONTROL LOGIC
-            // =========================================================================
-            function updateMusicToggleUI() {
-                if (bgMusic.muted) {
-                    speakerIcon.src = './images/volume.png'; // Assuming you have a silence.png
-                    speakerIcon.alt = 'Sound Off';
-                    musicStatus.textContent = 'បើកសំឡេង'; // Muted in Khmer
-                    bgMusic.pause();
-                } else {
-                    speakerIcon.src = './images/silence.png'; // Assuming you have a volume.png
-                    speakerIcon.alt = 'Sound On';
-                    musicStatus.textContent = 'បិទសំឡេង'; // Playing in Khmer
-                    bgMusic.play().catch(e => console.warn("Music play failed:", e));
-                }
-            }
-
-            musicToggleBtn.addEventListener('click', (event) => {
-                event.stopPropagation(); // Prevent navigation/closing menu when toggling music
-                bgMusic.muted = !bgMusic.muted;
-                updateMusicToggleUI();
-            });
-
-            // =========================================================================
-            // MENU NAVIGATION LOGIC
-            // =========================================================================
-            function openMenu() {
-                floatingMenuBtn.classList.add('active'); // Rotate + icon
-                menuOverlay.classList.remove('hidden');
-                // Use a short delay to ensure the element is visible before adding 'active' for smooth transition
-                setTimeout(() => {
-                    menuOverlay.classList.add('active'); // Add transparent background and enable pointer events
-                    document.body.style.overflow = 'hidden';
-                    updateMusicToggleUI(); // Ensure the music status is correct when opening
-                }, 10);
-            }
-
-            window.closeMenu = function() { // Expose globally for other elements if needed
-                floatingMenuBtn.classList.remove('active'); // Rotate + icon back
-                menuOverlay.classList.remove('active'); // Remove background and disable pointer events
-                document.body.style.overflow = 'auto'; 
-                setTimeout(() => menuOverlay.classList.add('hidden'), 300); // Wait for transition to complete before hiding
-            }
-
-            function navigateToSection(targetId) {
-                const targetElement = document.getElementById(targetId);
-                if (targetElement) {
-                    closeMenu();
-                    setTimeout(() => {
-                        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }, 350); // Wait for menu to close
-                }
-            }
-
-            // Toggle floating menu button click handler
-            floatingMenuBtn.addEventListener('click', (event) => {
-                event.stopPropagation();
-                if (menuOverlay.classList.contains('active')) {
-                    closeMenu();
-                } else {
-                    openMenu();
-                }
-            });
-            
-            // Dedicated close button click handler
-            closeMenuButton.addEventListener('click', closeMenu);
-            
-            // Reinstated: Close menu if clicking anywhere on the transparent background
-            menuOverlay.addEventListener('click', (event) => {
-                // Check if the click target is exactly the overlay itself, and not a child element (like a button)
-                if (event.target === menuOverlay && menuOverlay.classList.contains('active')) {
-                    closeMenu();
-                }
-            });
-            
-            // Event delegation for navigation links (using menu-button class)
-            menuContent.addEventListener('click', (event) => {
-                const targetButton = event.target.closest('.menu-button');
-                if (targetButton && targetButton.dataset.target) {
-                    navigateToSection(targetButton.dataset.target);
-                }
-            });
-
-            // =========================================================================
-            // PAGE FLOW HANDLER 
-            // =========================================================================
-
-            const contentRevealHandler = () => {
-                // 1. Fade out and hide the video splash screen
-                videoSplash.classList.add('opacity-0');
-                introVideo.pause(); 
-                
-                setTimeout(() => {
-                    videoSplash.classList.add('hidden'); 
-                    document.body.style.overflow = 'auto'; // Re-enable scrolling
-                    videoSplash.classList.remove('opacity-0');
-                }, 1000); 
-                
-                // 2. Hide the hero header (the invite)
-                heroHeader.classList.add('hidden');
-                
-                // 3. Show the main content area
-                mainContent.classList.remove('hidden');
-
-                // 4. Show the fixed background video for page 2
-                videoBgPage2.classList.remove('hidden');
-
-                // 5. Force show KHMEER-INVITE and PROGRAM SECTIONS
-                khmerInviteSection.classList.remove('opacity-0', 'translate-y-8');
-                programSection.classList.remove('opacity-0', 'translate-y-8');
-
-                // 6. Show the floating menu button
-                floatingMenuBtn.classList.remove('hidden');
-                // Use a slight delay to ensure the content is loaded before starting the fade-in of the button
-                setTimeout(() => {
-                    floatingMenuBtn.classList.remove('opacity-0');
-                }, 500);
-
-                // 7. Start the intersection observer for the remaining fade-up animations
-                startObserver();
-                
-                // 8. Scroll to the beginning of the new content
-                 setTimeout(() => {
-                    window.scrollTo({ top: 0, behavior: 'smooth' }); 
-                 }, 50);
-            };
-
-            // --- Event Listeners ---
-            
-            introVideo.addEventListener('ended', contentRevealHandler);
-
-            // 🌟 MUSIC START ON CLICK: The moment the user interacts
-            unlockButton.addEventListener('click', () => {
-                document.getElementById('button-background-box').classList.remove('animate-zoom-pulse');
-                
-                videoSplash.classList.remove('hidden');
-                
-                setTimeout(() => {
-                     videoSplash.classList.remove('opacity-0');
-                }, 10);
-                
-                // 1. Attempt to play intro video (Muted permanently)
-                introVideo.play().catch(e => {
-                    console.warn("Video Autoplay prevented:", e);
-                });
-
-                // 2. Attempt to play background music (NOW UNMUTED)
-                bgMusic.muted = false; 
-                bgMusic.play().catch(e => {
-                    console.warn("Music Autoplay prevented or failed:", e);
-                    bgMusic.muted = true; // Set to muted if it failed to play
-                });
-                
-                document.body.style.overflow = 'hidden';
-            });
-            
-            // --- Function to define and start the observer (UNCHANGED) ---
-            const startObserver = () => {
-                if (observer) {
-                    observer.disconnect();
-                }
-
-                // Select all sections with data-animate="fade-up" *except* the two we showed immediately
-                const animatedSections = document.querySelectorAll('[data-animate="fade-up"]:not(#khmer-invite):not(#program)');
-                
-                observer = new IntersectionObserver((entries) => {
-                    entries.forEach(entry => {
-                        const target = entry.target;
-
-                        if (entry.isIntersecting) {
-                            target.classList.remove('opacity-0', 'translate-y-8');
-                        } else {
-                            if (heroHeader.classList.contains('hidden')) { 
-                                target.classList.add('opacity-0', 'translate-y-8');
-                            }
-                        }
-                    });
-                }, {
-                    root: null, 
-                    rootMargin: '0px',
-                    threshold: 0.2
-                });
-
-                animatedSections.forEach(section => {
-                    observer.observe(section);
-                });
-            };
-
-            // --- Gallery Modal Logic (UNCHANGED) ---
-            const modal = document.getElementById('gallery-modal');
-            const modalImg = document.getElementById('modal-image');
-
-            window.openModal = function(imageSrc) {
-                modalImg.src = imageSrc;
-                modal.classList.remove('hidden');
-                document.body.style.overflow = 'hidden'; 
-            };
-
-            window.closeModal = function() {
-                modal.classList.add('hidden');
-                if (heroHeader.classList.contains('hidden')) {
-                     document.body.style.overflow = 'auto'; 
-                }
-            };
-            
-            // --- Initial Load Setup (UNCHANGED) ---
-            loadGuestName(); 
-            document.body.style.overflow = 'auto'; 
-            websiteContent.classList.remove('opacity-0');
-        });
-    </script>
+  <noscript>Please enable JavaScript to view the invitation.</noscript>
+  <script src="script.js"></script>
 </body>
 </html>
