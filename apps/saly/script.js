@@ -41,11 +41,8 @@ document.addEventListener('visibilitychange', () => { if (!document.hidden) appl
       }
     });
   }
-  if (mediaQuery.addEventListener) {
-    mediaQuery.addEventListener('change', apply);
-  } else {
-    mediaQuery.addListener(apply);
-  }
+  mediaQuery.addEventListener ? mediaQuery.addEventListener('change', apply)
+                              : mediaQuery.addListener(apply);
   apply();
 })();
 
@@ -64,13 +61,13 @@ function loadNames() {
   if (n2) n2.textContent = invitationData.guestName;
 }
 
-/* ===== Scroll Reveal ===== */
+/* ===== Scroll Reveal (root = #page2-main) ===== */
 function observeContentSections() {
   const page2Main = document.getElementById('page2-main');
-  const isMobile = window.innerWidth <= 520;
+  if (!page2Main) return;
 
   const observerOptions = {
-    root: isMobile ? null : page2Main,   // desktop: inner scroll, mobile: window
+    root: page2Main,
     rootMargin: '0px 0px -100px 0px',
     threshold: 0.1,
   };
@@ -97,11 +94,9 @@ function openModal(src) {
   img.src = src;
   modal.classList.remove('hidden');
 }
-
 function closeModal() {
   document.getElementById('gallery-modal').classList.add('hidden');
 }
-
 function showGalleryAt(i) {
   if (!galleryImages.length) return;
   galleryIndex = (i + galleryImages.length) % galleryImages.length;
@@ -115,12 +110,10 @@ document.addEventListener('click', (e) => {
     openModal(e.target.src);
   }
 });
-
 document.getElementById('prev-btn')?.addEventListener('click', (e) => {
   e.stopPropagation();
   showGalleryAt(galleryIndex - 1);
 });
-
 document.getElementById('next-btn')?.addEventListener('click', (e) => {
   e.stopPropagation();
   showGalleryAt(galleryIndex + 1);
@@ -130,11 +123,11 @@ document.getElementById('next-btn')?.addEventListener('click', (e) => {
 document.addEventListener('DOMContentLoaded', () => {
   loadNames();
 
-  // Section 1 (page 1 hero)
+  // Page 1
   const hero1 = document.getElementById('hero-header');
   const overlayBtn = document.getElementById('content-overlay');
 
-  // Intro layer
+  // Intro
   const introLayer = document.getElementById('intro-video-layer');
   const introVideo = document.getElementById('intro-video');
   const introSkip  = document.getElementById('intro-skip');
@@ -168,14 +161,14 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function goToKhmerInvite() {
-    // Hide intro layer
+    // hide intro overlay
     introLayer.classList.remove('show');
     setTimeout(() => introLayer.classList.add('hidden'), 200);
 
-    // Show fixed video backdrop
+    // show looping bg video
     page2Backdrop.classList.remove('hidden');
 
-    // Hide hero 2 in this flow
+    // hide hero 2 in this flow
     hero2.style.display = 'none';
     if (invite2) {
       invite2.classList.add('fade-out');
@@ -184,25 +177,23 @@ document.addEventListener('DOMContentLoaded', () => {
       invite2.style.pointerEvents = 'none';
     }
 
-    // Show page2 main — styles now handled by CSS (no inline overrides)
+    // show page2 main; it already fills the phone (CSS)
     page2Main.classList.remove('hidden');
 
-    // Make #khmer-invite visible
+    // show first section immediately
     if (khmerInvite) khmerInvite.classList.add('is-visible');
 
-    // Scroll to #khmer-invite inside the correct scroller (desktop) or window (mobile)
+    // scroll inner container to khmer-invite
     requestAnimationFrame(() => {
       waitForImages(khmerInvite || document).then(() => {
-        const isMobile = window.innerWidth <= 520;
+        page2Main.scrollTop = 0;
 
-        if (!isMobile) {
-          // Desktop: inner scroll container
-          page2Main.scrollTop = 0;
-          const targetTop = (khmerInvite?.offsetTop || 0) - (page2Main.offsetTop || 0);
+        if (khmerInvite) {
+          const sectionRect = khmerInvite.getBoundingClientRect();
+          const parentRect  = page2Main.getBoundingClientRect();
+          const targetTop   = sectionRect.top - parentRect.top + page2Main.scrollTop;
+
           page2Main.scrollTo({ top: targetTop, behavior: 'smooth' });
-        } else {
-          // Mobile: whole window scrolls
-          window.scrollTo({ top: khmerInvite.offsetTop || 0, behavior: 'smooth' });
         }
       });
     });
@@ -229,6 +220,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     introVideo.onended = () => goToKhmerInvite();
 
+    // safety timeout
     setTimeout(() => {
       if (!introVideo.paused && !introVideo.ended) return;
       goToKhmerInvite();
@@ -239,10 +231,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   overlayBtn.addEventListener('click', onFirstClick);
   overlayBtn.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      onFirstClick();
-    }
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onFirstClick(); }
   });
 
   introSkip.addEventListener('click', (e) => {
