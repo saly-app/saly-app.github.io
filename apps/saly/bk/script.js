@@ -34,11 +34,7 @@ document.addEventListener('visibilitychange', () => { if (!document.hidden) appl
       else if (v.paused) { v.play().catch(() => {}); }
     });
   }
-  if (mediaQuery.addEventListener) {
-    mediaQuery.addEventListener('change', apply);
-  } else {
-    mediaQuery.addListener(apply);
-  }
+  mediaQuery.addEventListener ? mediaQuery.addEventListener('change', apply) : mediaQuery.addListener(apply);
   apply();
 })();
 
@@ -57,50 +53,34 @@ function loadNames() {
   if (n2) n2.textContent = invitationData.guestName;
 }
 
-/* ===== Scroll Reveal (using #page2-main as root) ===== */
+/* ===== Scroll Reveal ===== */
+const observerOptions = { root: null, rootMargin: '0px 0px -100px 0px', threshold: 0.1 };
+const observer = new IntersectionObserver((entries, obs) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) { entry.target.classList.add('is-visible'); obs.unobserve(entry.target); }
+  });
+}, observerOptions);
 function observeContentSections() {
-  const page2Main = document.getElementById('page2-main');
-  if (!page2Main) return;
-
-  const observerOptions = {
-    root: page2Main,
-    rootMargin: '0px 0px -100px 0px',
-    threshold: 0.1,
-  };
-
-  const observer = new IntersectionObserver((entries, obs) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('is-visible');
-        obs.unobserve(entry.target);
-      }
-    });
-  }, observerOptions);
-
   document.querySelectorAll('[data-reveal]').forEach(el => observer.observe(el));
 }
 
 /* ===== Gallery Modal ===== */
 let galleryIndex = 0;
 let galleryImages = [];
-
 function openModal(src) {
   const modal = document.getElementById('gallery-modal');
   const img = document.getElementById('modal-image');
   img.src = src;
   modal.classList.remove('hidden');
 }
-
 function closeModal() {
   document.getElementById('gallery-modal').classList.add('hidden');
 }
-
 function showGalleryAt(i) {
   if (!galleryImages.length) return;
   galleryIndex = (i + galleryImages.length) % galleryImages.length;
   document.getElementById('modal-image').src = galleryImages[galleryIndex].src;
 }
-
 document.addEventListener('click', (e) => {
   if (e.target && e.target.matches('.gallery-thumbnail')) {
     galleryImages = Array.from(document.querySelectorAll('.gallery-thumbnail'));
@@ -108,16 +88,8 @@ document.addEventListener('click', (e) => {
     openModal(e.target.src);
   }
 });
-
-document.getElementById('prev-btn')?.addEventListener('click', (e) => {
-  e.stopPropagation();
-  showGalleryAt(galleryIndex - 1);
-});
-
-document.getElementById('next-btn')?.addEventListener('click', (e) => {
-  e.stopPropagation();
-  showGalleryAt(galleryIndex + 1);
-});
+document.getElementById('prev-btn')?.addEventListener('click', (e) => { e.stopPropagation(); showGalleryAt(galleryIndex - 1); });
+document.getElementById('next-btn')?.addEventListener('click', (e) => { e.stopPropagation(); showGalleryAt(galleryIndex + 1); });
 
 /* ===== Page Flow ===== */
 document.addEventListener('DOMContentLoaded', () => {
@@ -135,7 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Page 2
   const page2Backdrop = document.getElementById('video-bg-page2');
   const hero2   = document.getElementById('hero-header-2');
-  const invite2 = document.getElementById('invite-2'); // kept but hidden in this flow
+  const invite2 = document.getElementById('invite-2'); // we'll keep it hidden in this flow
   const page2Main = document.getElementById('page2-main');
   const khmerInvite = document.getElementById('khmer-invite');
 
@@ -146,73 +118,69 @@ document.addEventListener('DOMContentLoaded', () => {
     hero1.style.display = 'none';
   }
 
-  // Helper: wait for images to load inside a section
+  // Go straight to PAGE 2 main and focus #khmer-invite
+  function goToKhmerInvite() {
+  // Hide intro layer
+  introLayer.classList.remove('show');
+  setTimeout(() => introLayer.classList.add('hidden'), 200);
+
+  // Show fixed video backdrop
+  page2Backdrop.classList.remove('hidden');
+
+  // Ensure Section-2 hero is hidden/disabled in this flow
+  hero2.style.display = 'none';
+  if (invite2) {
+    invite2.classList.add('fade-out');
+    invite2.setAttribute('aria-hidden', 'true');
+    invite2.inert = true;
+    invite2.style.pointerEvents = 'none';
+  }
+
+  // Reveal PAGE 2 main (the only scroller); make it fill the phone
+  page2Main.classList.remove('hidden');
+  page2Main.style.position = 'absolute';
+  page2Main.style.left = '0';
+  page2Main.style.right = '0';
+  page2Main.style.bottom = '0';
+  page2Main.style.top = '0';
+
+  // Make #khmer-invite visible now
+  if (khmerInvite) khmerInvite.classList.add('is-visible');
+
+  // Helper: wait for images inside khmer-invite to finish (prevents layout jump)
   function waitForImages(el) {
     const imgs = Array.from(el.querySelectorAll('img'));
     if (!imgs.length) return Promise.resolve();
     return Promise.all(
-      imgs.map(img =>
-        img.complete
-          ? Promise.resolve()
-          : new Promise(res => {
-              img.addEventListener('load', res, { once: true });
-              img.addEventListener('error', res, { once: true });
-            })
-      )
+      imgs.map(img => img.complete ? Promise.resolve() : new Promise(res => {
+        img.addEventListener('load', res, { once: true });
+        img.addEventListener('error', res, { once: true });
+      }))
     );
   }
 
-  // Go straight to PAGE 2 main and focus #khmer-invite
-  function goToKhmerInvite() {
-    // Hide intro layer
-    introLayer.classList.remove('show');
-    setTimeout(() => introLayer.classList.add('hidden'), 200);
-
-    // Show fixed video backdrop
-    page2Backdrop.classList.remove('hidden');
-
-    // Ensure Section-2 hero is hidden/disabled in this flow
-    hero2.style.display = 'none';
-    if (invite2) {
-      invite2.classList.add('fade-out');
-      invite2.setAttribute('aria-hidden', 'true');
-      invite2.inert = true;
-      invite2.style.pointerEvents = 'none';
-    }
-
-    // Reveal PAGE 2 main (the only scroller); make it fill the phone
-    page2Main.classList.remove('hidden');
-    page2Main.style.position = 'absolute';
-    page2Main.style.left = '0';
-    page2Main.style.right = '0';
-    page2Main.style.bottom = '0';
-    page2Main.style.top = '0';
-
-    // Make #khmer-invite visible now
-    if (khmerInvite) khmerInvite.classList.add('is-visible');
-
-    // Scroll the CONTAINER (#page2-main) to #khmer-invite
-    requestAnimationFrame(() => {
-      waitForImages(khmerInvite || document).then(() => {
-        // reset container scroll to top then scroll to target
-        page2Main.scrollTop = 0;
-        const targetTop = (khmerInvite?.offsetTop || 0) - (page2Main.offsetTop || 0);
-        page2Main.scrollTo({ top: targetTop, behavior: 'smooth' });
-      });
+  // Scroll the CONTAINER (#page2-main) to #khmer-invite
+  requestAnimationFrame(() => {
+    waitForImages(khmerInvite || document).then(() => {
+      // First, reset container scroll to top
+      page2Main.scrollTop = 0;
+      // Compute offset of target relative to the scroller
+      const targetTop = (khmerInvite?.offsetTop || 0) - (page2Main.offsetTop || 0);
+      page2Main.scrollTo({ top: targetTop, behavior: 'smooth' });
     });
+  });
 
-    // Start observer for the rest
-    observeContentSections();
-  }
+  // Start observer for the rest
+  observeContentSections();
+}
+
 
   function showIntroVideo() {
-    // Respect prefers-reduced-motion: go directly to page 2
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       hideSection1Now();
       goToKhmerInvite();
       return;
     }
-
     // Hide Section 1 right away
     hideSection1Now();
 
@@ -227,7 +195,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     introVideo.onended = () => goToKhmerInvite();
 
-    // Safety: proceed if video fails or never starts
+    // Safety: proceed if video fails
     setTimeout(() => {
       if (!introVideo.paused && !introVideo.ended) return;
       goToKhmerInvite();
@@ -235,13 +203,9 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function onFirstClick() { showIntroVideo(); }
-
   overlayBtn.addEventListener('click', onFirstClick);
   overlayBtn.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      onFirstClick();
-    }
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onFirstClick(); }
   });
 
   // Skip intro
