@@ -36,30 +36,42 @@ body { overflow-x: hidden; }
   transform-origin: center;
   transform: translate(-50%, -50%) scale(var(--scale));
   box-shadow: 0 0 20px rgba(0,0,0,.5);
-  background: #fff;
-  overflow: hidden;             /* phone frame itself doesn't scroll */
+  background: transparent;
   border-radius: 20px;
+
+  /* scroll container on desktop preview */
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+
   padding-bottom: env(safe-area-inset-bottom);
 }
 
-/* === MOBILE: remove transforms & fixed ancestors (iOS scroll fix) === */
+/* === MOBILE: single-page, window scrolls === */
 @media (max-width: 520px) {
+  html, body {
+    height: auto;
+    min-height: 100%;
+  }
+
   #stage {
-    position: relative;
+    position: static;
     inset: auto;
     min-height: 100vh;
-    overflow: hidden;
+    overflow: visible;
   }
 
   #mobile-wrapper {
-    position: relative;
-    top: 0;
-    left: 0;
-    transform: none;                     /* 👈 no transform on mobile */
+    position: static;
+    top: auto;
+    left: auto;
+    transform: none;
     width: 100vw;
-    height: calc(var(--vh, 1vh) * 100);  /* full viewport height */
+    height: auto;
+    min-height: 100vh;
+    box-shadow: none;
     border-radius: 0;
-    margin: 0;
+    overflow-y: visible; /* let the window scroll */
+    background: transparent;
   }
 }
 
@@ -72,7 +84,8 @@ body { overflow-x: hidden; }
 
 /* ================= PAGE 1 HERO ================= */
 #hero-header {
-  min-height: 100%;
+  position: relative;
+  min-height: 100vh;
   display: grid; place-items: center; text-align: center;
   padding: 24px 0; transition: opacity 1s ease;
 }
@@ -136,7 +149,7 @@ body { overflow-x: hidden; }
 
 /* ================= INTRO VIDEO LAYER ================= */
 #intro-video-layer {
-  position: absolute; inset: 0; z-index: 50; background: #000;
+  position: fixed; inset: 0; z-index: 50; background: #000;
   display: grid; place-items: center;
   opacity: 0; pointer-events: none; transition: opacity 300ms ease;
 }
@@ -152,11 +165,11 @@ body { overflow-x: hidden; }
   cursor: pointer;
 }
 
-/* ================= PAGE 2 BACKDROP (FIXED, NON-SCROLLING) ================= */
+/* ================= PAGE 2 BACKGROUND VIDEO ================= */
 #video-bg-page2 {
-  position: absolute;
+  position: fixed;
   inset: 0;
-  z-index: 0;
+  z-index: -1;
   pointer-events: none;
 }
 #video-bg-page2 video {
@@ -165,16 +178,14 @@ body { overflow-x: hidden; }
   width: 100%;
   height: 100%;
   object-fit: cover;
-  z-index: 0;
 }
 #video-bg-page2 .overlay {
   position: absolute;
   inset: 0;
-  pointer-events: none;
-  z-index: 1;
+  background: rgba(0,0,0,0.2);
 }
 
-/* ================= PAGE 2 HERO (kept but skipped) ================= */
+/* ================= PAGE 2 HERO (kept but not used in this flow) ================= */
 #hero-header-2 {
   position: relative; z-index: 1;
   min-height: auto; display: block; padding: 24px 0 12px;
@@ -189,18 +200,13 @@ body { overflow-x: hidden; }
   align-items: center;
   padding: 6%;
 }
-
 #invite-2.fade-out { opacity: 0; transform: translateY(-8px); }
 
-/* ================= PAGE 2 MAIN SCROLLER ================= */
+/* ================= PAGE 2 MAIN: SINGLE PAGE CONTENT ================= */
 #page2-main {
-  position: absolute;
-  inset: 0;
+  position: relative;
   z-index: 1;
-  overflow-y: auto;      /* only this scrolls */
-  -webkit-overflow-scrolling: touch;
-  background: transparent;
-  padding: 16px 8px 96px; /* bottom padding so content isn't hidden behind nav */
+  padding: 16px 8px 96px;
 }
 
 /* ================= REVEAL SECTIONS ================= */
@@ -279,15 +285,17 @@ body { overflow-x: hidden; }
 
 /* Bottom nav */
 #bottom-nav {
-  position: absolute;
+  position: fixed;
   left: 0; right: 0;
   bottom: 0;
-  z-index: 2;
+  z-index: 10;
   padding: 4px 8px calc(4px + env(safe-area-inset-bottom));
-  background: rgba(0,0,0,0.8);
+  background: rgba(0,0,0,0.85);
   backdrop-filter: blur(16px);
 }
 .bottom-nav-inner {
+  max-width: 480px;
+  margin: 0 auto;
   display: flex;
   gap: 6px;
 }
@@ -303,7 +311,7 @@ body { overflow-x: hidden; }
   cursor: pointer;
 }
 .nav-item.active {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.14);
   font-weight: 600;
 }
 .nav-label {

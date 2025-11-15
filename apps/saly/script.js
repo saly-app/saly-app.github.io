@@ -111,24 +111,26 @@ document.getElementById('next-btn')?.addEventListener('click', (e) => {
 document.addEventListener('DOMContentLoaded', () => {
   loadNames();
 
-  // Section 1 (page 1 hero)
   const hero1 = document.getElementById('hero-header');
   const overlayBtn = document.getElementById('content-overlay');
 
-  // Intro layer
   const introLayer = document.getElementById('intro-video-layer');
   const introVideo = document.getElementById('intro-video');
   const introSkip  = document.getElementById('intro-skip');
 
-  // Page 2
   const page2Backdrop = document.getElementById('video-bg-page2');
   const hero2   = document.getElementById('hero-header-2');
   const invite2 = document.getElementById('invite-2');
   const page2Main = document.getElementById('page2-main');
   const khmerInvite = document.getElementById('khmer-invite');
 
-  // Bottom nav
+  const mobileWrapper = document.getElementById('mobile-wrapper');
   const bottomNav = document.getElementById('bottom-nav');
+
+  function getScrollContainer() {
+    // On mobile: window scroll; on desktop: phone wrapper scrolls
+    return window.innerWidth <= 520 ? window : mobileWrapper;
+  }
 
   function hideSection1Now() {
     hero1.style.opacity = '0';
@@ -136,15 +138,23 @@ document.addEventListener('DOMContentLoaded', () => {
     hero1.style.display = 'none';
   }
 
-  // Helper: scroll inside PAGE 2 to a specific section
+  // Scroll to a section (single page)
   function scrollToSection(id) {
     const target = document.getElementById(id);
-    if (!target || !page2Main) return;
+    if (!target) return;
 
-    requestAnimationFrame(() => {
-      const offset = target.offsetTop - page2Main.offsetTop;
-      page2Main.scrollTo({ top: offset, behavior: 'smooth' });
-    });
+    const container = getScrollContainer();
+
+    if (container === window) {
+      const rect = target.getBoundingClientRect();
+      const offset = rect.top + window.pageYOffset - 80; // leave some space from top
+      window.scrollTo({ top: offset, behavior: 'smooth' });
+    } else {
+      const cRect = container.getBoundingClientRect();
+      const tRect = target.getBoundingClientRect();
+      const offset = tRect.top - cRect.top + container.scrollTop - 80;
+      container.scrollTo({ top: offset, behavior: 'smooth' });
+    }
 
     if (bottomNav) {
       const items = bottomNav.querySelectorAll('.nav-item');
@@ -155,13 +165,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Go straight to PAGE 2 main and focus #khmer-invite
+  // Go to page 2 single-page view and focus Khmer invite
   function goToKhmerInvite() {
+    // Hide intro
     introLayer.classList.remove('show');
     setTimeout(() => introLayer.classList.add('hidden'), 200);
 
+    // Show background video
     page2Backdrop.classList.remove('hidden');
 
+    // Don't use hero-header-2 in this flow
     hero2.style.display = 'none';
     if (invite2) {
       invite2.classList.add('fade-out');
@@ -170,17 +183,13 @@ document.addEventListener('DOMContentLoaded', () => {
       invite2.style.pointerEvents = 'none';
     }
 
+    // Show main content
     page2Main.classList.remove('hidden');
-    page2Main.style.position = 'absolute';
-    page2Main.style.left = '0';
-    page2Main.style.right = '0';
-    page2Main.style.bottom = '0';
-    page2Main.style.top = '0';
 
-    if (bottomNav) {
-      bottomNav.classList.remove('hidden');
-    }
+    // Show bottom navigation
+    if (bottomNav) bottomNav.classList.remove('hidden');
 
+    // Reveal first section
     if (khmerInvite) khmerInvite.classList.add('is-visible');
 
     function waitForImages(el) {
@@ -196,7 +205,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     requestAnimationFrame(() => {
       waitForImages(khmerInvite || document).then(() => {
-        page2Main.scrollTop = 0;
+        const container = getScrollContainer();
+        if (container === window) {
+          window.scrollTo(0, 0);
+        } else if (container) {
+          container.scrollTop = 0;
+        }
         scrollToSection('khmer-invite');
       });
     });
@@ -243,9 +257,11 @@ document.addEventListener('DOMContentLoaded', () => {
   introSkip.addEventListener('click', (e) => {
     e.stopPropagation();
     try { introVideo.pause(); } catch {}
+    hideSection1Now();
     goToKhmerInvite();
   });
 
+  // Bottom nav clicks
   if (bottomNav) {
     bottomNav.addEventListener('click', (e) => {
       const btn = e.target.closest('.nav-item');
