@@ -40,7 +40,6 @@ body { overflow-x: hidden; }
 } */
 
 @media (max-width: 520px) {
-  /* Let the page scroll normally on mobile */
   #stage {
     position: static;
     inset: auto;
@@ -48,7 +47,7 @@ body { overflow-x: hidden; }
     overflow: visible;
   }
 
-  #mobile-wrapper {
+  /* #mobile-wrapper {
     position: static;
     top: auto;
     left: auto;
@@ -57,10 +56,9 @@ body { overflow-x: hidden; }
     min-height: 100vh;
     height: auto;
     border-radius: 0;
-    overflow: visible; /* allow inner content to define height */
-  }
+    overflow: visible;
+  } */
 
-  /* On mobile, let the whole page scroll instead of inner scroll container */
   #page2-main {
     position: static;
     inset: auto;
@@ -69,6 +67,7 @@ body { overflow-x: hidden; }
     -webkit-overflow-scrolling: auto;
   }
 }
+
 
 
 /* ================= REUSABLE LAYERS ================= */

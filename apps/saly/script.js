@@ -12,7 +12,10 @@ document.addEventListener('visibilitychange', () => { if (!document.hidden) setV
 function applyPhoneScale() {
   const BASE_W = 390, BASE_H = 844;
   const sw = window.innerWidth, sh = window.innerHeight;
-  if (sw <= 520) { document.documentElement.style.setProperty('--scale', '1'); return; }
+  if (sw <= 520) {
+    document.documentElement.style.setProperty('--scale', '1');
+    return;
+  }
   const scale = Math.min(sw / BASE_W, sh / BASE_H);
   document.documentElement.style.setProperty('--scale', scale.toString());
 }
@@ -30,8 +33,12 @@ document.addEventListener('visibilitychange', () => { if (!document.hidden) appl
 
   function apply() {
     vids.forEach(v => {
-      if (mediaQuery.matches) { v.pause(); v.removeAttribute('autoplay'); }
-      else if (v.paused) { v.play().catch(() => {}); }
+      if (mediaQuery.matches) {
+        v.pause();
+        v.removeAttribute('autoplay');
+      } else if (v.paused) {
+        v.play().catch(() => {});
+      }
     });
   }
   if (mediaQuery.addEventListener) {
@@ -57,13 +64,13 @@ function loadNames() {
   if (n2) n2.textContent = invitationData.guestName;
 }
 
-/* ===== Scroll Reveal (using #page2-main as root) ===== */
+/* ===== Scroll Reveal ===== */
 function observeContentSections() {
   const page2Main = document.getElementById('page2-main');
-  if (!page2Main) return;
+  const isMobile = window.innerWidth <= 520;
 
   const observerOptions = {
-    root: page2Main,
+    root: isMobile ? null : page2Main,   // desktop: inner scroll, mobile: window
     rootMargin: '0px 0px -100px 0px',
     threshold: 0.1,
   };
@@ -135,18 +142,16 @@ document.addEventListener('DOMContentLoaded', () => {
   // Page 2
   const page2Backdrop = document.getElementById('video-bg-page2');
   const hero2   = document.getElementById('hero-header-2');
-  const invite2 = document.getElementById('invite-2'); // kept but hidden in this flow
+  const invite2 = document.getElementById('invite-2');
   const page2Main = document.getElementById('page2-main');
   const khmerInvite = document.getElementById('khmer-invite');
 
-  // Hide Section 1 immediately when intro starts (no flash back)
   function hideSection1Now() {
     hero1.style.opacity = '0';
     hero1.style.height  = '0';
     hero1.style.display = 'none';
   }
 
-  // Helper: wait for images to load inside a section
   function waitForImages(el) {
     const imgs = Array.from(el.querySelectorAll('img'));
     if (!imgs.length) return Promise.resolve();
@@ -162,7 +167,6 @@ document.addEventListener('DOMContentLoaded', () => {
     );
   }
 
-  // Go straight to PAGE 2 main and focus #khmer-invite
   function goToKhmerInvite() {
     // Hide intro layer
     introLayer.classList.remove('show');
@@ -171,7 +175,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Show fixed video backdrop
     page2Backdrop.classList.remove('hidden');
 
-    // Ensure Section-2 hero is hidden/disabled in this flow
+    // Hide hero 2 in this flow
     hero2.style.display = 'none';
     if (invite2) {
       invite2.classList.add('fade-out');
@@ -180,43 +184,41 @@ document.addEventListener('DOMContentLoaded', () => {
       invite2.style.pointerEvents = 'none';
     }
 
-    // Reveal PAGE 2 main (the only scroller); make it fill the phone
+    // Show page2 main — styles now handled by CSS (no inline overrides)
     page2Main.classList.remove('hidden');
-    page2Main.style.position = 'absolute';
-    page2Main.style.left = '0';
-    page2Main.style.right = '0';
-    page2Main.style.bottom = '0';
-    page2Main.style.top = '0';
 
-    // Make #khmer-invite visible now
+    // Make #khmer-invite visible
     if (khmerInvite) khmerInvite.classList.add('is-visible');
 
-    // Scroll the CONTAINER (#page2-main) to #khmer-invite
+    // Scroll to #khmer-invite inside the correct scroller (desktop) or window (mobile)
     requestAnimationFrame(() => {
       waitForImages(khmerInvite || document).then(() => {
-        // reset container scroll to top then scroll to target
-        page2Main.scrollTop = 0;
-        const targetTop = (khmerInvite?.offsetTop || 0) - (page2Main.offsetTop || 0);
-        page2Main.scrollTo({ top: targetTop, behavior: 'smooth' });
+        const isMobile = window.innerWidth <= 520;
+
+        if (!isMobile) {
+          // Desktop: inner scroll container
+          page2Main.scrollTop = 0;
+          const targetTop = (khmerInvite?.offsetTop || 0) - (page2Main.offsetTop || 0);
+          page2Main.scrollTo({ top: targetTop, behavior: 'smooth' });
+        } else {
+          // Mobile: whole window scrolls
+          window.scrollTo({ top: khmerInvite.offsetTop || 0, behavior: 'smooth' });
+        }
       });
     });
 
-    // Start observer for the rest
     observeContentSections();
   }
 
   function showIntroVideo() {
-    // Respect prefers-reduced-motion: go directly to page 2
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       hideSection1Now();
       goToKhmerInvite();
       return;
     }
 
-    // Hide Section 1 right away
     hideSection1Now();
 
-    // Show intro
     introLayer.classList.add('show');
     introLayer.classList.remove('hidden');
 
@@ -227,7 +229,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     introVideo.onended = () => goToKhmerInvite();
 
-    // Safety: proceed if video fails or never starts
     setTimeout(() => {
       if (!introVideo.paused && !introVideo.ended) return;
       goToKhmerInvite();
@@ -244,7 +245,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Skip intro
   introSkip.addEventListener('click', (e) => {
     e.stopPropagation();
     try { introVideo.pause(); } catch {}
