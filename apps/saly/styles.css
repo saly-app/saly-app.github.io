@@ -117,11 +117,15 @@ body.lock-scroll {
   aspect-ratio: 384 / 110; display: grid; place-items: center; pointer-events: none;
   position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
 }
+
+/* YOUR CUSTOM TEXT STYLE (kept exactly) */
 .name-text,
 #tag_name_list,
 #tag_name_list_2 {
-  font-family: 'Moul', sans-serif; color: #efc45b;
-  font-size: clamp(16px, 3.5vw, 28px); margin-top: 6%;
+  font-family: 'Moul', sans-serif;
+  color: #efc45b;
+  font-size: clamp(16px, 3.5vw, 18px);
+  margin-top: 12%;
 }
 
 /* CTA button (shared) */

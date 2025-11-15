@@ -24,7 +24,7 @@
       <header id="hero-header" class="relative">
         <div id="video-wrapper" aria-hidden="true">
           <video id="bg-video" autoplay loop muted playsinline preload="auto" poster="./images/video_poster.jpg">
-            <source src="./video/bg_003.mp4" type="video/mp4" />
+            <source src="./video/bg_003.mp4" type="video/webm" />
             Your browser does not support the video tag.
           </video>
         </div>
@@ -32,11 +32,12 @@
         <section id="invite">
           <img src="./images/Invite_new.png" alt="Invitation cover" loading="eager" />
 
-          <div id="content-overlay" role="button" tabindex="0" aria-label="Open invitation">
-            <div id="names-background-box" aria-live="polite">
+
+          <div id="names-background-box" aria-live="polite">
               <p id="tag_name_list">កំពុងផ្ទុក...</p>
             </div>
-
+            
+          <div id="content-overlay" role="button" tabindex="0" aria-label="Open invitation">
             <div style="margin-bottom: -25px;" id="button-background-box" class="animate-zoom-pulse" aria-hidden="true"></div>
           </div>
         </section>
@@ -46,16 +47,12 @@
       <div id="intro-video-layer" class="hidden">
         <video id="intro-video" playsinline preload="auto">
           <source src="./video/intro.mov" type="video/mp4" />
-          <!-- Optional extra sources for broader support:
-          <source src="./video/intro.webm" type="video/webm" />
-          <source src="./video/intro.mp4" type="video/mp4" />
-          -->
           Your browser does not support the video tag.
         </video>
         <button id="intro-skip" aria-label="Skip intro">Skip ›</button>
       </div>
 
-      <!-- ============== PAGE 2: FIXED VIDEO BACKDROP (NON-SCROLLING) ============== -->
+      <!-- ============== PAGE 2: VIDEO BACKDROP (FIXED BEHIND CONTENT) ============== -->
       <div id="video-bg-page2" class="hidden">
         <video id="background-video" autoplay loop muted playsinline>
           <source src="./video/bg_003.mp4" type="video/mp4" />
@@ -64,11 +61,11 @@
         <div class="overlay"></div>
       </div>
 
-      <!-- ============== PAGE 2: TOP HERO (kept but we skip it) ============== -->
+      <!-- ============== PAGE 2: HERO (kept but not used in this flow) ============== -->
       <header id="hero-header-2" class="relative hidden">
         <div class="absolute-fill" aria-hidden="true">
           <video id="hero-background-video" autoplay loop muted playsinline class="cover">
-            <source src="./video/bg_vdo_02.webm" type="video/webm" />
+            <source src="./video/bg_003.mp4" type="video/mp4" />
             Your browser does not support the video tag.
           </video>
         </div>
@@ -86,7 +83,7 @@
         </section>
       </header>
 
-      <!-- ============== PAGE 2: MAIN CONTENT (THIS SCROLLS) ============== -->
+      <!-- ============== PAGE 2: MAIN CONTENT (ALL SECTIONS IN ONE PAGE) ============== -->
       <main id="page2-main" class="hidden">
         <!-- Section 2.1 Khmer Invite -->
         <section id="khmer-invite" class="invite-card" data-reveal>
@@ -152,6 +149,40 @@
           </div>
         </section>
       </main>
+
+      <!-- ============== POPUP ICON MENU (ONLY PAGE 2) ============== -->
+      <button
+        id="menu-toggle"
+        class="menu-fab hidden"
+        aria-label="Open menu"
+        aria-expanded="false"
+        aria-controls="popup-menu"
+      >
+        ☰
+      </button>
+
+      <nav id="popup-menu" class="popup-menu hidden" aria-label="Section menu">
+        <button class="menu-item" data-target="khmer-invite">
+          <span class="menu-icon">💌</span>
+          <span class="menu-text">សំបុត្រ</span>
+        </button>
+        <button class="menu-item" data-target="program">
+          <span class="menu-icon">📅</span>
+          <span class="menu-text">កម្មវិធី</span>
+        </button>
+        <button class="menu-item" data-target="venue">
+          <span class="menu-icon">📍</span>
+          <span class="menu-text">ទីតាំង</span>
+        </button>
+        <button class="menu-item" data-target="bank">
+          <span class="menu-icon">💳</span>
+          <span class="menu-text">ធនាគារ</span>
+        </button>
+        <button class="menu-item" data-target="gallery">
+          <span class="menu-icon">📷</span>
+          <span class="menu-text">រូបភាព</span>
+        </button>
+      </nav>
     </div>
   </div>
 

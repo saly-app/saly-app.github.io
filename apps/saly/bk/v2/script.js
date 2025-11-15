@@ -45,58 +45,19 @@ document.addEventListener('visibilitychange', () => { if (!document.hidden) appl
   apply();
 })();
 
-/* ===== Guest Name from guests.csv ===== */
-function setGuestNameText(name) {
-  const displayName = name || 'ស្វាមី និង ភរិយា';
-
+/* ===== Guest Name ===== */
+function getGuestNameFromURL() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const raw = urlParams.get('to');
+  if (!raw) return 'ស្វាមី និង ភរិយា';
+  return decodeURIComponent(raw.replace(/\+/g, ' ')).trim() || 'ស្វាមី និង ភរិយា';
+}
+const invitationData = { guestName: getGuestNameFromURL() };
+function loadNames() {
   const n1 = document.getElementById('tag_name_list');
   const n2 = document.getElementById('tag_name_list_2');
-
-  if (n1) n1.textContent = displayName;
-  if (n2) n2.textContent = displayName;
-}
-
-function loadGuestFromCSV() {
-  const urlParams = new URLSearchParams(window.location.search);
-  const guestId = urlParams.get('to');  // e.g. ?to=10001kimny
-
-  // No code in URL → use default text
-  if (!guestId) {
-    setGuestNameText(null);
-    return;
-  }
-
-  fetch('./guests.csv')
-    .then((res) => {
-      if (!res.ok) {
-        throw new Error('Failed to load guests.csv');
-      }
-      return res.text();
-    })
-    .then((csvText) => {
-      const lines = csvText.split(/\r?\n/);
-      let foundName = null;
-
-      for (const line of lines) {
-        const trimmed = line.trim();
-        if (!trimmed) continue;
-
-        // split only on the first comma
-        const [id, ...rest] = trimmed.split(',');
-        const name = rest.join(',').trim();
-
-        if (id === guestId) {
-          foundName = name;
-          break;
-        }
-      }
-
-      setGuestNameText(foundName);
-    })
-    .catch((err) => {
-      console.error('Error reading guests.csv:', err);
-      setGuestNameText(null); // fallback
-    });
+  if (n1) n1.textContent = invitationData.guestName;
+  if (n2) n2.textContent = invitationData.guestName;
 }
 
 /* ===== Scroll Reveal ===== */
@@ -151,7 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Lock scroll on first page
   document.body.classList.add('lock-scroll');
 
-  loadGuestFromCSV();
+  loadNames();
 
   const hero1 = document.getElementById('hero-header');
   const overlayBtn = document.getElementById('content-overlay');
@@ -167,9 +128,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const khmerInvite = document.getElementById('khmer-invite');
 
   const mobileWrapper = document.getElementById('mobile-wrapper');
-
-  // Music element
-  const bgMusic = document.getElementById('bg-music');
 
   // Popup menu elements
   const menuToggle = document.getElementById('menu-toggle');
@@ -274,23 +232,11 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function showIntroVideo() {
-    // Start music when intro opens (user gesture)
-    if (bgMusic) {
-      bgMusic.currentTime = 0;
-      const playPromise = bgMusic.play();
-      if (playPromise && typeof playPromise.then === 'function') {
-        playPromise.catch(err => {
-          console.warn('Music play blocked:', err);
-        });
-      }
-    }
-
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       hideSection1Now();
       goToKhmerInvite();
       return;
     }
-
     hideSection1Now();
 
     introLayer.classList.add('show');
