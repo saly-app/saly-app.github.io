@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Digital Invite - Wedding Invitation Service</title>
+     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+    
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="css/custom-style.css">
+<link rel="stylesheet" type="text/css" href="css/loaders.css"/>
+<link rel="stylesheet" type="text/css" href="font-awesome/css/font-awesome.min.css">
+
+<style>
+        /* 1. Define the KhmerOS font for general text */
+        @font-face {
+            font-family: 'KhmerOS';
+            src: url('fonts/Battambang-Regular.ttf') format('truetype'); 
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        /* 2. Define the Moul font for headings/titles */
+        @font-face {
+            font-family: 'Moul';
+            src: url('fonts/Moul.ttf') format('opentype'); 
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        /* 3. Default body font (Khmer) */
+        body {
+            font-family: 'KhmerOS', sans-serif !important;
+        }
+        
+        /* 4. English Font Overrides: Applied when body has data-lang="EN" */
+        body[data-lang="EN"] {
+            /* Set Open Sans for all English text */
+            font-family: 'Open Sans', sans-serif !important;
+        }
+
+        /* 5. English Headings (Use Open Sans Bold) */
+        body[data-lang="EN"] h1, 
+        body[data-lang="EN"] h2, 
+        body[data-lang="EN"] h3, 
+        body[data-lang="EN"] h4, 
+        body[data-lang="EN"] h5, 
+        body[data-lang="EN"] h6, 
+        body[data-lang="EN"] .font-abril, 
+        body[data-lang="EN"] .price-count {
+            /* Keep Open Sans for headings in English, make them bold */
+            font-family: 'Open Sans', sans-serif !important;
+            font-weight: 700 !important; 
+        }
+
+        /* 6. Apply the bolder Moul font to all main headings and titles for KH (default) */
+        h1, h2, h3, h4, h5, h6, .font-abril, .price-count {
+            font-family: 'Moul', sans-serif !important;
+        }
+        
+        /* === CUSTOM NAV/LOGO STYLES START HERE === */
+
+        /* Custom CSS to make the logo image responsive and control its size */
+        .navbar-brand img {
+            max-width: 100%; 
+            height: auto; 
+            width: 150px; /* Max width of the logo */
+            max-height: 50px; 
+            display: block; 
+        }
+
+        /* Ensure the nav links themselves are still readable and properly spaced */
+        .top-nav .nav-link {
+            font-size: 18px !important;
+            padding-right: 15px !important; 
+            padding-left: 15px !important; 
+            font-family: 'KhmerOS', sans-serif !important;
+        }
+        
+        /* Override Khmer link font in English mode */
+        body[data-lang="EN"] .top-nav .nav-link {
+            font-family: 'Open Sans', sans-serif !important;
+        }
+
+        /* Style for the language switch button (shared style) */
+        .lang-switch-btn {
+            cursor: pointer;
+            padding: 5px 10px;
+            border: 1px solid #ffffff;
+            background: none; 
+            border-radius: 4px;
+            color: #ffffff;
+            font-size: 14px;
+            margin-left: 10px;
+            transition: all 0.3s;
+        }
+
+        .lang-switch-btn:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Style for the button when it's inside the collapsed mobile menu */
+        @media (max-width: 767.98px) { /* Applies to screens smaller than md (mobile) */
+            .lang-mobile-item {
+                /* Remove inherited list margin for cleaner look */
+                padding: 10px 0; 
+                width: 100%; /* Make sure the containing list item takes full width */
+            }
+            .lang-mobile-item .lang-switch-btn {
+                /* Center the button and make it a block element */
+                display: inline-block;
+                margin: 10px auto;
+                border: 1px solid #C39F78; /* Use primary color for contrast */
+                color: #C39F78;
+                background: #ffffff;
+            }
+        }
+        /* === CUSTOM NAV/LOGO STYLES END HERE === */
+
+        /* Minor adjustments for better Khmer display in packages */
+        .service-block-bg ul {
+            font-size: 16px !important;
+            line-height: 1.8;
+            /* Ensure the list text stays readable with KhmerOS */
+            font-family: 'KhmerOS', sans-serif !important;
+        }
+        
+        /* Override list font in English mode */
+        body[data-lang="EN"] .service-block-bg ul {
+            font-family: 'Open Sans', sans-serif !important;
+        }
+        
+        .service-block-bg h3 {
+            font-size: 20px; 
+        }
+
+        /* Target the main intro caption heading */
+        #home .intro-caption h2 {
+            font-size: 2.4rem; /* Large, bold heading size */
+            font-weight: 700;
+            line-height: 1.6;
+        }
+
+        /* Target the main intro caption paragraph */
+        #home .intro-caption p {
+            font-size: 1.4rem; /* Significantly larger paragraph text */
+            line-height: 1.6;
+            margin-bottom: 30px; /* Adjust spacing */
+        }
+
+        /* Ensure the button text is also prominent */
+        #home .intro-caption .btn {
+            font-size: 1.2rem;
+            padding: 12px 30px;
+        }
+
+        /* Styling for the New Professional Pricing Boxes (existing styles retained) */
+            .price-box-pro {
+                background-color: #ffffff; 
+                border: 1px solid #C39F78; 
+                border-radius: 8px;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); 
+                transition: all 0.3s ease;
+                height: 100%; 
+            }
+            .price-box-pro:hover {
+                box-shadow: 0 6px 20px rgba(195, 159, 120, 0.4); 
+                transform: translateY(-5px); 
+            }
+            .price-box-pro.standard-active {
+                background-color: #C39F78; 
+                color: #ffffff; 
+                border: none;
+                box-shadow: 0 8px 25px rgba(195, 159, 120, 0.6); 
+                transform: scale(1.03);
+            }
+            .price-box-pro .price-count {
+                font-size: 4rem; 
+                font-weight: 700;
+                line-height: 1.6;
+            }
+            .price-box-pro.standard-active ul li {
+                color: #ffffff;
+            }
+            .price-box-pro ul li {
+                color: #444444; 
+                padding-bottom: 5px;
+            }
+            .price-box-pro ul li .text-muted {
+                opacity: 0.6; 
+            }
+
+        /* Styling for the New Professional Service Boxes (existing styles retained) */
+            .service-box-pro {
+                background-color: #ffffff; 
+                border: 1px solid #E7E7E7; 
+                border-radius: 6px;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08); 
+                transition: all 0.3s ease;
+                height: 100%; 
+            }
+            .service-box-pro:hover {
+                box-shadow: 0 4px 15px rgba(195, 159, 120, 0.3); 
+                transform: translateY(-3px); 
+                border-color: #C39F78; 
+            }
+            .service-box-pro .icon-box {
+                display: inline-block;
+                width: 60px;
+                height: 60px;
+            }
+            .service-box-pro .icon-box img {
+                max-width: 100%;
+                height: auto;
+            }
+            
+    </style>
+
+<body>
+
+<div class="loader loader-bg">
+    <div class="loader-inner ball-pulse">
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+</div>
+
+<nav class="navbar navbar-expand-md fixed-top top-nav">
+    <div class="container d-flex justify-content-center align-items-center"> 
+        
+        <a class="navbar-brand" href="index.html">
+            <img src="./img/logo.png" alt="Digital Invite Logo" data-i18n-alt-key="Brand/Logo Alt Text">
+        </a>
+        
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"><img src="img/icons/menu.png"></span>
+        </button>
+
+        <div class="collapse navbar-collapse justify-content-center" id="navbarSupportedContent">
+            <ul class="navbar-nav m-auto text-sm-center text-md-center"> 
+              <li class="nav-item">
+                <a class="nav-link" href="#home" data-i18n-key="Navigation Link 1">ទំព័រដើម <span class="sr-only">(current)</span></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#services" data-i18n-key="Navigation Link 2">សេវាកម្ម</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#price" data-i18n-key="Navigation Link 3">កញ្ចប់តម្លៃ</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#testimonial" data-i18n-key="Navigation Link 4">មតិអតិថិជន</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#contact" data-i18n-key="Navigation Link 5">ទំនាក់ទំនង</a>
+              </li>
+              
+              <li class="nav-item lang-mobile-item d-md-none d-lg-none d-xl-none text-center">
+                  <button id="lang-switch-mobile" class="lang-switch-btn mt-3" onclick="toggleLanguage()">EN</button>
+              </li>
+            </ul>
+        </div>    
+        
+        <ul class="navbar-nav ml-auto search-box align-items-center d-none d-md-flex">
+            <li class="nav-item">
+              <a class="nav-link" href="#"><i class="fa fa-search text-white"></i></a>
+            </li>
+            <li class="nav-item">
+                <button id="lang-switch-desktop" class="lang-switch-btn" onclick="toggleLanguage()">EN</button>
+            </li>
+        </ul>
+    </div>
+</nav>
+<section id="home" class="intro intro-bg bg-overlay-primary parallax">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-md-10 caption-two-panel mx-auto pt-5 text-center">
+                <div class="intro-caption mt-5">
+                    <h2 class="text-white mb-3" data-i18n-key="Main Heading/Slogan">លើសពីការអញ្ជើញ គឺអនុស្សាវរីយ៍</h2>
+                    <p class="text-white mb-5" data-i18n-key="Intro Paragraph"> យើងផ្តល់ជូនកាតអញ្ជើញឌីជីថលដែលមានលក្ខណៈពិសេស ទំនើប និងស្រស់ស្អាត ដើម្បីធ្វើឱ្យថ្ងៃពិសេសរបស់លោកអ្នកកាន់តែអស្ចារ្យ។</p>
+                    <a class="btn btn-primary text-white mx-auto" data-i18n-key="Button Text 1">ស្វែងយល់បន្ថែម</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="services" class="info-section py-7 text-dark bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 mx-auto">
+                <div class="head-box text-center">
+                    <h2 class="font-abril text-inverse text-underline-primary" data-i18n-key="Section Heading 1">សេវាកម្មរបស់យើង</h2>
+                </div>
+                <div class="three-panel-block mt-5">
+                    
+                    <div class="row justify-content-center"> 
+                        
+                        <div class="col-lg-4 col-md-6 col-sm-6 mb-4">
+                            <div class="service-box-pro text-center p-4">
+                                <i class="icon-box mb-3 w-100"><img src="img/icons/invitation-card.png" width="64" height="64" class="img-fluid"></i>
+                                <h3 class="text-primary mt-2" data-i18n-key="Service Title 1">ឌីហ្សាញកាតឌីជីថល</h3>
+                                <p data-i18n-key="Service Description 1">យើងរចនាកាតអញ្ជើញដែលអាចមើលបានលើទូរស័ព្ទដៃ និងកុំព្យូទ័របានយ៉ាងស្រស់ស្អាត ជាមួយនឹងជម្រើស Themes ទំនើបៗ។</p>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-4 col-md-6 col-sm-6 mb-4">
+                            <div class="service-box-pro text-center p-4">
+                                <i class="icon-box mb-3 w-100"><img src="img/icons/video.png" width="64" height="64" class="img-fluid"></i>
+                                <h3 class="text-primary mt-2" data-i18n-key="Service Title 2">បន្ថែមវីដេអូ/រូបភាព</h3>
+                                <p data-i18n-key="Service Description 2">ដាក់បញ្ចូលរូបភាព Pre-Wedding និងវីដេអូខ្លីៗ ដើម្បីឱ្យភ្ញៀវទទួលបានបទពិសោធន៍ថ្មី និងមានអនុស្សាវរីយ៍។</p>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-4 col-md-6 col-sm-6 mb-4">
+                            <div class="service-box-pro text-center p-4">
+                                <i class="icon-box mb-3 w-100"><img src="img/icons/software.png" width="64" height="64" class="img-fluid"></i>
+                                <h3 class="text-primary mt-2" data-i18n-key="Service Title 3">ប្រព័ន្ធ RSVP ឆ្លាតវៃ</h3>
+                                <p data-i18n-key="Service Description 3">គ្រប់គ្រងបញ្ជីភ្ញៀវ និងការឆ្លើយតបយ៉ាងងាយស្រួលតាមរយៈប្រព័ន្ធរបស់យើង ដោយទទួលបានរបាយការណ៍ច្បាស់លាស់។</p>
+                            </div>
+                        </div>
+                        
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="price" class="info-section bg-light"> <div class="container"> <div class="head-box text-center mb-5">
+            <h2 class="font-abril text-inverse text-underline-primary" data-i18n-key="Section Heading 2">កញ្ចប់តម្លៃពិសេស</h2>
+        </div>
+        
+        <div class="three-panel-block my-4">
+            <div class="row">
+                <div class="col-lg-4 col-md-4 col-sm-12 pl-md-5 mb-4">
+                    <div class="price-box-pro text-center p-4"> <h3 class="text-primary mt-2" data-i18n-key="Package Name 1">មូលដ្ឋាន</h3>
+                        <div class="price-count font-abril mt-3 mb-4">
+                            <span class="text-dark">$</span><span class="text-dark">99</span>
+                        </div>
+                        <ul class="px-2 text-left" style="list-style-type: none; padding-left: 0;">
+                            <li data-i18n-key="Feature 1">✅ Link ទៅកាន់សំបុត្រ Digital</li>
+                            <li data-i18n-key="Feature 2">✅ ឈ្មោះកូនកំលោះ កូនក្រមុំ</li>
+                            <li data-i18n-key="Feature 3">✅ ព័ត៌មានកម្មវិធី & ពេលវេលា</li>
+                            <li data-i18n-key="Feature 4">✅ ភ្លេង Auto Play Music Background</li>
+                            <li data-i18n-key="Feature 5">✅ Quote សម្រាប់គូស្នេហា</li>
+                            <li class="text-muted" data-i18n-key="Feature 6-Excluded">❌ ផែនទីទីតាំង (Google Map)</li>
+                            <li class="text-muted" data-i18n-key="Feature 7-Excluded">❌ វីដេអូ Pre-Wedding</li>
+                            <li class="text-muted" data-i18n-key="Feature 8-Excluded">❌ ប្រព័ន្ធ RSVP & ឈ្មោះភ្ញៀវ</li>
+                        </ul>
+                        <a class="btn btn-primary btn-capsul mt-3" data-i18n-key="Button Text 2">ជ្រើសរើស</a>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-4 col-sm-12 mb-4">
+                    <div class="price-box-pro text-center p-4 standard-active"> <h3 class="mt-2 text-white" data-i18n-key="Package Name 2">ស្តង់ដារ</h3>
+                        <div class="price-count font-abril mt-3 mb-4">
+                            <span class="text-white">$</span><span class="text-white">199</span>
+                        </div>
+                         <ul class="px-2 text-left" style="list-style-type: none; padding-left: 0;">
+                            <li data-i18n-key="Feature 1">✅ Link ទៅកាន់សំបុត្រ Digital</li>
+                            <li data-i18n-key="Feature 2">✅ ឈ្មោះកូនកំលោះ កូនក្រមុំ</li>
+                            <li data-i18n-key="Feature 3">✅ ព័ត៌មានកម្មវិធី & ពេលវេលា</li>
+                            <li data-i18n-key="Feature 4">✅ ភ្លេង Auto Play Music Background</li>
+                            <li data-i18n-key="Feature 5">✅ Quote សម្រាប់គូស្នេហា</li>
+                            <li data-i18n-key="Feature 6-Included">✅ ផែនទីទីតាំង (Google Map)</li>
+                            <li data-i18n-key="Feature 7-Standard">✅ រូបភាព Pre-Wedding (រហូតដល់ 10)</li>
+                            <li class="text-muted" data-i18n-key="Feature 7-Excluded">❌ វីដេអូ Pre-Wedding</li>
+                            <li class="text-muted" data-i18n-key="Feature 8-Excluded">❌ ប្រព័ន្ធ RSVP & ឈ្មោះភ្ញៀវ</li>
+                        </ul>
+                        <a class="btn btn-primary btn-capsul mt-3 bg-white text-primary" data-i18n-key="Button Text 2">ជ្រើសរើស</a> </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-4 col-sm-12 pr-md-5 mb-4">
+                    <div class="price-box-pro text-center p-4"> <h3 class="text-primary mt-2" data-i18n-key="Package Name 3">ពិសេស</h3>
+                        <div class="price-count font-abril mt-3 mb-4">
+                            <span class="text-dark">$</span><span class="text-dark">399</span>
+                        </div>
+                         <ul class="px-2 text-left" style="list-style-type: none; padding-left: 0;">
+                            <li data-i18n-key="Feature 1">✅ Link ទៅកាន់សំបុត្រ Digital</li>
+                            <li data-i18n-key="Feature 2">✅ ឈ្មោះកូនកំលោះ កូនក្រមុំ</li>
+                            <li data-i18n-key="Feature 3">✅ ព័ត៌មានកម្មវិធី & ពេលវេលា</li>
+                            <li data-i18n-key="Feature 4">✅ ភ្លេង Auto Play Music Background</li>
+                            <li data-i18n-key="Feature 5">✅ Quote សម្រាប់គូស្នេហា</li>
+                            <li data-i18n-key="Feature 6-Included">✅ ផែនទីទីតាំង (Google Map)</li>
+                            <li data-i18n-key="Feature 7-Exclusive-Image">✅ រូបភាព Pre-Wedding (គ្មានដែនកំណត់)</li>
+                            <li data-i18n-key="Feature 7-Exclusive-Video">✅ វីដេអូ Pre-Wedding (1 វីដេអូ)</li>
+                            <li data-i18n-key="Feature 8-Exclusive-Included">✅ ប្រព័ន្ធ RSVP & ឈ្មោះភ្ញៀវផ្ទាល់ខ្លួន</li>
+                        </ul>
+                        <a class="btn btn-primary btn-capsul mt-3" data-i18n-key="Button Text 2">ជ្រើសរើស</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="testimonial" class="testimonial-section sec-bg-04 py-5">
+    <div class="container">
+        <div class="row">
+            <div class="head-box text-center mb-3 col-md-12 mt-5">
+                <h2 class="font-abril" data-i18n-key="Section Heading 3">មតិយោបល់ពីអតិថិជន</h2>
+            </div>
+        </div>
+        <div class="single-testimonial">
+          <div id="carouselExampleCaptions" class="carousel slide" data-ride="carousel">
+            <div class="carousel-inner pt-5" role="listbox">
+              <div class="carousel-item active">
+                <div class="testimonial-box text-center">
+                    <div class="testimonial-content w-100 bg-faded">
+                        <p class="mb-0"><i class="fa fa-quote-left fa-3x" aria-hidden="true"></i></p>
+                        <p class="lead font-abril" data-i18n-key="Testimonial Quote 1">“កាតអញ្ជើញឌីជីថលគឺងាយស្រួលផ្ញើណាស់ ហើយភ្ញៀវក៏ចូលចិត្តដែលមានវីដេអូ Pre-Wedding នៅក្នុងនោះ។ សេវាកម្មរហ័សទាន់ចិត្ត!”</p>
+                        <div class="testimonial-footer">
+                            <h4 class="mt-2 mb-0 text-primary" data-i18n-key="Testimonial Name 1">លោក កុសល និង អ្នកនាង រតនា</h4>
+                            <p data-i18n-key="Testimonial Location 1">- ភ្នំពេញ, កម្ពុជា</p>
+                        </div>
+                    </div>
+                </div>
+              </div>
+              <div class="carousel-item">
+                <div class="testimonial-box text-center">
+                    <div class="testimonial-content w-100 bg-faded">
+                        <p class="mb-0"><i class="fa fa-quote-left fa-3x" aria-hidden="true"></i></p>
+                        <p class="lead font-abril" data-i18n-key="Testimonial Quote 2">“មុខងារផែនទី Google Map គឺសំខាន់ណាស់ ព្រោះភ្ញៀវរបស់ខ្ញុំរកឃើញទីតាំងបានយ៉ាងងាយ។ សូមអរគុណ ឌីជីថលអ៊ិនវ៉ាយ!”</p>
+                        <div class="testimonial-footer">
+                            <h4 class="mt-2 mb-0 text-primary" data-i18n-key="Testimonial Name 2">លោក សុភាព និង អ្នកនាង ដាលីស</h4>
+                            <p data-i18n-key="Testimonial Location 2">- សៀមរាប, កម្ពុជា</p>
+                        </div>
+                    </div>
+                </div>
+              </div>
+            </div>
+            <div class="navigator-box">
+                <a class="carousel-control-prev" href="#carouselExampleCaptions" role="button" data-slide="prev">
+                  <span class="fa fa-angle-left" aria-hidden="true"></span>
+                  <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#carouselExampleCaptions" role="button" data-slide="next">
+                  <span class="fa fa-angle-right" aria-hidden="true"></span>
+                  <span class="sr-only">Next</span>
+                </a>
+            </div>
+          </div>
+        </div>
+    </div>
+</section>
+
+<section id="contact" class="info-section bg-white">
+    <div class="container">
+        
+        <div class="row">
+            <div class="col-md-12 head-box text-center">
+                <h2 class="font-abril text-inverse text-underline-primary" data-i18n-key="Section Heading 4">ទំនាក់ទំនងមកយើងខ្ញុំ!</h2>
+            </div>
+        </div>
+        
+        <div class="row mt-4 justify-content-center">
+             <div class="col-md-10 text-center">
+                <p data-i18n-key="Contact Intro Paragraph">យើងរីករាយនឹងស្តាប់គំនិត និងសំណួររបស់លោកអ្នក។ សូមបំពេញព័ត៌មានខាងក្រោម ហើយយើងនឹងឆ្លើយតបទៅវិញឱ្យបានឆាប់តាមដែលអាចធ្វើទៅបាន។</p>
+            </div>
+        </div>
+        
+        <div class="row justify-content-center">
+            <div class="col-12 col-lg-8 form-sec bg-white my-4 p-4 mx-auto">
+                <form>
+                  <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="sr-only" for="formGroupExampleInput" data-i18n-key="Form Placeholder 1">ឈ្មោះពេញ</label>
+                            <input class="form-control" id="formGroupExampleInput" data-i18n-placeholder-key="Form Placeholder 1" placeholder="ឈ្មោះពេញ" onfocus="this.placeholder=''" onblur="this.placeholder='ឈ្មោះពេញ'" type="text">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="sr-only" for="formGroupExampleInput2" data-i18n-key="Form Placeholder 2">លេខទូរស័ព្labelទ</label>
+                            <input class="form-control" id="formGroupExampleInput2" data-i18n-placeholder-key="Form Placeholder 2" placeholder="លេខទូរស័ព្ទ" onfocus="this.placeholder=''" onblur="this.placeholder='លេខទូរស័ព្ទ'" type="text">
+                        </div>      
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="sr-only" for="formGroupExampleInput2" data-i18n-key="Form Placeholder 3-Label">អ៊ីម៉ែល</label>
+                            <input class="form-control" id="formGroupExampleInput2" data-i18n-placeholder-key="Form Placeholder 3" placeholder="អាសយដ្ឋានអ៊ីម៉ែល" onfocus="this.placeholder=''" onblur="this.placeholder='អាសយដ្ឋានអ៊ីម៉ែល'" type="email">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="sr-only" for="formGroupExampleInput2" data-i18n-key="Form Placeholder 4-Label">អាសយដ្ឋាន</label>
+                            <input class="form-control" id="formGroupExampleInput2" data-i18n-placeholder-key="Form Placeholder 4" placeholder="បញ្ចូលអាសយដ្ឋាន" onfocus="this.placeholder=''" onblur="this.placeholder='បញ្ចូលអាសយដ្ឋាន'" type="email">
+                        </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="sr-only" for="formGroupExampleInput2" data-i18n-key="Form Placeholder 5-Label">សារ</label>
+                            <textarea class="form-control" data-i18n-placeholder-key="Form Placeholder 5" placeholder="បញ្ចូលសាររបស់លោកអ្នកនៅទីនេះ!" rows="4" onfocus="this.placeholder=''" onblur="this.placeholder='បញ្ចូលសាររបស់លោកអ្នកនៅទីនេះ!'"></textarea>
+                        </div>
+                        <div class="form-group text-center">
+                            <button class="btn btn-primary btn-capsul px-4" data-i18n-key="Button Text 3">បញ្ជូន</button>
+                        </div>      
+                    </div>
+                  </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="copy-footer bg-primary py-2">
+    <div class="container text-center text-light">
+        © <span data-i18n-key="Brand/Logo Name">ឌីជីថលអ៊ិនវ៉ាយ</span> <span id="year"></span>. <span data-i18n-key="Footer Text">រក្សាសិទ្ធិគ្រប់យ៉ាង។</span>
+    </div>
+</div>
+
+
+<script  src="https://code.jquery.com/jquery-3.2.1.min.js" ></script>
+<script src="js/bootstrap.min.js" ></script>
+<script src="js/core.js"></script>
+
+<script>
+    let currentLang = 'KH'; // Default language is Khmer
+    let translations = {}; // Object to hold the JSON data
+
+    // Function to fetch the JSON file
+    function fetchTranslations(callback) {
+        // Assuming translations.json is in the same directory
+        fetch('translations.json')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to load translations.json: Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                translations = data;
+                callback(); // Execute the callback after data is loaded
+            })
+            .catch(error => {
+                console.error("Error loading translation file. Ensure 'translations.json' exists:", error);
+                // Handle case where translations fail to load (e.g., use default content)
+            });
+    }
+
+    // Function to update the content based on the language
+    function updateContent(lang) {
+        const langData = translations[lang];
+        if (!langData) {
+            console.error(`Language data for ${lang} not found.`);
+            return; 
+        }
+
+        // Set data-lang attribute on body for CSS font targeting
+        document.body.setAttribute('data-lang', lang);
+        
+        // 1. Update all standard text content
+        document.querySelectorAll('[data-i18n-key]').forEach(element => {
+            const key = element.getAttribute('data-i18n-key');
+            if (langData[key]) {
+                 // Handle elements like the nav link that wraps the sr-only span
+                if (element.tagName === 'A' && element.querySelector('.sr-only')) {
+                    const srOnly = element.querySelector('.sr-only').outerHTML;
+                    // Replace the whole innerHTML but preserve the screen-reader-only content
+                    element.innerHTML = langData[key] + ' ' + srOnly; 
+                } else {
+                    element.textContent = langData[key];
+                }
+            }
+        });
+
+        // 2. Update all placeholder text content
+        document.querySelectorAll('[data-i18n-placeholder-key]').forEach(element => {
+            const key = element.getAttribute('data-i18n-placeholder-key');
+            if (langData[key]) {
+                const newPlaceholder = langData[key];
+                element.setAttribute('placeholder', newPlaceholder);
+                element.setAttribute('onblur', `this.placeholder='${newPlaceholder}'`);
+            }
+        });
+        
+        // 3. Update all alt text content (for the logo image)
+        document.querySelectorAll('[data-i18n-alt-key]').forEach(element => {
+            const key = element.getAttribute('data-i18n-alt-key');
+            if (langData[key]) {
+                element.setAttribute('alt', langData[key]);
+            }
+        });
+        
+        // 4. Update the language button text (targets both desktop and mobile buttons)
+        const buttonText = (lang === 'KH' ? 'EN' : 'KH');
+        const mobileButton = document.getElementById('lang-switch-mobile');
+        const desktopButton = document.getElementById('lang-switch-desktop');
+
+        if (mobileButton) mobileButton.textContent = buttonText;
+        if (desktopButton) desktopButton.textContent = buttonText;
+        
+        currentLang = lang;
+    }
+
+    // Function to toggle the language (called by the button click)
+    function toggleLanguage() {
+        const newLang = (currentLang === 'KH' ? 'EN' : 'KH');
+        updateContent(newLang);
+    }
+
+    // INITIALIZATION: Fetch data and then set default language on page load
+    document.addEventListener('DOMContentLoaded', () => {
+        // Expose the function globally so the inline onclick handler can call it
+        window.toggleLanguage = toggleLanguage; 
+        
+        fetchTranslations(() => {
+            // After data is successfully loaded, set the default language
+            updateContent('KH'); 
+        });
+
+        // === JQUERY CODE FOR CLICK-OUTSIDE-TO-CLOSE MOBILE MENU ===
+        
+        // 1. Close the navbar if a click is registered outside of the navbar
+        $(document).on('click', function (event) {
+            // Check if the click is NOT inside the navbar 
+            // AND the navbar is currently open (has Bootstrap's 'show' class)
+            if (
+                !$(event.target).closest('.navbar').length && 
+                $('#navbarSupportedContent').hasClass('show')
+            ) {
+                // If both are true, close the navbar
+                $('#navbarSupportedContent').collapse('hide');
+            }
+        });
+        
+        // 2. Close the navbar when a nav link inside it is clicked
+        $('.navbar-nav a[href^="#"]').on('click', function () {
+            $('#navbarSupportedContent').collapse('hide');
+        });
+        
+    });
+
+</script>
+</body>
+</html>
