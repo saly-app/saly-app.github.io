@@ -28,8 +28,11 @@ body { overflow-x: hidden; }
 
 /* ================= “PHONE” WRAPPER ================= */
 #mobile-wrapper {
-  width: var(--base-w); height: var(--base-h);
-  position: absolute; top: 50%; left: 50%;
+  width: var(--base-w);
+  height: var(--base-h);
+  position: absolute;
+  top: 50%;
+  left: 50%;
   transform-origin: center;
   transform: translate(-50%, -50%) scale(var(--scale));
   box-shadow: 0 0 20px rgba(0,0,0,.5);
@@ -39,6 +42,7 @@ body { overflow-x: hidden; }
   padding-bottom: env(safe-area-inset-bottom);
 }
 
+/* === MOBILE: remove transforms & fixed ancestors (iOS scroll fix) === */
 @media (max-width: 520px) {
   #stage {
     position: relative;
@@ -48,10 +52,14 @@ body { overflow-x: hidden; }
   }
 
   #mobile-wrapper {
+    position: relative;
+    top: 0;
+    left: 0;
+    transform: none;                     /* 👈 no transform on mobile */
     width: 100vw;
-    height: calc(var(--vh, 1vh) * 100);
-    transform: translate(-50%, -50%) scale(1);
+    height: calc(var(--vh, 1vh) * 100);  /* full viewport height */
     border-radius: 0;
+    margin: 0;
   }
 }
 
@@ -191,7 +199,6 @@ body { overflow-x: hidden; }
   z-index: 1;
   overflow-y: auto;      /* only this scrolls */
   -webkit-overflow-scrolling: touch;
-  touch-action: pan-y;
   background: transparent;
   padding: 16px 8px 96px; /* bottom padding so content isn't hidden behind nav */
 }
