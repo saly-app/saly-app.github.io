@@ -23,7 +23,7 @@ body { overflow-x: hidden; }
   inset: 0;
   background: #121212;
   overflow: hidden;
-  min-height: 100vh; /* ensure full height when we switch to relative on mobile */
+  min-height: 100vh;
 }
 
 /* ================= “PHONE” WRAPPER ================= */
@@ -34,12 +34,12 @@ body { overflow-x: hidden; }
   transform: translate(-50%, -50%) scale(var(--scale));
   box-shadow: 0 0 20px rgba(0,0,0,.5);
   background: #fff;
-  overflow: hidden;             /* phone itself doesn't scroll */
+  overflow: hidden;             /* phone frame itself doesn't scroll */
   border-radius: 20px;
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
 @media (max-width: 520px) {
-  /* On real phones, don't use fixed stage — it can block inner scrolling */
   #stage {
     position: relative;
     inset: auto;
@@ -146,9 +146,9 @@ body { overflow-x: hidden; }
 
 /* ================= PAGE 2 BACKDROP (FIXED, NON-SCROLLING) ================= */
 #video-bg-page2 {
-  position: absolute;   /* pinned inside phone */
+  position: absolute;
   inset: 0;
-  z-index: 0;           /* behind page2-main */
+  z-index: 0;
   pointer-events: none;
 }
 #video-bg-page2 video {
@@ -159,11 +159,9 @@ body { overflow-x: hidden; }
   object-fit: cover;
   z-index: 0;
 }
-/* 20% black overlay ON TOP of the video */
 #video-bg-page2 .overlay {
   position: absolute;
   inset: 0;
-  /* background: rgba(0, 0, 0, 0.2); */
   pointer-events: none;
   z-index: 1;
 }
@@ -188,24 +186,20 @@ body { overflow-x: hidden; }
 
 /* ================= PAGE 2 MAIN SCROLLER ================= */
 #page2-main {
-  position: absolute;   /* fills the phone frame */
+  position: absolute;
   inset: 0;
-  z-index: 1;           /* above video */
-  overflow-y: auto;     /* only this scrolls */
+  z-index: 1;
+  overflow-y: auto;      /* only this scrolls */
   -webkit-overflow-scrolling: touch;
-  touch-action: pan-y;  /* 👈 allow vertical touch scrolling */
+  touch-action: pan-y;
   background: transparent;
-  padding-bottom: 16px; /* little space at bottom */
+  padding: 16px 8px 96px; /* bottom padding so content isn't hidden behind nav */
 }
 
 /* ================= REVEAL SECTIONS ================= */
 .invite-card {
   position: relative; max-width: 480px; margin: 0 auto 12px;
   background: rgba(0,0,0,.03);
-  /* blur removed:
-     backdrop-filter: blur(8px);
-     -webkit-backdrop-filter: blur(8px);
-  */
   border-radius: 1rem; box-shadow: 0 4px 16px rgba(0,0,0,.2);
   opacity: 0; transform: translateY(20px);
   transition: opacity 600ms ease, transform 600ms ease;
@@ -222,7 +216,9 @@ body { overflow-x: hidden; }
 
 /* Bank QR inline */
 .aba-inline {
-  position: absolute; inset: 0; display: flex; justify-content: center; align-items: center; gap: 12px; padding: 20px;
+  position: absolute; inset: 0;
+  display: flex; justify-content: center; align-items: center;
+  gap: 12px; padding: 20px;
 }
 .qr-thumb { display: block; border-radius: 12px; overflow: hidden; border: 4px solid #fff; box-shadow: 0 6px 16px rgba(0,0,0,.25); transition: transform .2s ease; }
 .qr-thumb:hover { transform: scale(1.02); }
@@ -231,8 +227,10 @@ body { overflow-x: hidden; }
 /* Gallery */
 .gallery-card {
   position: relative; max-width: 640px; margin: 0 auto 12px; padding: 24px;
-  background: rgba(0,0,0,.06); border-radius: 1rem; box-shadow: 0 4px 16px rgba(0,0,0,0);
-  opacity: 0; transform: translateY(20px); transition: opacity 600ms ease, transform 600ms ease;
+  background: rgba(0,0,0,.06); border-radius: 1rem;
+  box-shadow: 0 4px 16px rgba(0,0,0,0);
+  opacity: 0; transform: translateY(20px);
+  transition: opacity 600ms ease, transform 600ms ease;
 }
 .gallery-card.is-visible { opacity: 1; transform: translateY(0); }
 .gallery-inner { text-align: center; color: #fff; }
@@ -272,42 +270,41 @@ body { overflow-x: hidden; }
 .modal-nav.left { left: 8px; }
 .modal-nav.right { right: 8px; }
 
+/* Bottom nav */
+#bottom-nav {
+  position: absolute;
+  left: 0; right: 0;
+  bottom: 0;
+  z-index: 2;
+  padding: 4px 8px calc(4px + env(safe-area-inset-bottom));
+  background: rgba(0,0,0,0.8);
+  backdrop-filter: blur(16px);
+}
+.bottom-nav-inner {
+  display: flex;
+  gap: 6px;
+}
+.nav-item {
+  flex: 1;
+  border-radius: 999px;
+  border: none;
+  background: transparent;
+  color: #e5e7eb;
+  font-size: 12px;
+  padding: 8px 4px;
+  text-align: center;
+  cursor: pointer;
+}
+.nav-item.active {
+  background: rgba(255, 255, 255, 0.1);
+  font-weight: 600;
+}
+.nav-label {
+  display: block;
+}
+
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   .animate-zoom-pulse { animation: none; }
   #bg-video, #background-video, #hero-background-video { display: none; }
-}
-
-/* Optional safe area padding */
-#mobile-wrapper { padding-bottom: env(safe-area-inset-bottom); }
-
-/* --- FORCE THE SECTION-2 BUTTON TO STICK TO THE BOTTOM --- */
-#invite-2 { position: relative; }
-
-#invite-2 .overlay-stack {
-  position: absolute; /* fill the card */
-  inset: 0;
-  display: block;
-  padding: 0;
-}
-
-#button-background-box-2 {
-  position: absolute !important;
-  left: 50%;
-  transform: translateX(-50%);
-  bottom: calc(env(safe-area-inset-bottom) + 12px); /* tweak this value to move higher/lower */
-  margin: 0 !important;
-
-  /* visuals */
-  width: 50%;
-  max-width: 384px;
-  aspect-ratio: 384 / 110;
-  background-image: url('./images/btn_open.png');
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-  filter: drop-shadow(0 4px 6px rgba(0,0,0,.3));
-  display: grid;
-  place-items: center;
-  z-index: 2;
 }

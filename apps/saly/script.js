@@ -127,10 +127,34 @@ document.addEventListener('DOMContentLoaded', () => {
   const page2Main = document.getElementById('page2-main');
   const khmerInvite = document.getElementById('khmer-invite');
 
+  // Bottom nav
+  const bottomNav = document.getElementById('bottom-nav');
+
   function hideSection1Now() {
     hero1.style.opacity = '0';
     hero1.style.height  = '0';
     hero1.style.display = 'none';
+  }
+
+  // Helper: scroll inside PAGE 2 to a specific section
+  function scrollToSection(id) {
+    const target = document.getElementById(id);
+    if (!target || !page2Main) return;
+
+    // wait a frame to ensure layout is ready
+    requestAnimationFrame(() => {
+      const offset = target.offsetTop - page2Main.offsetTop;
+      page2Main.scrollTo({ top: offset, behavior: 'smooth' });
+    });
+
+    // update active state in bottom nav
+    if (bottomNav) {
+      const items = bottomNav.querySelectorAll('.nav-item');
+      items.forEach(btn => {
+        const t = btn.getAttribute('data-target');
+        btn.classList.toggle('active', t === id);
+      });
+    }
   }
 
   // Go straight to PAGE 2 main and focus #khmer-invite
@@ -142,7 +166,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Show fixed video backdrop
     page2Backdrop.classList.remove('hidden');
 
-    // Ensure Section-2 hero is hidden/disabled in this flow
+    // Hide hero-header-2 in this flow
     hero2.style.display = 'none';
     if (invite2) {
       invite2.classList.add('fade-out');
@@ -151,7 +175,7 @@ document.addEventListener('DOMContentLoaded', () => {
       invite2.style.pointerEvents = 'none';
     }
 
-    // Reveal PAGE 2 main (the only scroller); make it fill the phone
+    // Show PAGE 2 main
     page2Main.classList.remove('hidden');
     page2Main.style.position = 'absolute';
     page2Main.style.left = '0';
@@ -159,10 +183,15 @@ document.addEventListener('DOMContentLoaded', () => {
     page2Main.style.bottom = '0';
     page2Main.style.top = '0';
 
-    // Make #khmer-invite visible now
+    // Show bottom nav
+    if (bottomNav) {
+      bottomNav.classList.remove('hidden');
+    }
+
+    // Make #khmer-invite visible immediately
     if (khmerInvite) khmerInvite.classList.add('is-visible');
 
-    // Helper: wait for images inside khmer-invite to finish (prevents layout jump)
+    // Ensure images are loaded before scrolling
     function waitForImages(el) {
       const imgs = Array.from(el.querySelectorAll('img'));
       if (!imgs.length) return Promise.resolve();
@@ -174,16 +203,14 @@ document.addEventListener('DOMContentLoaded', () => {
       );
     }
 
-    // Scroll the CONTAINER (#page2-main) to #khmer-invite
     requestAnimationFrame(() => {
       waitForImages(khmerInvite || document).then(() => {
         page2Main.scrollTop = 0;
-        const targetTop = (khmerInvite?.offsetTop || 0) - (page2Main.offsetTop || 0);
-        page2Main.scrollTo({ top: targetTop, behavior: 'smooth' });
+        scrollToSection('khmer-invite');
       });
     });
 
-    // Start observer for the rest
+    // Start reveal observer for all sections
     observeContentSections();
   }
 
@@ -193,10 +220,8 @@ document.addEventListener('DOMContentLoaded', () => {
       goToKhmerInvite();
       return;
     }
-    // Hide Section 1 right away
     hideSection1Now();
 
-    // Show intro
     introLayer.classList.add('show');
     introLayer.classList.remove('hidden');
 
@@ -207,7 +232,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     introVideo.onended = () => goToKhmerInvite();
 
-    // Safety: proceed if video fails
+    // Safety timeout
     setTimeout(() => {
       if (!introVideo.paused && !introVideo.ended) return;
       goToKhmerInvite();
@@ -232,4 +257,15 @@ document.addEventListener('DOMContentLoaded', () => {
     try { introVideo.pause(); } catch {}
     goToKhmerInvite();
   });
+
+  // Bottom nav click handlers
+  if (bottomNav) {
+    bottomNav.addEventListener('click', (e) => {
+      const btn = e.target.closest('.nav-item');
+      if (!btn) return;
+      const targetId = btn.getAttribute('data-target');
+      if (!targetId) return;
+      scrollToSection(targetId);
+    });
+  }
 });
