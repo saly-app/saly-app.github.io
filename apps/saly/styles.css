@@ -17,6 +17,12 @@ html, body {
 }
 body { overflow-x: hidden; }
 
+/* Lock scrolling on first page (body class controlled by JS) */
+body.lock-scroll {
+  overflow: hidden;
+  height: 100vh;
+}
+
 /* ================= DESKTOP STAGE ================= */
 #stage {
   position: fixed;
@@ -36,7 +42,7 @@ body { overflow-x: hidden; }
   transform-origin: center;
   transform: translate(-50%, -50%) scale(var(--scale));
   box-shadow: 0 0 20px rgba(0,0,0,.5);
-  background: transparent;
+  background: transparent;           /* transparent so video shows */
   border-radius: 20px;
 
   /* scroll container on desktop preview */
@@ -182,7 +188,7 @@ body { overflow-x: hidden; }
 #video-bg-page2 .overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0,0,0,0.2);
+  background: rgba(0,0,0,0.3); /* darken a bit for readability */
 }
 
 /* ================= PAGE 2 HERO (kept but not used in this flow) ================= */
@@ -206,14 +212,16 @@ body { overflow-x: hidden; }
 #page2-main {
   position: relative;
   z-index: 1;
-  padding: 16px 8px 96px;
+  padding: 16px 8px 120px;
+  background: transparent; /* see video through gaps */
 }
 
 /* ================= REVEAL SECTIONS ================= */
 .invite-card {
   position: relative; max-width: 480px; margin: 0 auto 12px;
-  background: rgba(0,0,0,.03);
-  border-radius: 1rem; box-shadow: 0 4px 16px rgba(0,0,0,.2);
+  background: rgba(0,0,0,0.25);           /* translucent card over video */
+  border-radius: 1rem;
+  box-shadow: 0 4px 16px rgba(0,0,0,.4);
   opacity: 0; transform: translateY(20px);
   transition: opacity 600ms ease, transform 600ms ease;
 }
@@ -240,8 +248,9 @@ body { overflow-x: hidden; }
 /* Gallery */
 .gallery-card {
   position: relative; max-width: 640px; margin: 0 auto 12px; padding: 24px;
-  background: rgba(0,0,0,.06); border-radius: 1rem;
-  box-shadow: 0 4px 16px rgba(0,0,0,0);
+  background: rgba(0,0,0,0.35);          /* slightly stronger for text */
+  border-radius: 1rem;
+  box-shadow: 0 4px 16px rgba(0,0,0,.45);
   opacity: 0; transform: translateY(20px);
   transition: opacity 600ms ease, transform 600ms ease;
 }
@@ -283,43 +292,80 @@ body { overflow-x: hidden; }
 .modal-nav.left { left: 8px; }
 .modal-nav.right { right: 8px; }
 
-/* Bottom nav */
-#bottom-nav {
+/* POPUP ICON MENU */
+.menu-fab {
   position: fixed;
-  left: 0; right: 0;
-  bottom: 0;
-  z-index: 10;
-  padding: 4px 8px calc(4px + env(safe-area-inset-bottom));
-  background: rgba(0,0,0,0.85);
-  backdrop-filter: blur(16px);
-}
-.bottom-nav-inner {
-  max-width: 480px;
-  margin: 0 auto;
-  display: flex;
-  gap: 6px;
-}
-.nav-item {
-  flex: 1;
-  border-radius: 999px;
+  right: 16px;
+  bottom: calc(16px + env(safe-area-inset-bottom));
+  z-index: 20;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
   border: none;
-  background: transparent;
-  color: #e5e7eb;
-  font-size: 12px;
-  padding: 8px 4px;
-  text-align: center;
+  background: rgba(255, 255, 255, 0.9);
+  color: #111827;
+  font-size: 24px;
+  box-shadow: 0 10px 25px rgba(0,0,0,.35);
   cursor: pointer;
 }
-.nav-item.active {
-  background: rgba(255, 255, 255, 0.14);
-  font-weight: 600;
+
+/* On desktop, anchor the FAB closer to the phone */
+@media (min-width: 521px) {
+  .menu-fab {
+    right: calc(50% - 195px); /* approx right edge of 390px phone */
+  }
 }
-.nav-label {
-  display: block;
+
+.popup-menu {
+  position: fixed;
+  right: 16px;
+  bottom: calc(80px + env(safe-area-inset-bottom));
+  z-index: 19;
+  background: rgba(17, 24, 39, 0.95);
+  border-radius: 16px;
+  padding: 8px;
+  box-shadow: 0 16px 40px rgba(0,0,0,.5);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 150px;
+}
+
+/* Match FAB alignment on desktop */
+@media (min-width: 521px) {
+  .popup-menu {
+    right: calc(50% - 195px);
+  }
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: none;
+  background: transparent;
+  padding: 6px 8px;
+  border-radius: 10px;
+  color: #e5e7eb;
+  font-size: 13px;
+  cursor: pointer;
+}
+.menu-item:hover {
+  background: rgba(255,255,255,0.08);
+}
+.menu-icon {
+  font-size: 18px;
+}
+.menu-text {
+  white-space: nowrap;
 }
 
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   .animate-zoom-pulse { animation: none; }
   #bg-video, #background-video, #hero-background-video { display: none; }
+}
+/* Put this NEAR THE BOTTOM of your CSS file */
+.hidden {
+  display: none !important;
 }

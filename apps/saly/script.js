@@ -109,6 +109,9 @@ document.getElementById('next-btn')?.addEventListener('click', (e) => {
 
 /* ===== Page Flow ===== */
 document.addEventListener('DOMContentLoaded', () => {
+  // Lock scroll on first page
+  document.body.classList.add('lock-scroll');
+
   loadNames();
 
   const hero1 = document.getElementById('hero-header');
@@ -125,7 +128,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const khmerInvite = document.getElementById('khmer-invite');
 
   const mobileWrapper = document.getElementById('mobile-wrapper');
-  const bottomNav = document.getElementById('bottom-nav');
+
+  // Popup menu elements
+  const menuToggle = document.getElementById('menu-toggle');
+  const popupMenu  = document.getElementById('popup-menu');
 
   function getScrollContainer() {
     // On mobile: window scroll; on desktop: phone wrapper scrolls
@@ -156,17 +162,18 @@ document.addEventListener('DOMContentLoaded', () => {
       container.scrollTo({ top: offset, behavior: 'smooth' });
     }
 
-    if (bottomNav) {
-      const items = bottomNav.querySelectorAll('.nav-item');
-      items.forEach(btn => {
-        const t = btn.getAttribute('data-target');
-        btn.classList.toggle('active', t === id);
-      });
+    // Close popup after selection
+    if (popupMenu && !popupMenu.classList.contains('hidden')) {
+      popupMenu.classList.add('hidden');
+      if (menuToggle) menuToggle.setAttribute('aria-expanded', 'false');
     }
   }
 
   // Go to page 2 single-page view and focus Khmer invite
   function goToKhmerInvite() {
+    // Unlock scroll from now on (Page 2)
+    document.body.classList.remove('lock-scroll');
+
     // Hide intro
     introLayer.classList.remove('show');
     setTimeout(() => introLayer.classList.add('hidden'), 200);
@@ -186,8 +193,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // Show main content
     page2Main.classList.remove('hidden');
 
-    // Show bottom navigation
-    if (bottomNav) bottomNav.classList.remove('hidden');
+    // Show FAB only now, keep popup menu closed
+    if (menuToggle) {
+      menuToggle.classList.remove('hidden');
+      menuToggle.setAttribute('aria-expanded', 'false');
+    }
+    if (popupMenu) {
+      popupMenu.classList.add('hidden');
+    }
 
     // Reveal first section
     if (khmerInvite) khmerInvite.classList.add('is-visible');
@@ -261,14 +274,34 @@ document.addEventListener('DOMContentLoaded', () => {
     goToKhmerInvite();
   });
 
-  // Bottom nav clicks
-  if (bottomNav) {
-    bottomNav.addEventListener('click', (e) => {
-      const btn = e.target.closest('.nav-item');
+  // Popup menu toggle
+  if (menuToggle && popupMenu) {
+    menuToggle.addEventListener('click', () => {
+      const isHidden = popupMenu.classList.contains('hidden');
+      popupMenu.classList.toggle('hidden');
+      menuToggle.setAttribute('aria-expanded', isHidden ? 'true' : 'false');
+    });
+
+    // Click on menu items
+    popupMenu.addEventListener('click', (e) => {
+      const btn = e.target.closest('.menu-item');
       if (!btn) return;
       const targetId = btn.getAttribute('data-target');
       if (!targetId) return;
       scrollToSection(targetId);
+    });
+
+    // Close menu when clicking outside
+    document.addEventListener('click', (e) => {
+      if (
+        !popupMenu.classList.contains('hidden') &&
+        !popupMenu.contains(e.target) &&
+        e.target !== menuToggle &&
+        !menuToggle.contains(e.target)
+      ) {
+        popupMenu.classList.add('hidden');
+        menuToggle.setAttribute('aria-expanded', 'false');
+      }
     });
   }
 });
