@@ -31,44 +31,13 @@ body { overflow-x: hidden; }
   overflow: hidden;             /* phone itself doesn't scroll */
   border-radius: 20px;
 }
-/* @media (max-width: 520px) {
+@media (max-width: 520px) {
   #mobile-wrapper {
     width: 100vw; height: calc(var(--vh, 1vh) * 100);
     transform: translate(-50%, -50%) scale(1);
     border-radius: 0;
   }
-} */
-
-@media (max-width: 520px) {
-  #stage {
-    position: static;
-    inset: auto;
-    background: #121212;
-    overflow: visible;
-  }
-
-  /* #mobile-wrapper {
-    position: static;
-    top: auto;
-    left: auto;
-    transform: none;
-    width: 100vw;
-    min-height: 100vh;
-    height: auto;
-    border-radius: 0;
-    overflow: visible;
-  } */
-
-  #page2-main {
-    position: static;
-    inset: auto;
-    height: auto;
-    overflow-y: visible;
-    -webkit-overflow-scrolling: auto;
-  }
 }
-
-
 
 /* ================= REUSABLE LAYERS ================= */
 .relative { position: relative; }
@@ -109,7 +78,7 @@ body { overflow-x: hidden; }
 #tag_name_list,
 #tag_name_list_2 {
   font-family: 'Moul', sans-serif; color: #efc45b;
-  font-size: clamp(16px, 3.5vw, 18px); margin-top: 15%;
+  font-size: clamp(16px, 3.5vw, 28px); margin-top: 6%;
 }
 
 /* CTA button (shared) */
@@ -211,16 +180,28 @@ body { overflow-x: hidden; }
 }
 
 /* ================= REVEAL SECTIONS ================= */
-.invite-card {
+/* .invite-card {
   position: relative; max-width: 480px; margin: 0 auto 12px;
-  background: rgba(0,0,0,.03);
-  /* blur removed */
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
+  background: rgba(0,0,0,.03); backdrop-filter: blur(8px);
   border-radius: 1rem; box-shadow: 0 4px 16px rgba(0,0,0,.2);
   opacity: 0; transform: translateY(20px);
   transition: opacity 600ms ease, transform 600ms ease;
 }
+ */
+
+ .invite-card {
+  position: relative; max-width: 480px; margin: 0 auto 12px;
+  background: rgba(0,0,0,.03); 
+  /* remove or comment out the blur line */
+  /* backdrop-filter: blur(8px); */
+  /* -webkit-backdrop-filter: blur(8px); if you had this too */
+  border-radius: 1rem; box-shadow: 0 4px 16px rgba(0,0,0,.2);
+  opacity: 0; transform: translateY(20px);
+  transition: opacity 600ms ease, transform 600ms ease;
+}
+
+
+
 .invite-card.is-visible { opacity: 1; transform: translateY(0); }
 .invite-card img { width: 100%; height: 100%; display: block; border-radius: inherit; }
 
