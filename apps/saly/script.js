@@ -178,7 +178,7 @@ document.addEventListener('DOMContentLoaded', () => {
     introLayer.classList.remove('show');
     setTimeout(() => introLayer.classList.add('hidden'), 200);
 
-    // Show background video
+    // Show fixed background video
     page2Backdrop.classList.remove('hidden');
 
     // Don't use hero-header-2 in this flow
