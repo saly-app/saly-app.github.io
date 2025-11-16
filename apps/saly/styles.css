@@ -123,9 +123,9 @@ body.lock-scroll {
 #tag_name_list,
 #tag_name_list_2 {
   font-family: 'Moul', sans-serif;
-  color: #efc45b;
+  color: #fff;
   font-size: clamp(16px, 3.5vw, 18px);
-  margin-top: 12%;
+  margin-top: 15%;
 }
 
 /* CTA button (shared) */
