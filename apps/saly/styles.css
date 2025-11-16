@@ -42,7 +42,7 @@ body.lock-scroll {
   transform-origin: center;
   transform: translate(-50%, -50%) scale(var(--scale));
   box-shadow: 0 0 20px rgba(0,0,0,.5);
-  background: transparent;
+  background: black;
   border-radius: 20px;
 
   /* scroll container on desktop preview */
@@ -123,7 +123,7 @@ body.lock-scroll {
 #tag_name_list,
 #tag_name_list_2 {
   font-family: 'Moul', sans-serif;
-  color: #fff;
+  color: #ffdb2f;
   font-size: clamp(16px, 3.5vw, 18px);
   margin-top: 15%;
 }
