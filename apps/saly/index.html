@@ -26,12 +26,13 @@
     <div id="mobile-wrapper">
       <!-- ============== PAGE 1: HERO (tap to open) ============== -->
       <header id="hero-header" class="relative">
-        <div id="video-wrapper" aria-hidden="true">
-          <video id="bg-video" autoplay loop muted playsinline preload="auto" poster="./images/video_poster.jpg">
-            <source src="./video/bg_small.mp4" type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
-        </div>
+      <div id="video-wrapper" aria-hidden="true">
+        <video id="bg-video" autoplay loop muted playsinline preload="auto" poster="./images/video_poster.jpg">
+          <source src="./video/bg_small.mp4" type="video/webm" />
+          Your browser does not support the video tag.
+        </video>
+        <div class="hero-video-overlay"></div>
+      </div>
 
         <section id="invite">
           <img src="./images/app_invite_white.png" alt="Invitation cover" loading="eager" />
@@ -66,12 +67,12 @@
 
       <!-- ============== PAGE 2: HERO (kept but not used in this flow) ============== -->
       <header id="hero-header-2" class="relative hidden">
-        <div class="absolute-fill" aria-hidden="true">
+        <!-- <div class="absolute-fill" aria-hidden="true">
           <video id="hero-background-video" autoplay loop muted playsinline class="cover" muted>
             <source src="./video/bg_1.mp4" type="video/mp4" />
             Your browser does not support the video tag.
           </video>
-        </div>
+        </div> -->
 
         <section id="invite-2" class="relative-layer">
           <img src="./images/app_invite_white.png" alt="Invitation Image" />
@@ -121,7 +122,7 @@
         </section>
 
         <!-- Section 2.4 Bank (ABAs) -->
-        <section id="bank" class="invite-card" data-reveal>
+        <!-- <section id="bank" class="invite-card" data-reveal>
           <img src="./images/aba_card.png" alt="ABA Card" loading="lazy" />
           <div class="aba-inline">
             <a href="./images/aba.JPG" target="_blank" title="View ABA QR Code 1" class="qr-thumb">
@@ -131,7 +132,7 @@
               <img src="./images/aba2.JPG" alt="ABA QR 2" />
             </a>
           </div>
-        </section>
+        </section> -->
 
         <!-- Section 2.5 Gallery -->
         <section id="gallery" class="gallery-card" data-reveal>
@@ -140,12 +141,10 @@
             <p class="gallery-sub">ដំណើរកម្សាន្តរបស់យើង</p>
 
             <div class="gallery-grid">
-              <img src="./images/img_001.JPG"  alt="Gallery Photo 1" class="gallery-thumbnail" />
-              <img src="./images/img_002.jpeg" alt="Gallery Photo 2" class="gallery-thumbnail" />
-              <img src="./images/img_03.jpeg"  alt="Gallery Photo 3" class="gallery-thumbnail" />
-              <img src="./images/img_004.JPG"  alt="Gallery Photo 4" class="gallery-thumbnail" />
-              <img src="./images/us_01.png"   alt="Gallery Photo 5" class="gallery-thumbnail" />
-              <img src="./images/us_01.png"   alt="Gallery Photo 6" class="gallery-thumbnail" />
+              <img src="./images/my_photos/a1.jpeg"  alt="Gallery Photo 1" class="gallery-thumbnail" />
+              <img src="./images/my_photos/a2.jpg" alt="Gallery Photo 2" class="gallery-thumbnail" />
+              <img src="./images/my_photos/a3.jpg"  alt="Gallery Photo 3" class="gallery-thumbnail" />
+              <img src="./images/my_photos/a4.jpg"  alt="Gallery Photo 3" class="gallery-thumbnail" />
             </div>
 
             <a href="#gallery" class="gallery-more">មើលរូបភាពទាំងអស់ (View All Photos)</a>
