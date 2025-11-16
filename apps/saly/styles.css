@@ -275,6 +275,7 @@ body.lock-scroll {
   padding: 16px; padding-top: 0;
 }
 .bottom-tight { bottom: 4px; padding: 4px; }
+.bottom-gift { bottom: 45px; padding: 2px; }
 
 /* Bank QR inline */
 .aba-inline {
