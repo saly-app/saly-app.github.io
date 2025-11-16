@@ -98,13 +98,15 @@ body.lock-scroll {
 #video-wrapper { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
 #video-wrapper video { width: 100%; height: 100%; object-fit: cover; }
 
-/* 20% black overlay on first-page video (slightly stronger for readability) */
+/* 20% black overlay on first-page video */
 .hero-video-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.4); /* 20% black */
   z-index: 1;
 }
+
+
 
 #invite { position: relative; z-index: 2; width: 100%; max-width: 420px; margin: 0 auto; }
 #invite img { width: 100%; display: block; border-radius: inherit; pointer-events: none; }
@@ -126,14 +128,14 @@ body.lock-scroll {
   position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
 }
 
-/* YOUR CUSTOM TEXT STYLE (do not change) */
+/* YOUR CUSTOM TEXT STYLE (kept exactly) */
 .name-text,
 #tag_name_list,
 #tag_name_list_2 {
   font-family: 'Moul', sans-serif;
-  color: #efc45b;
+  color: #ffdb2f;
   font-size: clamp(16px, 3.5vw, 18px);
-  margin-top: 12%;
+  margin-top: 15%;
 }
 
 /* CTA button (shared) */
@@ -229,46 +231,17 @@ body.lock-scroll {
 }
 
 /* ================= REVEAL SECTIONS ================= */
-.invite-card,
-.gallery-card {
-  opacity: 0;
-  transform: translateY(30px);
+.invite-card {
+  position: relative; max-width: 480px; margin: 0 auto 12px;
+  background: rgba(0,0,0,0.0);           /* translucent card over video */
+  border-radius: 1rem;
+  box-shadow: 0 4px 16px rgba(0,0,0,.0);
+  opacity: 0; transform: translateY(20px);
   transition: opacity 600ms ease, transform 600ms ease;
 }
+.invite-card.is-visible { opacity: 1; transform: translateY(0); }
+.invite-card img { width: 100%; height: 100%; display: block; border-radius: inherit; }
 
-.invite-card {
-  position: relative;
-  max-width: 480px;
-  margin: 0 auto 12px;
-  background: rgba(0,0,0,0.0);
-  border-radius: 1rem;
-  box-shadow: 0 4px 16px rgba(0,0,0,.0);
-}
-
-.gallery-card {
-  position: relative;
-  max-width: 640px;
-  margin: 0 auto 12px;
-  padding: 24px;
-  background: rgba(0,0,0,0.0);
-  border-radius: 1rem;
-  box-shadow: 0 4px 16px rgba(0,0,0,.0);
-}
-
-.invite-card.is-visible,
-.gallery-card.is-visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.invite-card img {
-  width: 100%;
-  height: 100%;
-  display: block;
-  border-radius: inherit;
-}
-
-/* CTA row inside invite cards */
 .cta-row {
   position: absolute; inset-inline: 0; bottom: 0;
   display: flex; justify-content: center; align-items: center;
@@ -278,34 +251,24 @@ body.lock-scroll {
 
 /* Bank QR inline */
 .aba-inline {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 12px;
-  padding: 20px;
+  position: absolute; inset: 0;
+  display: flex; justify-content: center; align-items: center;
+  gap: 12px; padding: 20px;
 }
-
-/* Each QR as a card */
-.qr-thumb {
-  display: block;
-  flex: 1 1 0;
-  max-width: 50%;
-  border-radius: 12px;
-  overflow: hidden;
-  border: 4px solid #fff;
-  box-shadow: 0 6px 16px rgba(0,0,0,.25);
-  transition: transform .2s ease;
-}
-.qr-thumb img {
-  display: block;
-  width: 100%;
-  height: auto;
-}
+.qr-thumb { display: block; border-radius: 12px; overflow: hidden; border: 4px solid #fff; box-shadow: 0 6px 16px rgba(0,0,0,.25); transition: transform .2s ease; }
 .qr-thumb:hover { transform: scale(1.02); }
+.qr-thumb img { display: block; height: 140px; width: auto; }
 
 /* Gallery */
+.gallery-card {
+  position: relative; max-width: 640px; margin: 0 auto 12px; padding: 24px;
+  background: rgba(0,0,0,0.0);          /* slightly stronger for text */
+  border-radius: 1rem;
+  box-shadow: 0 4px 16px rgba(0,0,0,.0);
+  opacity: 0; transform: translateY(20px);
+  transition: opacity 600ms ease, transform 600ms ease;
+}
+.gallery-card.is-visible { opacity: 1; transform: translateY(0); }
 .gallery-inner { text-align: center; color: #fff; }
 .gallery-title { font-size: 28px; margin: 0 0 10px; color: #d4af37; }
 .gallery-sub { margin: 0 0 18px; font-weight: 500; }
@@ -314,20 +277,11 @@ body.lock-scroll {
   display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;
 }
 .gallery-thumbnail {
-  width: 100%;
-  height: auto;
-  display: block;
-  border-radius: 12px;
+  width: 100%; height: auto; display: block; border-radius: 12px;
   box-shadow: 0 6px 16px rgba(0,0,0,.25);
-  transition: transform .2s ease, box-shadow .2s ease, opacity .2s ease;
-  cursor: pointer;
-  opacity: 0.95;
+  transition: transform .2s ease; cursor: pointer;
 }
-.gallery-thumbnail:hover {
-  transform: scale(1.05);
-  box-shadow: 0 10px 24px rgba(0,0,0,.4);
-  opacity: 1;
-}
+.gallery-thumbnail:hover { transform: scale(1.05); }
 .gallery-more {
   display: inline-block; margin-top: 18px; background: #5b7f6a; color: #fff; padding: 10px 16px;
   border-radius: 999px; text-decoration: none; font-weight: 600; transition: opacity .2s ease;
@@ -336,29 +290,14 @@ body.lock-scroll {
 
 /* Modal */
 .modal {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,.9);
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 16px;
-  animation: modal-fade 200ms ease-out;
+  position: fixed; inset: 0; background: rgba(0,0,0,.9); z-index: 100; display: flex;
+  align-items: center; justify-content: center; padding: 16px;
 }
 .modal.hidden { display: none !important; }
-
-.modal-content {
-  position: relative;
-  animation: modal-pop 200ms ease-out;
-}
-.modal-content img {
-  max-width: 100%; max-height: 100%; object-fit: contain;
-  border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,.6);
-}
+.modal-content { position: relative; }
+.modal-content img { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,.6); }
 .modal-close {
-  position: absolute; top: 8px; right: 10px; font-size: 40px; color: #fff;
-  background: transparent; border: none; cursor: pointer;
+  position: absolute; top: 8px; right: 10px; font-size: 40px; color: #fff; background: transparent; border: none; cursor: pointer;
 }
 .modal-nav {
   position: absolute; top: 50%; transform: translateY(-50%); font-size: 40px;
@@ -366,22 +305,6 @@ body.lock-scroll {
 }
 .modal-nav.left { left: 8px; }
 .modal-nav.right { right: 8px; }
-
-/* Modal animations */
-@keyframes modal-fade {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-@keyframes modal-pop {
-  from {
-    transform: scale(0.92);
-    opacity: 0;
-  }
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
 
 /* POPUP ICON MENU */
 .menu-fab {

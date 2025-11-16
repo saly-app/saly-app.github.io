@@ -99,25 +99,16 @@ function loadGuestFromCSV() {
     });
 }
 
-/* ===== Scroll Reveal (animate on scroll up & down) ===== */
-const observerOptions = {
-  root: null,
-  rootMargin: '0px 0px -80px 0px', // start slightly before fully visible
-  threshold: 0.15
-};
-
-const observer = new IntersectionObserver((entries) => {
+/* ===== Scroll Reveal ===== */
+const observerOptions = { root: null, rootMargin: '0px 0px -100px 0px', threshold: 0.1 };
+const observer = new IntersectionObserver((entries, obs) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
-      // Element enters viewport → fade & slide in
       entry.target.classList.add('is-visible');
-    } else {
-      // Element leaves viewport → reset so it can animate again
-      entry.target.classList.remove('is-visible');
+      obs.unobserve(entry.target);
     }
   });
 }, observerOptions);
-
 function observeContentSections() {
   document.querySelectorAll('[data-reveal]').forEach(el => observer.observe(el));
 }
@@ -125,24 +116,20 @@ function observeContentSections() {
 /* ===== Gallery Modal ===== */
 let galleryIndex = 0;
 let galleryImages = [];
-
 function openModal(src) {
   const modal = document.getElementById('gallery-modal');
   const img = document.getElementById('modal-image');
   img.src = src;
   modal.classList.remove('hidden');
 }
-
 function closeModal() {
   document.getElementById('gallery-modal').classList.add('hidden');
 }
-
 function showGalleryAt(i) {
   if (!galleryImages.length) return;
   galleryIndex = (i + galleryImages.length) % galleryImages.length;
   document.getElementById('modal-image').src = galleryImages[galleryIndex].src;
 }
-
 document.addEventListener('click', (e) => {
   if (e.target && e.target.matches('.gallery-thumbnail')) {
     galleryImages = Array.from(document.querySelectorAll('.gallery-thumbnail'));
@@ -150,7 +137,6 @@ document.addEventListener('click', (e) => {
     openModal(e.target.src);
   }
 });
-
 document.getElementById('prev-btn')?.addEventListener('click', (e) => {
   e.stopPropagation();
   showGalleryAt(galleryIndex - 1);
@@ -258,7 +244,7 @@ document.addEventListener('DOMContentLoaded', () => {
       popupMenu.classList.add('hidden');
     }
 
-    // Reveal first section immediately
+    // Reveal first section
     if (khmerInvite) khmerInvite.classList.add('is-visible');
 
     function waitForImages(el) {
@@ -284,7 +270,6 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
 
-    // Start observing sections for scroll animations
     observeContentSections();
   }
 
