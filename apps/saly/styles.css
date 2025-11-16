@@ -202,7 +202,7 @@ body.lock-scroll {
 #video-bg-page2 .overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0,0,0,0.3);  /* darken slightly for readability */
+  background: rgba(0,0,0,0.4);  /* darken slightly for readability */
 }
 
 /* ================= PAGE 2 HERO (kept but not used in this flow) ================= */
@@ -233,9 +233,9 @@ body.lock-scroll {
 /* ================= REVEAL SECTIONS ================= */
 .invite-card {
   position: relative; max-width: 480px; margin: 0 auto 12px;
-  background: rgba(0,0,0,0.25);           /* translucent card over video */
+  background: rgba(0,0,0,0.0);           /* translucent card over video */
   border-radius: 1rem;
-  box-shadow: 0 4px 16px rgba(0,0,0,.4);
+  box-shadow: 0 4px 16px rgba(0,0,0,.0);
   opacity: 0; transform: translateY(20px);
   transition: opacity 600ms ease, transform 600ms ease;
 }
@@ -262,9 +262,9 @@ body.lock-scroll {
 /* Gallery */
 .gallery-card {
   position: relative; max-width: 640px; margin: 0 auto 12px; padding: 24px;
-  background: rgba(0,0,0,0.35);          /* slightly stronger for text */
+  background: rgba(0,0,0,0.0);          /* slightly stronger for text */
   border-radius: 1rem;
-  box-shadow: 0 4px 16px rgba(0,0,0,.45);
+  box-shadow: 0 4px 16px rgba(0,0,0,.0);
   opacity: 0; transform: translateY(20px);
   transition: opacity 600ms ease, transform 600ms ease;
 }
