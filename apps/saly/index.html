@@ -60,14 +60,26 @@
       </div>
 
       <!-- ============== PAGE 2: VIDEO BACKDROP (FIXED BEHIND CONTENT) ============== -->
-      <div id="video-bg-page2" class="hidden">
+      <!-- <div id="video-bg-page2" class="hidden">
         <video id="background-video" autoplay loop muted playsinline>
           <source src="./video/bg_small.mp4" type="video/mp4" />
           Your browser does not support the video tag.
         </video>
         <div class="overlay"></div>
-      </div>
+      </div> -->
 
+
+      <!-- ============== PAGE 2 OVERLAY GIF ============== -->
+      <img id="page2-overlay-gif" 
+          src="./images/overlay_gif.gif" 
+          alt=""
+          class="hidden" />
+     
+      <!-- ============== PAGE 2: IMAGE BACKDROP (FIXED BEHIND CONTENT) ============== -->
+      <div id="video-bg-page2" class="hidden">
+        <!-- We’ll draw the background using CSS (background-image) -->
+        <div class="overlay"></div>
+      </div>
       <!-- ============== PAGE 2: HERO (kept but not used in this flow) ============== -->
       <header id="hero-header-2" class="relative hidden">
         <div class="absolute-fill" aria-hidden="true">
@@ -92,9 +104,57 @@
 
       <!-- ============== PAGE 2: MAIN CONTENT (ALL SECTIONS IN ONE PAGE) ============== -->
       <main id="page2-main" class="hidden">
+
+
+
+       <!-- Section 2.4.5 Our Calendar -->
+        <section id="our-calendar" class="calendar-card" data-reveal>
+          <div class="calendar-hero">
+            <!-- Slideshow images -->
+            <img src="./images/my_photos/a1.jpeg" alt="Our Calendar 1" class="calendar-slide is-active" />
+            <img src="./images/my_photos/a2.jpg" alt="Our Calendar 2" class="calendar-slide" />
+            <img src="./images/my_photos/a3.jpg" alt="Our Calendar 3" class="calendar-slide" />
+            <img src="./images/my_photos/a4.jpg" alt="Our Calendar 4" class="calendar-slide" />
+            <!-- <img src="./images/calendar_5.jpg" alt="Our Calendar 5" class="calendar-slide" /> -->
+
+            <!-- Dark overlay -->
+            <div class="calendar-overlay"></div>
+
+            <!-- Center content -->
+            <div class="calendar-content">
+              <div class="calendar-heading-top">OUR CALENDAR</div>
+              <div class="calendar-couple-name">Saly &amp; Kimbouy</div>
+
+              <div class="calendar-countdown">
+                <div class="calendar-count-item">
+                  <div id="count-days" class="calendar-count-value">000</div>
+                  <div class="calendar-count-label">DAYS</div>
+                </div>
+                <div class="calendar-count-item">
+                  <div id="count-hours" class="calendar-count-value">00</div>
+                  <div class="calendar-count-label">HOURS</div>
+                </div>
+                <div class="calendar-count-item">
+                  <div id="count-minutes" class="calendar-count-value">00</div>
+                  <div class="calendar-count-label">MINUTES</div>
+                </div>
+                <div class="calendar-count-item">
+                  <div id="count-seconds" class="calendar-count-value">00</div>
+                  <div class="calendar-count-label">SECONDS</div>
+                </div>
+              </div>
+
+              <div class="calendar-date-small">
+                11 January 2026 · Phnom Penh
+              </div>
+            </div>
+          </div>
+        </section>
+        
+
         <!-- Section 2.1 Khmer Invite -->
         <section id="khmer-invite" class="invite-card" data-reveal>
-          <img src="./images/1_Info.png" alt="សំបុត្រអញ្ជើញ" loading="lazy" />
+          <img src="./images/1_Info2.png" alt="សំបុត្រអញ្ជើញ" loading="lazy" />
           <div class="cta-row">
             <div class="cta-big animate-zoom-pulse" style="background-image:url('./images/btn_save.png')">
               <a
@@ -115,12 +175,12 @@
 
         <!-- Section 2.2 Program (extra) -->
         <section id="program-extra" class="invite-card" data-reveal>
-          <img src="./images/2_program.png" alt="Program" loading="lazy" />
+          <img src="./images/2_program2.png" alt="Program" loading="lazy" />
         </section>
 
         <!-- Section 2.3 Venue (Map) -->
         <section id="venue" class="invite-card" data-reveal>
-          <img src="./images/3_map_card.png" alt="Map Card" loading="lazy" />
+          <img src="./images/3_map_card2.png" alt="Map Card" loading="lazy" />
           <div class="cta-row bottom-tight">
             <div class="cta-big animate-zoom-pulse" style="background-image:url('./images/btn_map.png')">
               <a
@@ -136,7 +196,7 @@
 
         <!-- Section 2.4 Wedding Gift / Bank -->
         <section id="bank" class="invite-card" data-reveal>
-          <img src="./images/4_wedding_gift.png" alt="WeddingGift" loading="lazy" />
+          <img src="./images/4_wedding_gift2.png" alt="WeddingGift" loading="lazy" />
           <div class="cta-row bottom-gift">
             <div class="cta-big animate-zoom-pulse" style="background-image:url('./images/btn_aba_kh.png')">
               <a
@@ -161,7 +221,7 @@
 
         <!-- Section 2.5 Thank you -->
         <section id="photo_thank" class="invite-card" data-reveal>
-          <img src="./images/6_thanks.png" alt="photo_thank" loading="lazy" />
+          <img src="./images/6_thanks2.png" alt="photo_thank" loading="lazy" />
         </section>
 
         <!-- Section 2.6 Photo title -->

@@ -184,11 +184,26 @@ body.lock-scroll {
   cursor: pointer;
 }
 
+
+/* ================= PAGE 2 TRANSPARENT GIF OVERLAY ================= */
+#page2-overlay-gif {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: var(--base-w);      /* match phone width */
+  max-width: 100%;
+  z-index: 15;               /* above content, below popup menu */
+  pointer-events: none;      /* user can touch buttons under it */
+  opacity: 1;
+}
+
+
 /* ================= PAGE 2 BACKGROUND VIDEO (FIXED, NON-SCROLLING) ================= */
-#video-bg-page2 {
+/* #video-bg-page2 {
   position: fixed;
   inset: 0;
-  z-index: 0;               /* behind phone & content */
+  z-index: 0;               
   pointer-events: none;
 }
 #video-bg-page2 video {
@@ -201,8 +216,39 @@ body.lock-scroll {
 #video-bg-page2 .overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0,0,0,0.4);  /* darken slightly for readability */
+  background: rgba(0,0,0,0.4);  
+} */
+
+
+/* ================= PAGE 2 BACKGROUND IMAGE (FIXED, OVER CONTENT) ================= */
+#video-bg-page2 {
+  position: fixed;
+  inset: 0;
+  z-index: 999;          /* ⬅️ now on top of #mobile-wrapper */
+  pointer-events: none;  /* ⬅️ don't block buttons / links */
+  overflow: hidden;
 }
+
+/* The actual image */
+#video-bg-page2::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("./images/overlay_gif.gif"); /* your transparent GIF */
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  transform: scale(1.02);
+}
+
+/* Optional dark/bright overlay on top of the gif */
+#video-bg-page2 .overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.0);  /* 0.0 = no darkening; increase if you want */
+}
+
+
 
 /* ================= PAGE 2 HERO (kept but not used in this flow) ================= */
 #hero-header-2 {
@@ -225,8 +271,9 @@ body.lock-scroll {
 #page2-main {
   position: relative;
   z-index: 1;  /* above fixed video */
-  padding: 16px 8px 120px;
-  background: transparent;
+  /* padding: 16px 8px 120px; */
+  padding: 0px 0 10px;
+  background: #FFF;
 }
 
 /* ================= REVEAL SECTIONS ================= */
@@ -410,7 +457,7 @@ body.lock-scroll {
   right: 16px;
   bottom: calc(80px + env(safe-area-inset-bottom));
   z-index: 19;
-  background: rgba(17, 24, 39, 0.95);
+  background: rgba(0, 0, 0, 0.85);
   border-radius: 16px;
   padding: 8px;
   box-shadow: 0 16px 40px rgba(0,0,0,.5);
@@ -543,4 +590,117 @@ body.lock-scroll {
 @media (prefers-reduced-motion: reduce) {
   .animate-zoom-pulse { animation: none; }
   #bg-video, #background-video, #hero-background-video { display: none; }
+}
+
+
+/* ================= OUR CALENDAR SECTION (FULL-SCREEN) ================= */
+.calendar-card {
+  position: relative;
+  width: 100%;
+  margin: 0 0 16px;
+  border-radius: 0;
+  overflow: hidden;
+}
+
+#our-calendar {
+  margin: 0 0 16px; /* just bottom space before the next section */
+}
+
+/* Full-screen hero area */
+.calendar-hero {
+  position: relative;
+  width: 100%;
+  height: calc(var(--vh) * 100);  /* full viewport height */
+  min-height: 100vh;
+  border-radius: 0;
+  overflow: hidden;
+}
+
+
+/* Slides */
+.calendar-slide {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 1.2s ease-in-out;
+}
+
+.calendar-slide.is-active {
+  opacity: 1;
+}
+
+/* Dark overlay on top of slideshow */
+.calendar-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.35),
+      rgba(0, 0, 0, 0.65)
+    );
+}
+
+/* Centered content */
+.calendar-content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+  text-align: center;
+  color: #fff;
+}
+
+.calendar-heading-top {
+  letter-spacing: 0.2em;
+  font-size: 11px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  opacity: 0.9;
+}
+
+.calendar-couple-name {
+  font-family: "Georgia", "Times New Roman", serif;
+  font-style: italic;
+  font-size: 26px;
+  margin-bottom: 18px;
+}
+
+/* Countdown grid */
+.calendar-countdown {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  width: 100%;
+  max-width: 320px;
+  margin: 0 auto 10px;
+}
+
+.calendar-count-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.calendar-count-value {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.calendar-count-label {
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.calendar-date-small {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.9;
 }

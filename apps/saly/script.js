@@ -322,7 +322,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (container) {
           container.scrollTop = 0;
         }
-        scrollToSection('khmer-invite');
+        scrollToSection('our-calendar');
       });
     });
 
@@ -428,6 +428,59 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
+
+  /* ===== Our Calendar: Background Slideshow ===== */
+  const calendarSlides = document.querySelectorAll('.calendar-slide');
+  if (calendarSlides.length > 1) {
+    let calendarIndex = 0;
+
+    setInterval(() => {
+      calendarSlides[calendarIndex].classList.remove('is-active');
+      calendarIndex = (calendarIndex + 1) % calendarSlides.length;
+      calendarSlides[calendarIndex].classList.add('is-active');
+    }, 5000); // change slide every 5 seconds
+  }
+
+  /* ===== Our Calendar: Countdown ===== */
+  // Use your real wedding datetime here (local time)
+  const weddingDate = new Date('2026-01-11T10:00:00+07:00');
+
+  const elDays = document.getElementById('count-days');
+  const elHours = document.getElementById('count-hours');
+  const elMinutes = document.getElementById('count-minutes');
+  const elSeconds = document.getElementById('count-seconds');
+
+  function pad(num, size) {
+    return String(num).padStart(size, '0');
+  }
+
+  function updateCountdown() {
+    if (!elDays || !elHours || !elMinutes || !elSeconds) return;
+
+    const now = new Date();
+    let diff = weddingDate - now;
+
+    if (diff < 0) {
+      diff = 0;
+    }
+
+    const seconds = Math.floor(diff / 1000) % 60;
+    const minutes = Math.floor(diff / (1000 * 60)) % 60;
+    const hours   = Math.floor(diff / (1000 * 60 * 60)) % 24;
+    const days    = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+    elDays.textContent    = pad(days, 3);
+    elHours.textContent   = pad(hours, 2);
+    elMinutes.textContent = pad(minutes, 2);
+    elSeconds.textContent = pad(seconds, 2);
+  }
+
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
+
+
+
+
 });
 
 /* ===== Disable pinch-zoom & double-tap zoom ===== */
