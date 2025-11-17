@@ -106,7 +106,7 @@ function loadGuestFromCSV() {
 /* ===== Scroll Reveal (animate once) ===== */
 const observerOptions = {
   root: null,
-  rootMargin: '0px 0px -80px 0px', // start slightly before fully visible
+  rootMargin: '0px 0px -80px 0px',
   threshold: 0.15
 };
 
@@ -114,7 +114,6 @@ const observer = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
       entry.target.classList.add('is-visible');
-      // animate only once, then stop observing
       observer.unobserve(entry.target);
     }
   });
@@ -153,7 +152,6 @@ document.addEventListener('click', (e) => {
   }
 });
 
-/* iOS-safe version: no optional chaining */
 const prevBtn = document.getElementById('prev-btn');
 if (prevBtn) {
   prevBtn.addEventListener('click', (e) => {
@@ -188,7 +186,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const hero2   = document.getElementById('hero-header-2');
   const invite2 = document.getElementById('invite-2');
   const page2Main = document.getElementById('page2-main');
-  const khmerInvite = document.getElementById('khmer-invite');
 
   const mobileWrapper = document.getElementById('mobile-wrapper');
 
@@ -210,19 +207,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const isPlaying = bgMusic && !bgMusic.paused && !bgMusic.muted;
 
     if (isPlaying) {
-      menuMusicIcon.textContent = '🔊';           // sound on
-      menuMusicText.textContent = 'បិទតន្ត្រី'; // "mute music"
+      menuMusicIcon.textContent = '🔊';
+      menuMusicText.textContent = 'បិទតន្ត្រី';
       menuMusicItem.setAttribute('aria-label', 'Mute music');
     } else {
-      menuMusicIcon.textContent = '🔇';           // muted
-      menuMusicText.textContent = 'បើកតន្ត្រី'; // "play music"
+      menuMusicIcon.textContent = '🔇';
+      menuMusicText.textContent = 'បើកតន្ត្រី';
       menuMusicItem.setAttribute('aria-label', 'Play music');
     }
   }
 
   if (menuMusicItem) {
     menuMusicItem.addEventListener('click', (e) => {
-      e.stopPropagation(); // don't trigger outer click handlers
+      e.stopPropagation();
       if (!bgMusic) return;
 
       if (bgMusic.paused || bgMusic.muted) {
@@ -247,7 +244,7 @@ document.addEventListener('DOMContentLoaded', () => {
     hero1.style.display = 'none';
   }
 
-  // Scroll to a section (single page)
+  // Scroll helper for popup menu
   function scrollToSection(id) {
     const target = document.getElementById(id);
     if (!target) return;
@@ -256,7 +253,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (container === window) {
       const rect = target.getBoundingClientRect();
-      const offset = rect.top + window.pageYOffset - 80; // leave some space from top
+      const offset = rect.top + window.pageYOffset - 80;
       window.scrollTo({ top: offset, behavior: 'smooth' });
     } else {
       const cRect = container.getBoundingClientRect();
@@ -265,26 +262,21 @@ document.addEventListener('DOMContentLoaded', () => {
       container.scrollTo({ top: offset, behavior: 'smooth' });
     }
 
-    // Close popup after selection
     if (popupMenu && !popupMenu.classList.contains('hidden')) {
       popupMenu.classList.add('hidden');
       if (menuToggle) menuToggle.setAttribute('aria-expanded', 'false');
     }
   }
 
-  // Go to page 2 single-page view and focus Khmer invite
-  function goToKhmerInvite() {
-    // Unlock scroll from now on (Page 2)
+  // Go to page 2 single-page view (no auto-scroll to section)
+  function goToPage2() {
     document.body.classList.remove('lock-scroll');
 
-    // Hide intro
     introLayer.classList.remove('show');
     setTimeout(() => introLayer.classList.add('hidden'), 200);
 
-    // Show fixed background (gif/image div)
     page2Backdrop.classList.remove('hidden');
 
-    // Don't use hero-header-2 in this flow
     hero2.style.display = 'none';
     if (invite2) {
       invite2.classList.add('fade-out');
@@ -293,10 +285,8 @@ document.addEventListener('DOMContentLoaded', () => {
       invite2.style.pointerEvents = 'none';
     }
 
-    // Show main content
     page2Main.classList.remove('hidden');
 
-    // Show FAB only now, keep popup menu closed
     if (menuToggle) {
       menuToggle.classList.remove('hidden');
       menuToggle.setAttribute('aria-expanded', 'false');
@@ -305,41 +295,21 @@ document.addEventListener('DOMContentLoaded', () => {
       popupMenu.classList.add('hidden');
     }
 
-    // Update music UI in case music already playing/stopped
     updateMusicToggleUI();
 
-    // Reveal first section immediately
-    if (khmerInvite) khmerInvite.classList.add('is-visible');
-
-    function waitForImages(el) {
-      const imgs = Array.from(el.querySelectorAll('img'));
-      if (!imgs.length) return Promise.resolve();
-      return Promise.all(
-        imgs.map(img => img.complete ? Promise.resolve() : new Promise(res => {
-          img.addEventListener('load', res, { once: true });
-          img.addEventListener('error', res, { once: true });
-        }))
-      );
-    }
-
     requestAnimationFrame(() => {
-      waitForImages(khmerInvite || document).then(() => {
-        const container = getScrollContainer();
-        if (container === window) {
-          window.scrollTo(0, 0);
-        } else if (container) {
-          container.scrollTop = 0;
-        }
-        scrollToSection('our-calendar');
-      });
+      const container = getScrollContainer();
+      if (container === window) {
+        window.scrollTo(0, 0);
+      } else if (container) {
+        container.scrollTop = 0;
+      }
     });
 
-    // Start observing sections for scroll animations
     observeContentSections();
   }
 
   function showIntroVideo() {
-    // Start music when intro opens (user gesture)
     if (bgMusic) {
       bgMusic.currentTime = 0;
       const playPromise = bgMusic.play();
@@ -359,7 +329,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       hideSection1Now();
-      goToKhmerInvite();
+      goToPage2();
       return;
     }
 
@@ -373,11 +343,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (p && typeof p.then === 'function') {
       p.catch(() => introVideo.setAttribute('controls', 'controls'));
     }
-    introVideo.onended = () => goToKhmerInvite();
+    introVideo.onended = () => goToPage2();
 
     setTimeout(() => {
       if (!introVideo.paused && !introVideo.ended) return;
-      goToKhmerInvite();
+      goToPage2();
     }, 30000);
   }
 
@@ -397,7 +367,7 @@ document.addEventListener('DOMContentLoaded', () => {
     e.stopPropagation();
     try { introVideo.pause(); } catch {}
     hideSection1Now();
-    goToKhmerInvite();
+    goToPage2();
   });
 
   // Popup menu toggle
@@ -408,12 +378,10 @@ document.addEventListener('DOMContentLoaded', () => {
       menuToggle.setAttribute('aria-expanded', isHidden ? 'true' : 'false');
     });
 
-    // Click on menu items
     popupMenu.addEventListener('click', (e) => {
       const btn = e.target.closest('.menu-item');
       if (!btn) return;
 
-      // Music item is handled separately
       if (btn.id === 'menu-item-music') {
         return;
       }
@@ -423,7 +391,6 @@ document.addEventListener('DOMContentLoaded', () => {
       scrollToSection(targetId);
     });
 
-    // Close menu when clicking outside
     document.addEventListener('click', (e) => {
       if (
         !popupMenu.classList.contains('hidden') &&
@@ -442,18 +409,16 @@ document.addEventListener('DOMContentLoaded', () => {
   if (calendarSlides.length > 1) {
     let calendarIndex = 0;
 
-    // Ensure the first slide is visible initially
     calendarSlides[0].classList.add('is-active');
 
     setInterval(() => {
       calendarSlides[calendarIndex].classList.remove('is-active');
       calendarIndex = (calendarIndex + 1) % calendarSlides.length;
       calendarSlides[calendarIndex].classList.add('is-active');
-    }, 5000); // change slide every 5 seconds
+    }, 5000);
   }
 
   /* ===== Our Calendar: Countdown ===== */
-  // Use your real wedding datetime here (local time)
   const weddingDate = new Date('2026-01-11T10:00:00+07:00');
 
   const elDays = document.getElementById('count-days');
@@ -489,30 +454,3 @@ document.addEventListener('DOMContentLoaded', () => {
   updateCountdown();
   setInterval(updateCountdown, 1000);
 });
-
-/* ===== Disable pinch-zoom & double-tap zoom ===== */
-
-// Block pinch-zoom gestures (iOS Safari)
-['gesturestart', 'gesturechange', 'gestureend'].forEach((evt) => {
-  document.addEventListener(
-    evt,
-    function (e) {
-      e.preventDefault();
-    },
-    { passive: false }
-  );
-});
-
-// Block double-tap zoom
-let lastTouchEnd = 0;
-document.addEventListener(
-  'touchend',
-  function (e) {
-    const now = Date.now();
-    if (now - lastTouchEnd <= 300) {
-      e.preventDefault();
-    }
-    lastTouchEnd = now;
-  },
-  { passive: false }
-);
