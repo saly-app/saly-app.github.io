@@ -6,7 +6,9 @@ function setViewportHeight() {
 setViewportHeight();
 window.addEventListener('resize', setViewportHeight);
 window.addEventListener('orientationchange', setViewportHeight);
-document.addEventListener('visibilitychange', () => { if (!document.hidden) setViewportHeight(); });
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden) setViewportHeight();
+});
 
 /* ===== Desktop Scale ===== */
 function applyPhoneScale() {
@@ -22,12 +24,14 @@ function applyPhoneScale() {
 applyPhoneScale();
 window.addEventListener('resize', applyPhoneScale);
 window.addEventListener('orientationchange', applyPhoneScale);
-document.addEventListener('visibilitychange', () => { if (!document.hidden) applyPhoneScale(); });
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden) applyPhoneScale();
+});
 
 /* ===== Reduced Motion for Videos ===== */
 (function controlVideosForReducedMotion() {
   const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-  const vids = ['bg-video','background-video','hero-background-video','intro-video']
+  const vids = ['bg-video', 'background-video', 'hero-background-video', 'intro-video']
     .map(id => document.getElementById(id))
     .filter(Boolean);
 
@@ -106,17 +110,29 @@ const observerOptions = {
   threshold: 0.15
 };
 
+// const observer = new IntersectionObserver((entries) => {
+//   entries.forEach(entry => {
+//     if (entry.isIntersecting) {
+//       // Element enters viewport → fade & slide in
+//       entry.target.classList.add('is-visible');
+//     } else {
+//       // Element leaves viewport → reset so it can animate again
+//       entry.target.classList.remove('is-visible');
+//     }
+//   });
+// }, observerOptions);
+
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
-      // Element enters viewport → fade & slide in
       entry.target.classList.add('is-visible');
-    } else {
-      // Element leaves viewport → reset so it can animate again
-      entry.target.classList.remove('is-visible');
+      // stop observing this element after first reveal
+      observer.unobserve(entry.target);
     }
   });
 }, observerOptions);
+
+
 
 function observeContentSections() {
   document.querySelectorAll('[data-reveal]').forEach(el => observer.observe(el));
@@ -426,6 +442,21 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
+
+  // ===== Make entire .cta-big area clickable (not only the inner button/text) =====
+  const ctaBoxes = document.querySelectorAll('.cta-big');
+
+  ctaBoxes.forEach((box) => {
+    box.addEventListener('click', (e) => {
+      const link = box.querySelector('a');
+      if (!link) return;
+
+      // If user already tapped on the actual <a>, let browser handle it
+      if (e.target.closest('a')) return;
+
+      link.click();
+    });
+  });
 });
 
 /* ===== Disable pinch-zoom & double-tap zoom ===== */

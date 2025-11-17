@@ -153,6 +153,7 @@ body.lock-scroll {
   display: grid;
   place-items: center;
   z-index: 2;
+  cursor: pointer; /* 👈 add this */
 }
 .cta-big button,
 #button-background-box button,
