@@ -103,36 +103,22 @@ function loadGuestFromCSV() {
     });
 }
 
-/* ===== Scroll Reveal (animate on scroll up & down) ===== */
+/* ===== Scroll Reveal (animate once) ===== */
 const observerOptions = {
   root: null,
   rootMargin: '0px 0px -80px 0px', // start slightly before fully visible
   threshold: 0.15
 };
 
-// const observer = new IntersectionObserver((entries) => {
-//   entries.forEach(entry => {
-//     if (entry.isIntersecting) {
-//       // Element enters viewport → fade & slide in
-//       entry.target.classList.add('is-visible');
-//     } else {
-//       // Element leaves viewport → reset so it can animate again
-//       entry.target.classList.remove('is-visible');
-//     }
-//   });
-// }, observerOptions);
-
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
       entry.target.classList.add('is-visible');
-      // stop observing this element after first reveal
+      // animate only once, then stop observing
       observer.unobserve(entry.target);
     }
   });
 }, observerOptions);
-
-
 
 function observeContentSections() {
   document.querySelectorAll('[data-reveal]').forEach(el => observer.observe(el));
@@ -442,21 +428,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
-
-  // ===== Make entire .cta-big area clickable (not only the inner button/text) =====
-  const ctaBoxes = document.querySelectorAll('.cta-big');
-
-  ctaBoxes.forEach((box) => {
-    box.addEventListener('click', (e) => {
-      const link = box.querySelector('a');
-      if (!link) return;
-
-      // If user already tapped on the actual <a>, let browser handle it
-      if (e.target.closest('a')) return;
-
-      link.click();
-    });
-  });
 });
 
 /* ===== Disable pinch-zoom & double-tap zoom ===== */

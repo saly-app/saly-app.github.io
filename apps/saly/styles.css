@@ -153,14 +153,13 @@ body.lock-scroll {
   display: grid;
   place-items: center;
   z-index: 2;
-  cursor: pointer; /* 👈 add this */
+  cursor: pointer;
 }
-.cta-big button,
-#button-background-box button,
-#button-background-box-2 button,
-#save-date-button,
-#open-map-button {
-  width: 100%; height: 100%; border: none; background: transparent; cursor: pointer;
+
+.cta-link {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 /* Zoom pulse */
@@ -282,7 +281,7 @@ body.lock-scroll {
 .bottom-tight { bottom: 4px; padding: 4px; }
 .bottom-gift { bottom: 45px; padding: 2px; }
 
-/* Bank QR inline (kept, if you want to use later) */
+/* Bank QR inline (kept if needed later) */
 .aba-inline {
   position: absolute;
   inset: 0;
