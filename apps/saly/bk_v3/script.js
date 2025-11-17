@@ -374,23 +374,3 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
-
-
-/* ===== Disable pinch-zoom & double-tap zoom ===== */
-
-// Block pinch-zoom gestures (iOS Safari)
-['gesturestart', 'gesturechange', 'gestureend'].forEach((evt) => {
-  document.addEventListener(evt, function (e) {
-    e.preventDefault();
-  }, { passive: false });
-});
-
-// Block double-tap zoom
-let lastTouchEnd = 0;
-document.addEventListener('touchend', function (e) {
-  const now = Date.now();
-  if (now - lastTouchEnd <= 300) {
-    e.preventDefault();
-  }
-  lastTouchEnd = now;
-}, { passive: false });
