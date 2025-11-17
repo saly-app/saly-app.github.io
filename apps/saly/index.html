@@ -2,11 +2,10 @@
 <html lang="km">
 <head>
   <meta charset="UTF-8" />
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover"
-/>
-
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover"
+  />
   <title>Mobile-Only Wedding Invitation</title>
 
   <!-- Load Moul font -->
@@ -130,37 +129,34 @@
           </div>
         </section>
 
-         <!-- Section 2.2 Program (extra) -->
-        <section id="program-extra" class="invite-card" data-reveal>
+        <!-- Section 2.4 Wedding Gift / Bank -->
+        <section id="bank" class="invite-card" data-reveal>
           <img src="./images/4_wedding_gift.png" alt="WeddingGift" loading="lazy" />
-           <div class="cta-row bottom-gift">
+          <div class="cta-row bottom-gift">
             <div class="cta-big animate-zoom-pulse" style="background-image:url('./images/btn_aba_kh.png')">
               <a href="https://pay.ababank.com/oRF8/s60gaexm" target="_blank" rel="noopener noreferrer">
-                <button id="open-map-button" aria-label="Open ABA KHR"></button>
+                <button aria-label="Open ABA KHR"></button>
               </a>
             </div>
             <div class="cta-big animate-zoom-pulse" style="background-image:url('./images/btn_abd_usd.png')">
               <a href="https://pay.ababank.com/oRF8/ovtybmbs" target="_blank" rel="noopener noreferrer">
-                <button id="open-map-button" aria-label="Open ABA USD"></button>
+                <button aria-label="Open ABA USD"></button>
               </a>
             </div>
           </div>
         </section>
 
-
-        <!-- Section 2.5 Photo title -->
+        <!-- Section 2.5 Thank you -->
         <section id="photo_thank" class="invite-card" data-reveal>
           <img src="./images/6_thanks.png" alt="photo_thank" loading="lazy" />
         </section>
 
-
-
-
-            <!-- Section 2.5 Photo title -->
+        <!-- Section 2.6 Photo title -->
         <section id="photo_title" class="invite-card" data-reveal>
           <img src="./images/5_photo_title.png" alt="photo_title" loading="lazy" />
         </section>
-        <!-- Section 2.6 Gallery -->
+
+        <!-- Section 2.7 Gallery -->
         <section id="gallery" class="gallery-card" data-reveal>
           <div class="gallery-inner">
             <div class="gallery-grid">
@@ -169,16 +165,10 @@
               <img src="./images/my_photos/a3.jpg"   alt="Gallery Photo 3" class="gallery-thumbnail" />
               <img src="./images/my_photos/a4.jpg"   alt="Gallery Photo 4" class="gallery-thumbnail" />
             </div>
-
-            <!-- <a href="#gallery" class="gallery-more">មើលរូបភាពទាំងអស់ (View All Photos)</a> -->
           </div>
         </section>
-
-
-
       </main>
 
-      
       <!-- ============== POPUP ICON MENU (ONLY PAGE 2) ============== -->
       <button
         id="menu-toggle"
@@ -211,6 +201,13 @@
           <span class="menu-icon">📷</span>
           <span class="menu-text">រូបភាព</span>
         </button>
+
+        <!-- Music control inside menu -->
+        <div class="menu-divider"></div>
+        <button class="menu-item" id="menu-item-music" type="button">
+          <span class="menu-icon" id="menu-music-icon">🔊</span>
+          <span class="menu-text" id="menu-music-text">បិទតន្ត្រី</span>
+        </button>
       </nav>
     </div>
   </div>
@@ -222,6 +219,18 @@
       <button id="close-modal-btn" class="modal-close" aria-label="Close Modal" onclick="closeModal()">×</button>
       <button id="prev-btn" class="modal-nav left" aria-label="Previous Image">‹</button>
       <button id="next-btn" class="modal-nav right" aria-label="Next Image">›</button>
+    </div>
+  </div>
+
+  <!-- Orientation overlay (landscape lock style) -->
+  <div id="rotate-overlay">
+    <div class="rotate-inner">
+      <div class="rotate-icon">📱⤴️</div>
+      <p class="rotate-title">សូមបង្វិលទូរសព្ទឲ្យឈរ</p>
+      <p class="rotate-text">
+        សំបុត្រនេះរចនាឡើងសម្រាប់​ Portrait​ ប៉ុណ្ណោះ 🥰<br />
+        សូមបង្វិលទូរសព្ទរបស់អ្នកមកឲ្យឈរ ដើម្បីមើលមាតិកាផ្ទៀងផ្ទាត់។
+      </p>
     </div>
   </div>
 

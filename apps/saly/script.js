@@ -189,6 +189,43 @@ document.addEventListener('DOMContentLoaded', () => {
   const menuToggle = document.getElementById('menu-toggle');
   const popupMenu  = document.getElementById('popup-menu');
 
+  // Music item inside popup menu
+  const menuMusicItem = document.getElementById('menu-item-music');
+  const menuMusicIcon = document.getElementById('menu-music-icon');
+  const menuMusicText = document.getElementById('menu-music-text');
+
+  function updateMusicToggleUI() {
+    if (!menuMusicItem || !menuMusicIcon || !menuMusicText) return;
+
+    const isPlaying = bgMusic && !bgMusic.paused && !bgMusic.muted;
+
+    if (isPlaying) {
+      menuMusicIcon.textContent = '🔊';           // sound on
+      menuMusicText.textContent = 'បិទតន្ត្រី'; // "mute music"
+      menuMusicItem.setAttribute('aria-label', 'Mute music');
+    } else {
+      menuMusicIcon.textContent = '🔇';           // muted
+      menuMusicText.textContent = 'បើកតន្ត្រី'; // "play music"
+      menuMusicItem.setAttribute('aria-label', 'Play music');
+    }
+  }
+
+  if (menuMusicItem) {
+    menuMusicItem.addEventListener('click', (e) => {
+      e.stopPropagation(); // don't trigger outer click handlers
+      if (!bgMusic) return;
+
+      if (bgMusic.paused || bgMusic.muted) {
+        bgMusic.muted = false;
+        bgMusic.play().catch((err) => console.warn('Music play blocked:', err));
+      } else {
+        bgMusic.pause();
+      }
+
+      updateMusicToggleUI();
+    });
+  }
+
   function getScrollContainer() {
     // On mobile: window scroll; on desktop: phone wrapper scrolls
     return window.innerWidth <= 520 ? window : mobileWrapper;
@@ -258,6 +295,9 @@ document.addEventListener('DOMContentLoaded', () => {
       popupMenu.classList.add('hidden');
     }
 
+    // Update music UI in case music already playing/stopped
+    updateMusicToggleUI();
+
     // Reveal first section immediately
     if (khmerInvite) khmerInvite.classList.add('is-visible');
 
@@ -294,9 +334,16 @@ document.addEventListener('DOMContentLoaded', () => {
       bgMusic.currentTime = 0;
       const playPromise = bgMusic.play();
       if (playPromise && typeof playPromise.then === 'function') {
-        playPromise.catch(err => {
-          console.warn('Music play blocked:', err);
-        });
+        playPromise
+          .then(() => {
+            updateMusicToggleUI();
+          })
+          .catch(err => {
+            console.warn('Music play blocked:', err);
+            updateMusicToggleUI();
+          });
+      } else {
+        updateMusicToggleUI();
       }
     }
 
@@ -355,6 +402,12 @@ document.addEventListener('DOMContentLoaded', () => {
     popupMenu.addEventListener('click', (e) => {
       const btn = e.target.closest('.menu-item');
       if (!btn) return;
+
+      // Music item is handled separately
+      if (btn.id === 'menu-item-music') {
+        return;
+      }
+
       const targetId = btn.getAttribute('data-target');
       if (!targetId) return;
       scrollToSection(targetId);
@@ -375,22 +428,29 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-
 /* ===== Disable pinch-zoom & double-tap zoom ===== */
 
 // Block pinch-zoom gestures (iOS Safari)
 ['gesturestart', 'gesturechange', 'gestureend'].forEach((evt) => {
-  document.addEventListener(evt, function (e) {
-    e.preventDefault();
-  }, { passive: false });
+  document.addEventListener(
+    evt,
+    function (e) {
+      e.preventDefault();
+    },
+    { passive: false }
+  );
 });
 
 // Block double-tap zoom
 let lastTouchEnd = 0;
-document.addEventListener('touchend', function (e) {
-  const now = Date.now();
-  if (now - lastTouchEnd <= 300) {
-    e.preventDefault();
-  }
-  lastTouchEnd = now;
-}, { passive: false });
+document.addEventListener(
+  'touchend',
+  function (e) {
+    const now = Date.now();
+    if (now - lastTouchEnd <= 300) {
+      e.preventDefault();
+    }
+    lastTouchEnd = now;
+  },
+  { passive: false }
+);
