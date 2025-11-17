@@ -153,14 +153,22 @@ document.addEventListener('click', (e) => {
   }
 });
 
-document.getElementById('prev-btn')?.addEventListener('click', (e) => {
-  e.stopPropagation();
-  showGalleryAt(galleryIndex - 1);
-});
-document.getElementById('next-btn')?.addEventListener('click', (e) => {
-  e.stopPropagation();
-  showGalleryAt(galleryIndex + 1);
-});
+/* iOS-safe version: no optional chaining */
+const prevBtn = document.getElementById('prev-btn');
+if (prevBtn) {
+  prevBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    showGalleryAt(galleryIndex - 1);
+  });
+}
+
+const nextBtn = document.getElementById('next-btn');
+if (nextBtn) {
+  nextBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    showGalleryAt(galleryIndex + 1);
+  });
+}
 
 /* ===== Page Flow ===== */
 document.addEventListener('DOMContentLoaded', () => {
@@ -273,7 +281,7 @@ document.addEventListener('DOMContentLoaded', () => {
     introLayer.classList.remove('show');
     setTimeout(() => introLayer.classList.add('hidden'), 200);
 
-    // Show fixed background video
+    // Show fixed background (gif/image div)
     page2Backdrop.classList.remove('hidden');
 
     // Don't use hero-header-2 in this flow
@@ -434,6 +442,9 @@ document.addEventListener('DOMContentLoaded', () => {
   if (calendarSlides.length > 1) {
     let calendarIndex = 0;
 
+    // Ensure the first slide is visible initially
+    calendarSlides[0].classList.add('is-active');
+
     setInterval(() => {
       calendarSlides[calendarIndex].classList.remove('is-active');
       calendarIndex = (calendarIndex + 1) % calendarSlides.length;
@@ -477,10 +488,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   updateCountdown();
   setInterval(updateCountdown, 1000);
-
-
-
-
 });
 
 /* ===== Disable pinch-zoom & double-tap zoom ===== */
