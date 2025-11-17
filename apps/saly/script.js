@@ -167,7 +167,6 @@ if (nextBtn) {
     showGalleryAt(galleryIndex + 1);
   });
 }
-
 /* ===== Page Flow ===== */
 document.addEventListener('DOMContentLoaded', () => {
   // Lock scroll on first page
@@ -244,7 +243,7 @@ document.addEventListener('DOMContentLoaded', () => {
     hero1.style.display = 'none';
   }
 
-  // Scroll helper for popup menu
+  // Scroll helper for popup menu ONLY
   function scrollToSection(id) {
     const target = document.getElementById(id);
     if (!target) return;
@@ -268,15 +267,19 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Go to page 2 single-page view (no auto-scroll to section)
+  // Go to page 2 single-page view (NO auto-scroll)
   function goToPage2() {
+    // Unlock scroll
     document.body.classList.remove('lock-scroll');
 
+    // Hide intro
     introLayer.classList.remove('show');
     setTimeout(() => introLayer.classList.add('hidden'), 200);
 
+    // Show fixed background
     page2Backdrop.classList.remove('hidden');
 
+    // Hide hero-header-2 / invite2
     hero2.style.display = 'none';
     if (invite2) {
       invite2.classList.add('fade-out');
@@ -285,8 +288,10 @@ document.addEventListener('DOMContentLoaded', () => {
       invite2.style.pointerEvents = 'none';
     }
 
+    // Show main content
     page2Main.classList.remove('hidden');
 
+    // Show FAB
     if (menuToggle) {
       menuToggle.classList.remove('hidden');
       menuToggle.setAttribute('aria-expanded', 'false');
@@ -297,19 +302,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     updateMusicToggleUI();
 
-    requestAnimationFrame(() => {
-      const container = getScrollContainer();
-      if (container === window) {
-        window.scrollTo(0, 0);
-      } else if (container) {
-        container.scrollTop = 0;
-      }
-    });
+    // IMPORTANT: no scrollTo(0,0) here → we let browser keep natural position
+    // (but since page2 just became visible, it will naturally be at the top)
 
+    // Start observing sections for scroll animations
     observeContentSections();
   }
 
   function showIntroVideo() {
+    // Start music when intro opens (user gesture)
     if (bgMusic) {
       bgMusic.currentTime = 0;
       const playPromise = bgMusic.play();
