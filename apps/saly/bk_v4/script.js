@@ -123,14 +123,9 @@ function observeContentSections() {
   document.querySelectorAll('[data-reveal]').forEach(el => observer.observe(el));
 }
 
-/* ===== Gallery Modal (click + arrows + swipe) ===== */
+/* ===== Gallery Modal ===== */
 let galleryIndex = 0;
 let galleryImages = [];
-
-// For swipe detection
-let touchStartX = 0;
-let touchEndX = 0;
-const SWIPE_THRESHOLD = 40; // px
 
 function openModal(src) {
   const modal = document.getElementById('gallery-modal');
@@ -149,7 +144,6 @@ function showGalleryAt(i) {
   document.getElementById('modal-image').src = galleryImages[galleryIndex].src;
 }
 
-// Open modal when clicking a thumbnail
 document.addEventListener('click', (e) => {
   if (e.target && e.target.matches('.gallery-thumbnail')) {
     galleryImages = Array.from(document.querySelectorAll('.gallery-thumbnail'));
@@ -158,7 +152,6 @@ document.addEventListener('click', (e) => {
   }
 });
 
-// Prev / Next buttons
 const prevBtn = document.getElementById('prev-btn');
 if (prevBtn) {
   prevBtn.addEventListener('click', (e) => {
@@ -174,35 +167,6 @@ if (nextBtn) {
     showGalleryAt(galleryIndex + 1);
   });
 }
-
-// Swipe left / right inside modal
-const modalContent = document.querySelector('#gallery-modal .modal-content');
-if (modalContent) {
-  modalContent.addEventListener('touchstart', function (e) {
-    if (!e.touches || e.touches.length === 0) return;
-    touchStartX = e.touches[0].clientX;
-    touchEndX = touchStartX;
-  }, { passive: true });
-
-  modalContent.addEventListener('touchmove', function (e) {
-    if (!e.touches || e.touches.length === 0) return;
-    touchEndX = e.touches[0].clientX;
-  }, { passive: true });
-
-  modalContent.addEventListener('touchend', function () {
-    const dx = touchEndX - touchStartX;
-    if (Math.abs(dx) < SWIPE_THRESHOLD) return;
-
-    if (dx < 0) {
-      // swipe left → next photo
-      showGalleryAt(galleryIndex + 1);
-    } else {
-      // swipe right → previous photo
-      showGalleryAt(galleryIndex - 1);
-    }
-  });
-}
-
 /* ===== Page Flow ===== */
 document.addEventListener('DOMContentLoaded', () => {
   // Lock scroll on first page
