@@ -273,7 +273,8 @@ body.lock-scroll {
   z-index: 1;  /* above fixed video */
   /* padding: 16px 8px 120px; */
   padding: 0px 0 10px;
-  background: #FFF;
+  background-image: url(./images/bg.webp);
+  /* background: #FFF; */
 }
 
 /* ================= REVEAL SECTIONS ================= */
