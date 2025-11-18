@@ -569,35 +569,40 @@ document.addEventListener('DOMContentLoaded', function () {
 
       // Handle submit
       wishesForm.addEventListener('submit', function (e) {
-        e.preventDefault();
-        var name = (wishesNameInput.value || '').trim() || 'Guest';
-        var message = (wishesMessageInput.value || '').trim();
+            e.preventDefault();
+            var name = (wishesNameInput.value || '').trim() || 'Guest';
+            var message = (wishesMessageInput.value || '').trim();
 
-        if (!message) {
-          wishesStatus.textContent = 'សូមសរសេរសារមុននឹងផ្ញើ 🙏';
-          return;
-        }
+            if (!message) {
+              wishesStatus.textContent = 'សូមសរសេរសារមុននឹងផ្ញើ 🙏';
+              return;
+            }
 
-        wishesStatus.textContent = 'កំពុងផ្ញើ...';
+            wishesStatus.textContent = 'កំពុងផ្ញើ...';
 
-        wishesRef
-          .add({
-            name: name,
-            message: message,
-            createdAt: firebase.firestore.FieldValue.serverTimestamp()
-          })
-          .then(function () {
-            wishesMessageInput.value = '';
-            wishesStatus.textContent = 'បានផ្ញើរួចរាល់ 💌 សូមអរគុណ!';
-            setTimeout(function () {
-              wishesStatus.textContent = '';
-            }, 3000);
-          })
-          .catch(function (err) {
-            console.error('Error adding wish:', err);
-            wishesStatus.textContent = 'មានបញ្ហា ខណៈពេលផ្ញើ សូមព្យាយាមម្ដងទៀត 🙏';
+            wishesRef
+              .add({
+                name: name,
+                message: message,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+              })
+              .then(function () {
+                // ✅ clear fields
+                wishesNameInput.value = '';
+                wishesMessageInput.value = '';
+                wishesMessageInput.blur();
+                wishesNameInput.blur();
+
+                wishesStatus.textContent = 'បានផ្ញើរួចរាល់ 💌 សូមអរគុណ!';
+                setTimeout(function () {
+                  wishesStatus.textContent = '';
+                }, 3000);
+              })
+              .catch(function (err) {
+                console.error('Error adding wish:', err);
+                wishesStatus.textContent = 'មានបញ្ហា ខណៈពេលផ្ញើ សូមព្យាយាមម្ដងទៀត 🙏';
+              });
           });
-      });
 
       // Render list from snapshot (top 10 newest)
       function renderWishes(snapshot) {

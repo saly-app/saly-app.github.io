@@ -770,30 +770,14 @@ body.lock-scroll {
   margin: 0 0 16px;
 }
 
-/* Full-screen hero area, but slightly softer for scrolling */
+/* Full-screen hero area (always full height) */
 .calendar-hero {
   position: relative;
   width: 100%;
-  height: calc(var(--vh, 1vh) * 92);
-  min-height: 92vh;
+  height: calc(var(--vh, 1vh) * 100);  /* full viewport height */
+  min-height: 100vh;
   border-radius: 0;
   overflow: hidden;
-}
-
-/* On very tall screens, allow full height */
-@media (min-height: 800px) {
-  .calendar-hero {
-    height: calc(var(--vh, 1vh) * 100);
-    min-height: 100vh;
-  }
-}
-
-/* On small height devices, slightly smaller */
-@media (max-height: 640px) {
-  .calendar-hero {
-    height: calc(var(--vh, 1vh) * 88);
-    min-height: 88vh;
-  }
 }
 
 /* Slides */
@@ -1037,5 +1021,12 @@ body.lock-scroll {
   color: #6b7280;
   text-align: left;
   margin: 0 0 6px;
+  font-family: 'KhmerWish', 'Moul', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.hint-text{
+  font-size: 12px;
+  font-weight: 600;
+  color: #ffffff;
   font-family: 'KhmerWish', 'Moul', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
