@@ -538,7 +538,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var hours   = Math.floor(diff / (1000 * 60 * 60)) % 24;
     var days    = Math.floor(diff / (1000 * 60 * 60 * 24));
 
-    elDays.textContent    = pad(days, 3);
+    elDays.textContent    = pad(days, 2);
     elHours.textContent   = pad(hours, 2);
     elMinutes.textContent = pad(minutes, 2);
     elSeconds.textContent = pad(seconds, 2);
