@@ -205,7 +205,7 @@ body.lock-scroll {
 #tag_name_list_2 {
   font-family: "Moul", sans-serif;
   color: #efc45b; /* keep your gold */
-  font-size: clamp(16px, 3.5vw, 18px); /* keep your size */
+  font-size: clamp(13px, 3.5vw, 13px); /* keep your size */
   margin-top: 12%;
 }
 
