@@ -45,7 +45,11 @@ document.addEventListener('visibilitychange', () => {
       }
     });
   }
-  mediaQuery.addEventListener ? mediaQuery.addEventListener('change', apply) : mediaQuery.addListener(apply);
+  if (mediaQuery.addEventListener) {
+    mediaQuery.addEventListener('change', apply);
+  } else if (mediaQuery.addListener) {
+    mediaQuery.addListener(apply);
+  }
   apply();
 })();
 
@@ -273,6 +277,44 @@ document.addEventListener('DOMContentLoaded', () => {
     return window.innerWidth <= 520 ? window : mobileWrapper;
   }
 
+  // ==== Calendar scroll hint state + handler ====
+  let hasHiddenCalendarHint = false;
+
+  function handleCalendarScrollHint() {
+    if (hasHiddenCalendarHint) return;
+
+    const hint = document.getElementById('calendar-scroll-hint');
+    if (!hint) return;
+
+    const container = getScrollContainer();
+    let scrollTop;
+
+    if (container === window) {
+      scrollTop =
+        window.pageYOffset ||
+        document.documentElement.scrollTop ||
+        document.body.scrollTop ||
+        0;
+    } else if (container) {
+      scrollTop = container.scrollTop;
+    } else {
+      scrollTop = 0;
+    }
+
+    // Once user scrolls more than ~40px, hide hint forever
+    if (scrollTop > 40) {
+      hint.classList.add('calendar-scroll-hint--hidden');
+      hasHiddenCalendarHint = true;
+
+      if (container === window) {
+        window.removeEventListener('scroll', handleCalendarScrollHint);
+      } else if (container) {
+        container.removeEventListener('scroll', handleCalendarScrollHint);
+      }
+    }
+  }
+  // ==============================================
+
   function hideSection1Now() {
     hero1.style.opacity = '0';
     hero1.style.height  = '0';
@@ -303,19 +345,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Go to page 2 single-page view (NO auto-scroll)
+  // Go to page 2 single-page view (no auto-scroll to section)
   function goToPage2() {
-    // Unlock scroll
     document.body.classList.remove('lock-scroll');
 
-    // Hide intro
     introLayer.classList.remove('show');
     setTimeout(() => introLayer.classList.add('hidden'), 200);
 
-    // Show fixed background
     page2Backdrop.classList.remove('hidden');
 
-    // Hide hero-header-2 / invite2
     hero2.style.display = 'none';
     if (invite2) {
       invite2.classList.add('fade-out');
@@ -324,10 +362,8 @@ document.addEventListener('DOMContentLoaded', () => {
       invite2.style.pointerEvents = 'none';
     }
 
-    // Show main content
     page2Main.classList.remove('hidden');
 
-    // Show FAB
     if (menuToggle) {
       menuToggle.classList.remove('hidden');
       menuToggle.setAttribute('aria-expanded', 'false');
@@ -338,15 +374,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     updateMusicToggleUI();
 
-    // IMPORTANT: no scrollTo(0,0) here → we let browser keep natural position
-    // (but since page2 just became visible, it will naturally be at the top)
-
-    // Start observing sections for scroll animations
+    // We don't force scrollTo(0,0) anymore
     observeContentSections();
+
+    // Start listening for scroll to hide the calendar hint
+    const container = getScrollContainer();
+    if (container === window) {
+      window.addEventListener('scroll', handleCalendarScrollHint, { passive: true });
+    } else if (container) {
+      container.addEventListener('scroll', handleCalendarScrollHint);
+    }
+    // In case there's already some scroll offset
+    handleCalendarScrollHint();
   }
 
   function showIntroVideo() {
-    // Start music when intro opens (user gesture)
     if (bgMusic) {
       bgMusic.currentTime = 0;
       const playPromise = bgMusic.play();

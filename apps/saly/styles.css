@@ -705,3 +705,58 @@ body.lock-scroll {
   text-transform: uppercase;
   opacity: 0.9;
 }
+
+/* ===== Calendar scroll hint ===== */
+.calendar-scroll-hint {
+  position: absolute;
+  left: 50%;
+  bottom: 32px;
+  transform: translate(-50%, 0);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.9;
+  pointer-events: none; /* don't block taps */
+  animation: calendar-hint-bounce 1.8s infinite ease-in-out;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.calendar-scroll-hint .hint-text {
+  font-weight: 500;
+}
+
+.calendar-scroll-hint .hint-arrow {
+  font-size: 16px;
+}
+
+/* When hidden after scroll */
+.calendar-scroll-hint--hidden {
+  opacity: 0;
+  transform: translate(-50%, 10px);
+  pointer-events: none;
+  animation: none;
+}
+
+@keyframes calendar-hint-bounce {
+  0%, 100% {
+    transform: translate(-50%, 0);
+  }
+  40% {
+    transform: translate(-50%, -6px);
+  }
+  70% {
+    transform: translate(-50%, 2px);
+  }
+}
+
+/* Slight tweak on very small heights so it doesn't sit too close to bottom */
+@media (max-height: 640px) {
+  .calendar-scroll-hint {
+    bottom: 20px;
+    font-size: 10px;
+  }
+}
