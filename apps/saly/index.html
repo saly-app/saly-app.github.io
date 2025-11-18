@@ -8,6 +8,33 @@
   />
   <title>Mobile-Only Wedding Invitation</title>
 
+    <!-- Firebase (compat CDN) -->
+    <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-analytics-compat.js"></script>
+
+    <script>
+      // Your web app's Firebase configuration (same as you provided)
+      const firebaseConfig = {
+        apiKey: "AIzaSyBdk5XAztiKDDn5ukn8NAupcpo51d4YecE",
+        authDomain: "saly-wedding.firebaseapp.com",
+        projectId: "saly-wedding",
+        storageBucket: "saly-wedding.firebasestorage.app",
+        messagingSenderId: "1085155324122",
+        appId: "1:1085155324122:web:c522f38934721971e2b5e3",
+        measurementId: "G-S09RY3ZRXL"
+      };
+
+      // Initialize Firebase (compat)
+      firebase.initializeApp(firebaseConfig);
+
+      // Optional: initialize analytics (not required for wishes to work)
+      if (typeof firebase.analytics === 'function') {
+        firebase.analytics();
+      }
+    </script>
+
+
   <!-- Load Moul font -->
   <link href="https://fonts.googleapis.com/css2?family=Moul&display=swap" rel="stylesheet" />
 
@@ -30,7 +57,7 @@
       <!-- ============== PAGE 1: HERO (tap to open) ============== -->
       <header id="hero-header" class="relative">
         <div id="video-wrapper" aria-hidden="true">
-          <video id="bg-video" autoplay loop muted playsinline preload="auto" poster="./images/video_poster.jpg">
+          <video id="bg-video" autoplay loop muted playsinline preload="auto">
             <source src="./video/bg_small.mp4" type="video/mp4" />
             Your browser does not support the video tag.
           </video>
@@ -246,6 +273,52 @@
             </div>
           </div>
         </section>
+
+
+        <!-- Section 2.8 Guest Wishes -->
+        <section id="wishes" class="gallery-card" data-reveal>
+          <div class="gallery-inner">
+            <h2 class="gallery-title" style="color:#d4af37; margin-bottom:8px;">
+              សារ​អំណរគុណ & មន្ត្រីង
+            </h2>
+            <p class="gallery-sub" style="color:#444; margin-bottom:16px;">
+              សូមសរសេរសារអបអរសាទរ ឬមន្ត្រីងសម្រាប់គូស្លៀកព្រេង ❤️
+            </p>
+
+            <!-- Form -->
+            <form id="wishes-form" class="wishes-form">
+              <input
+                id="wishes-name"
+                type="text"
+                name="name"
+                placeholder="ឈ្មោះរបស់អ្នក (មិនចាំបាច់)"
+                maxlength="50"
+              />
+              <textarea
+                id="wishes-message"
+                name="message"
+                placeholder="សរសេរសាររបស់អ្នកនៅទីនេះ..."
+                rows="3"
+                maxlength="200"
+                required
+              ></textarea>
+              <button type="submit" class="wishes-submit">
+                ផ្ញើសារ
+              </button>
+              <p id="wishes-status" class="wishes-status"></p>
+            </form>
+
+            <!-- List of wishes -->
+             <h3 class="wishes-list-title">
+              សារអបអរសាទរ​ចុងក្រោយ (Top 10)
+            </h3>
+            <div id="wishes-list" class="wishes-list">
+              <!-- messages will be injected here by JS -->
+            </div>
+          </div>
+        </section>
+
+
       </main>
 
       <!-- ============== POPUP ICON MENU (ONLY PAGE 2) ============== -->

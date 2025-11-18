@@ -9,14 +9,32 @@
 }
 
 /* ================= RESET / BASE ================= */
-* { box-sizing: border-box; }
-html, body {
-  margin: 0; padding: 0; height: 100%;
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
   background: #121212;
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, "Moul", sans-serif;
+
+  /* Mobile polish */
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
-body { overflow-x: hidden; }
-html { overflow-x: hidden; }
+
+/* Prevent font zoom on iOS during orientation/form focus */
+body {
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+}
+
+html {
+  overflow-x: hidden;
+}
 
 /* Lock scrolling on first page (body class controlled by JS) */
 body.lock-scroll {
@@ -28,7 +46,7 @@ body.lock-scroll {
 #stage {
   position: fixed;
   inset: 0;
-  background: transparent;      /* let fixed video show */
+  background: transparent; /* let fixed video show */
   overflow: hidden;
   min-height: 100vh;
 }
@@ -42,7 +60,7 @@ body.lock-scroll {
   left: 50%;
   transform-origin: center;
   transform: translate(-50%, -50%) scale(var(--scale));
-  box-shadow: 0 0 20px rgba(0,0,0,.5);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
   background: black;
   border-radius: 20px;
 
@@ -56,7 +74,8 @@ body.lock-scroll {
 
 /* === MOBILE: single-page, window scrolls === */
 @media (max-width: 520px) {
-  html, body {
+  html,
+  body {
     height: auto;
     min-height: 100%;
   }
@@ -84,20 +103,47 @@ body.lock-scroll {
 }
 
 /* ================= REUSABLE LAYERS ================= */
-.relative { position: relative; }
-.absolute-fill { position: absolute; inset: 0; z-index: 0; }
-.cover { width: 100%; height: 100%; object-fit: cover; }
-.relative-layer { position: relative; z-index: 1; }
+.relative {
+  position: relative;
+}
+.absolute-fill {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+.cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.relative-layer {
+  position: relative;
+  z-index: 1;
+}
 
 /* ================= PAGE 1 HERO ================= */
 #hero-header {
   position: relative;
   min-height: 100vh;
-  display: grid; place-items: center; text-align: center;
-  padding: 24px 0; transition: opacity 1s ease;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  padding: 24px 0;
+  transition: opacity 1s ease;
 }
-#video-wrapper { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
-#video-wrapper video { width: 100%; height: 100%; object-fit: cover; }
+
+#video-wrapper {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+#video-wrapper video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 
 /* 20% black overlay on first-page video (slightly stronger for readability) */
 .hero-video-overlay {
@@ -107,33 +153,59 @@ body.lock-scroll {
   z-index: 1;
 }
 
-#invite { position: relative; z-index: 2; width: 100%; max-width: 420px; margin: 0 auto; }
-#invite img { width: 100%; display: block; border-radius: inherit; pointer-events: none; }
+#invite {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+}
+#invite img {
+  width: 100%;
+  display: block;
+  border-radius: inherit;
+  pointer-events: none;
+}
 
 #content-overlay {
-  position: absolute; inset: 0; display: flex; flex-direction: column;
-  align-items: center; text-align: center;
-  padding: 5vh 6%; cursor: pointer; z-index: 10;
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 5vh 6%;
+  cursor: pointer;
+  z-index: 10;
 }
 
 /* Name card (shared) */
 .namecard,
 #names-background-box,
 #names-background-box-2 {
-  background-image: url('./images/btn_namecard2.png');
-  background-size: contain; background-repeat: no-repeat; background-position: center;
-  max-width: 80%; width: 100%;
-  aspect-ratio: 384 / 110; display: grid; place-items: center; pointer-events: none;
-  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  background-image: url("./images/btn_namecard2.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  max-width: 80%;
+  width: 100%;
+  aspect-ratio: 384 / 110;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
-/* YOUR CUSTOM TEXT STYLE (do not change) */
+/* YOUR CUSTOM TEXT STYLE (kept as requested) */
 .name-text,
 #tag_name_list,
 #tag_name_list_2 {
-  font-family: 'Moul', sans-serif;
-  color: #f5b71a;
-  font-size: clamp(12px, 3.5vw, 12px);
+  font-family: "Moul", sans-serif;
+  color: #efc45b; /* keep your gold */
+  font-size: clamp(16px, 3.5vw, 18px); /* keep your size */
   margin-top: 12%;
 }
 
@@ -145,11 +217,11 @@ body.lock-scroll {
   width: 50%;
   max-width: 384px;
   aspect-ratio: 384 / 110;
-  background-image: url('./images/btn_open.png');
+  background-image: url("./images/btn_open.png");
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
-  filter: drop-shadow(0 4px 6px rgba(0,0,0,.3));
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3));
   display: grid;
   place-items: center;
   z-index: 2;
@@ -163,27 +235,54 @@ body.lock-scroll {
 }
 
 /* Zoom pulse */
-@keyframes zoom-pulse { 0%{transform:scale(1)} 50%{transform:scale(1.05)} 100%{transform:scale(1)} }
-.animate-zoom-pulse { animation: zoom-pulse 2s infinite ease-in-out; }
+@keyframes zoom-pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+.animate-zoom-pulse {
+  animation: zoom-pulse 2s infinite ease-in-out;
+}
 
 /* ================= INTRO VIDEO LAYER ================= */
 #intro-video-layer {
-  position: fixed; inset: 0; z-index: 50; background: #000;
-  display: grid; place-items: center;
-  opacity: 0; pointer-events: none; transition: opacity 300ms ease;
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: #000;
+  display: grid;
+  place-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 300ms ease;
 }
 #intro-video-layer.show {
-  opacity: 1; pointer-events: auto;
+  opacity: 1;
+  pointer-events: auto;
 }
-#intro-video { width: 100%; height: 100%; object-fit: cover; }
+#intro-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 #intro-skip {
-  position: absolute; right: 10px; top: 10px;
-  background: rgba(0,0,0,.45); color: #fff;
-  border: 1px solid rgba(255,255,255,.3);
-  padding: 6px 10px; border-radius: 999px; font-weight: 600;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  background: rgba(0, 0, 0, 0.45);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-weight: 600;
   cursor: pointer;
 }
-
 
 /* ================= PAGE 2 TRANSPARENT GIF OVERLAY ================= */
 #page2-overlay-gif {
@@ -191,41 +290,19 @@ body.lock-scroll {
   top: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: var(--base-w);      /* match phone width */
+  width: var(--base-w); /* match phone width */
   max-width: 100%;
-  z-index: 15;               /* above content, below popup menu */
-  pointer-events: none;      /* user can touch buttons under it */
+  z-index: 15; /* above content, below popup menu */
+  pointer-events: none; /* user can touch buttons under it */
   opacity: 1;
 }
-
-
-/* ================= PAGE 2 BACKGROUND VIDEO (FIXED, NON-SCROLLING) ================= */
-/* #video-bg-page2 {
-  position: fixed;
-  inset: 0;
-  z-index: 0;               
-  pointer-events: none;
-}
-#video-bg-page2 video {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-#video-bg-page2 .overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(0,0,0,0.4);  
-} */
-
 
 /* ================= PAGE 2 BACKGROUND IMAGE (FIXED, OVER CONTENT) ================= */
 #video-bg-page2 {
   position: fixed;
   inset: 0;
-  z-index: 999;          /* ⬅️ now on top of #mobile-wrapper */
-  pointer-events: none;  /* ⬅️ don't block buttons / links */
+  z-index: 999; /* on top of #mobile-wrapper */
+  pointer-events: none;
   overflow: hidden;
 }
 
@@ -234,7 +311,7 @@ body.lock-scroll {
   content: "";
   position: absolute;
   inset: 0;
-  background-image: url("./images/overlay_gif.gif"); /* your transparent GIF */
+  background-image: url("./images/overlay_gif.gif"); /* transparent GIF */
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
@@ -245,53 +322,74 @@ body.lock-scroll {
 #video-bg-page2 .overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0,0,0,0.0);  /* 0.0 = no darkening; increase if you want */
+  background: rgba(0, 0, 0, 0.0);
 }
 
-
+/* Tiny darkening on small phones, optional but nice */
+@media (max-width: 520px) {
+  #video-bg-page2 .overlay {
+    background: rgba(0, 0, 0, 0.08);
+  }
+}
 
 /* ================= PAGE 2 HERO (kept but not used in this flow) ================= */
 #hero-header-2 {
-  position: relative; z-index: 1;
-  min-height: auto; display: block; padding: 24px 0 12px;
+  position: relative;
+  z-index: 1;
+  min-height: auto;
+  display: block;
+  padding: 24px 0 12px;
 }
-#invite-2 { width: 100%; max-width: 420px; margin: 0 auto; transition: opacity 400ms ease, transform 400ms ease; }
-#invite-2 img { width: 100%; display: block; border-radius: inherit; }
+#invite-2 {
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+  transition: opacity 400ms ease, transform 400ms ease;
+}
+#invite-2 img {
+  width: 100%;
+  display: block;
+  border-radius: inherit;
+}
 
 #invite-2 .overlay-stack {
-  position: absolute; inset: 0;
-  display: flex; flex-direction: column;
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
   justify-content: flex-end;
   align-items: center;
   padding: 6%;
 }
-#invite-2.fade-out { opacity: 0; transform: translateY(-8px); }
+#invite-2.fade-out {
+  opacity: 0;
+  transform: translateY(-8px);
+}
 
 /* ================= PAGE 2 MAIN: SINGLE PAGE CONTENT ================= */
 #page2-main {
   position: relative;
-  z-index: 1;  /* above fixed video */
-  /* padding: 16px 8px 120px; */
-  padding: 0px 0 10px;
+  z-index: 1; /* above fixed bg */
+  padding: 0 0 10px;
   background-image: url(./images/bg.webp);
-  /* background: #FFF; */
 }
 
 /* ================= REVEAL SECTIONS ================= */
 .invite-card,
 .gallery-card {
   opacity: 0;
-  transform: translateY(30px) scale(0.98);
+  transform: translateY(18px) scale(0.99);
   transition:
-    opacity 600ms ease,
-    transform 600ms ease;
+    opacity 480ms ease-out,
+    transform 480ms ease-out;
+  will-change: opacity, transform;
 }
 
 .invite-card {
   position: relative;
   max-width: 480px;
   margin: 0 auto 12px;
-  background: rgba(0,0,0,0.0);
+  background: rgba(0, 0, 0, 0.0);
   border-radius: 1rem;
   box-shadow: none;
 }
@@ -301,7 +399,7 @@ body.lock-scroll {
   max-width: 640px;
   margin: 0 auto 12px;
   padding: 24px;
-  background: rgba(0,0,0,0.0);
+  background: rgba(0, 0, 0, 0.0);
   border-radius: 1rem;
   box-shadow: none;
 }
@@ -322,14 +420,25 @@ body.lock-scroll {
 
 /* CTA row inside invite cards */
 .cta-row {
-  position: absolute; inset-inline: 0; bottom: 0;
-  display: flex; justify-content: center; align-items: center;
-  padding: 16px; padding-top: 0;
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+  padding-top: 0;
 }
-.bottom-tight { bottom: 4px; padding: 4px; }
-.bottom-gift { bottom: 45px; padding: 2px; }
+.bottom-tight {
+  bottom: 4px;
+  padding: 4px;
+}
+.bottom-gift {
+  bottom: 45px;
+  padding: 2px;
+}
 
-/* Bank QR inline (kept if needed later) */
+/* Bank QR inline (if used later) */
 .aba-inline {
   position: absolute;
   inset: 0;
@@ -348,29 +457,45 @@ body.lock-scroll {
   border-radius: 12px;
   overflow: hidden;
   border: 4px solid #fff;
-  transition: transform .2s ease;
+  transition: transform 0.2s ease;
 }
 .qr-thumb img {
   display: block;
   width: 100%;
   height: auto;
 }
-.qr-thumb:hover { transform: scale(1.02); }
+.qr-thumb:hover {
+  transform: scale(1.02);
+}
 
 /* Gallery */
-.gallery-inner { text-align: center; color: #fff; }
-.gallery-title { font-size: 28px; margin: 0 0 10px; color: #d4af37; }
-.gallery-sub { margin: 0 0 18px; font-weight: 500; }
+.gallery-inner {
+  text-align: center;
+  color: #fff;
+}
+.gallery-title {
+  font-size: 28px;
+  margin: 0 0 10px;
+  color: #d4af37;
+}
+.gallery-sub {
+  margin: 0 0 18px;
+  font-weight: 500;
+}
 
 .gallery-grid {
-  display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
 }
 .gallery-thumbnail {
   width: 100%;
   height: auto;
   display: block;
   border-radius: 12px;
-  transition: transform .2s ease, opacity .2s ease;
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease;
   cursor: pointer;
   opacity: 0.95;
 }
@@ -383,7 +508,7 @@ body.lock-scroll {
 .modal {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,.9);
+  background: rgba(0, 0, 0, 0.9);
   z-index: 100;
   display: flex;
   align-items: center;
@@ -391,31 +516,58 @@ body.lock-scroll {
   padding: 16px;
   animation: modal-fade 200ms ease-out;
 }
-.modal.hidden { display: none !important; }
+.modal.hidden {
+  display: none !important;
+}
 
 .modal-content {
   position: relative;
   animation: modal-pop 200ms ease-out;
 }
 .modal-content img {
-  max-width: 100%; max-height: 100%; object-fit: contain;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
   border-radius: 12px;
 }
 .modal-close {
-  position: absolute; top: 8px; right: 10px; font-size: 40px; color: #fff;
-  background: transparent; border: none; cursor: pointer;
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  font-size: 40px;
+  color: #fff;
+  background: transparent;
+  border: none;
+  cursor: pointer;
 }
 .modal-nav {
-  position: absolute; top: 50%; transform: translateY(-50%); font-size: 40px;
-  color: #fff; background: rgba(0,0,0,.3); border: none; border-radius: 999px; width: 44px; height: 44px; cursor: pointer;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 40px;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.3);
+  border: none;
+  border-radius: 999px;
+  width: 44px;
+  height: 44px;
+  cursor: pointer;
 }
-.modal-nav.left { left: 8px; }
-.modal-nav.right { right: 8px; }
+.modal-nav.left {
+  left: 8px;
+}
+.modal-nav.right {
+  right: 8px;
+}
 
 /* Modal animations */
 @keyframes modal-fade {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 @keyframes modal-pop {
   from {
@@ -441,7 +593,7 @@ body.lock-scroll {
   background: rgba(255, 255, 255, 0.9);
   color: #111827;
   font-size: 24px;
-  box-shadow: 0 10px 25px rgba(0,0,0,.35);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
   cursor: pointer;
   animation: zoom-pulse 2.2s infinite ease-in-out;
 }
@@ -461,7 +613,7 @@ body.lock-scroll {
   background: rgba(0, 0, 0, 0.85);
   border-radius: 16px;
   padding: 8px;
-  box-shadow: 0 16px 40px rgba(0,0,0,.5);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -488,7 +640,7 @@ body.lock-scroll {
   cursor: pointer;
 }
 .menu-item:hover {
-  background: rgba(255,255,255,0.08);
+  background: rgba(255, 255, 255, 0.08);
 }
 .menu-icon {
   font-size: 18px;
@@ -519,8 +671,9 @@ body.lock-scroll {
   justify-content: center;
   padding: 24px;
   text-align: center;
-  background: radial-gradient(circle at top, rgba(248, 250, 252, 0.08), transparent),
-              linear-gradient(135deg, rgba(15, 23, 42, 0.96), rgba(30, 64, 175, 0.88));
+  background:
+    radial-gradient(circle at top, rgba(248, 250, 252, 0.08), transparent),
+    linear-gradient(135deg, rgba(15, 23, 42, 0.96), rgba(30, 64, 175, 0.88));
 }
 
 #rotate-overlay .rotate-inner {
@@ -576,7 +729,8 @@ body.lock-scroll {
 }
 
 @keyframes rotate-phone-nudge {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0) rotate(0deg);
   }
   40% {
@@ -589,12 +743,17 @@ body.lock-scroll {
 
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
-  .animate-zoom-pulse { animation: none; }
-  #bg-video, #background-video, #hero-background-video { display: none; }
+  .animate-zoom-pulse {
+    animation: none;
+  }
+  #bg-video,
+  #background-video,
+  #hero-background-video {
+    display: none;
+  }
 }
 
-
-/* ================= OUR CALENDAR SECTION (FULL-SCREEN) ================= */
+/* ================= OUR CALENDAR SECTION (FULL-SCREEN-ish) ================= */
 .calendar-card {
   position: relative;
   width: 100%;
@@ -604,19 +763,34 @@ body.lock-scroll {
 }
 
 #our-calendar {
-  margin: 0 0 16px; /* just bottom space before the next section */
+  margin: 0 0 16px;
 }
 
-/* Full-screen hero area */
+/* Full-screen hero area, but slightly softer for scrolling */
 .calendar-hero {
   position: relative;
   width: 100%;
-  height: calc(var(--vh) * 100);  /* full viewport height */
-  min-height: 100vh;
+  height: calc(var(--vh, 1vh) * 92);
+  min-height: 92vh;
   border-radius: 0;
   overflow: hidden;
 }
 
+/* On very tall screens, allow full height */
+@media (min-height: 800px) {
+  .calendar-hero {
+    height: calc(var(--vh, 1vh) * 100);
+    min-height: 100vh;
+  }
+}
+
+/* On small height devices, slightly smaller */
+@media (max-height: 640px) {
+  .calendar-hero {
+    height: calc(var(--vh, 1vh) * 88);
+    min-height: 88vh;
+  }
+}
 
 /* Slides */
 .calendar-slide {
@@ -626,7 +800,10 @@ body.lock-scroll {
   height: 100%;
   object-fit: cover;
   opacity: 0;
-  transition: opacity 1.2s ease-in-out;
+  transition: opacity 1.0s ease-in-out;
+  will-change: opacity;
+  backface-visibility: hidden;
+  transform: translate3d(0, 0, 0);
 }
 
 .calendar-slide.is-active {
@@ -638,10 +815,10 @@ body.lock-scroll {
   position: absolute;
   inset: 0;
   background: linear-gradient(
-      to bottom,
-      rgba(0, 0, 0, 0.35),
-      rgba(0, 0, 0, 0.65)
-    );
+    to bottom,
+    rgba(0, 0, 0, 0.35),
+    rgba(0, 0, 0, 0.65)
+  );
 }
 
 /* Centered content */
@@ -704,6 +881,7 @@ body.lock-scroll {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   opacity: 0.9;
+  margin-top: 4px;
 }
 
 /* ===== Calendar scroll hint ===== */
@@ -720,7 +898,7 @@ body.lock-scroll {
   letter-spacing: 0.12em;
   text-transform: uppercase;
   opacity: 0.9;
-  pointer-events: none; /* don't block taps */
+  pointer-events: none;
   animation: calendar-hint-bounce 1.8s infinite ease-in-out;
   transition: opacity 0.4s ease, transform 0.4s ease;
 }
@@ -742,7 +920,8 @@ body.lock-scroll {
 }
 
 @keyframes calendar-hint-bounce {
-  0%, 100% {
+  0%,
+  100% {
     transform: translate(-50%, 0);
   }
   40% {
@@ -759,4 +938,99 @@ body.lock-scroll {
     bottom: 20px;
     font-size: 10px;
   }
+}
+
+/* ===== (End calendar) ===== */
+
+/* ===== Wishes section ===== */
+.wishes-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.wishes-form input,
+.wishes-form textarea {
+  width: 100%;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  padding: 8px 10px;
+  font-size: 14px;
+  font-family: inherit;
+  outline: none;
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.wishes-form input:focus,
+.wishes-form textarea:focus {
+  border-color: #d4af37;
+  box-shadow: 0 0 0 1px rgba(212, 175, 55, 0.3);
+}
+
+.wishes-submit {
+  align-self: flex-end;
+  border: none;
+  border-radius: 999px;
+  padding: 6px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  background: #d4af37;
+  color: #111827;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.wishes-submit:active {
+  transform: scale(0.97);
+}
+
+.wishes-status {
+  font-size: 12px;
+  color: #4b5563;
+  min-height: 16px;
+}
+
+.wishes-list {
+  max-height: 260px;
+  overflow-y: auto;
+  padding-right: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Each wish card */
+.wish-item {
+  background: rgba(255, 255, 255, 0.96);
+  border-radius: 12px;
+  padding: 8px 10px;
+  text-align: left;
+  border: 1px solid #e5e7eb;
+}
+
+.wish-name {
+  font-size: 12px;
+  font-weight: 600;
+  color: #6b7280;
+  margin-bottom: 2px;
+}
+
+.wish-message {
+  font-size: 13px;
+  color: #111827;
+  word-wrap: break-word;
+}
+
+.wish-time {
+  font-size: 11px;
+  color: #9ca3af;
+  margin-top: 2px;
+}
+.wishes-list-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #6b7280;
+  text-align: left;
+  margin: 0 0 6px;
 }

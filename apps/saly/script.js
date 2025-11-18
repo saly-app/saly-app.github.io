@@ -1,47 +1,47 @@
 /* ===== Viewport Height Fix ===== */
 function setViewportHeight() {
   const vh = window.innerHeight * 0.01;
-  document.documentElement.style.setProperty('--vh', `${vh}px`);
+  document.documentElement.style.setProperty('--vh', vh + 'px');
 }
 setViewportHeight();
 window.addEventListener('resize', setViewportHeight);
 window.addEventListener('orientationchange', setViewportHeight);
-document.addEventListener('visibilitychange', () => {
+document.addEventListener('visibilitychange', function () {
   if (!document.hidden) setViewportHeight();
 });
 
 /* ===== Desktop Scale ===== */
 function applyPhoneScale() {
-  const BASE_W = 390, BASE_H = 844;
-  const sw = window.innerWidth, sh = window.innerHeight;
+  var BASE_W = 390, BASE_H = 844;
+  var sw = window.innerWidth, sh = window.innerHeight;
   if (sw <= 520) {
     document.documentElement.style.setProperty('--scale', '1');
     return;
   }
-  const scale = Math.min(sw / BASE_W, sh / BASE_H);
-  document.documentElement.style.setProperty('--scale', scale.toString());
+  var scale = Math.min(sw / BASE_W, sh / BASE_H);
+  document.documentElement.style.setProperty('--scale', String(scale));
 }
 applyPhoneScale();
 window.addEventListener('resize', applyPhoneScale);
 window.addEventListener('orientationchange', applyPhoneScale);
-document.addEventListener('visibilitychange', () => {
+document.addEventListener('visibilitychange', function () {
   if (!document.hidden) applyPhoneScale();
 });
 
 /* ===== Reduced Motion for Videos ===== */
 (function controlVideosForReducedMotion() {
-  const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-  const vids = ['bg-video', 'background-video', 'hero-background-video', 'intro-video']
-    .map(id => document.getElementById(id))
-    .filter(Boolean);
+  var mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var vids = ['bg-video', 'background-video', 'hero-background-video', 'intro-video']
+    .map(function (id) { return document.getElementById(id); })
+    .filter(function (el) { return !!el; });
 
   function apply() {
-    vids.forEach(v => {
+    vids.forEach(function (v) {
       if (mediaQuery.matches) {
         v.pause();
         v.removeAttribute('autoplay');
       } else if (v.paused) {
-        v.play().catch(() => {});
+        v.play().catch(function () {});
       }
     });
   }
@@ -55,18 +55,18 @@ document.addEventListener('visibilitychange', () => {
 
 /* ===== Guest Name from guests.csv ===== */
 function setGuestNameText(name) {
-  const displayName = name || 'ស្វាមី និង ភរិយា';
+  var displayName = name || 'ស្វាមី និង ភរិយា';
 
-  const n1 = document.getElementById('tag_name_list');
-  const n2 = document.getElementById('tag_name_list_2');
+  var n1 = document.getElementById('tag_name_list');
+  var n2 = document.getElementById('tag_name_list_2');
 
   if (n1) n1.textContent = displayName;
   if (n2) n2.textContent = displayName;
 }
 
 function loadGuestFromCSV() {
-  const urlParams = new URLSearchParams(window.location.search);
-  const guestId = urlParams.get('to');  // e.g. ?to=10001kimny
+  var urlParams = new URLSearchParams(window.location.search);
+  var guestId = urlParams.get('to');  // e.g. ?to=10001kimny
 
   // No code in URL → use default text
   if (!guestId) {
@@ -75,23 +75,26 @@ function loadGuestFromCSV() {
   }
 
   fetch('./guests.csv')
-    .then((res) => {
+    .then(function (res) {
       if (!res.ok) {
         throw new Error('Failed to load guests.csv');
       }
       return res.text();
     })
-    .then((csvText) => {
-      const lines = csvText.split(/\r?\n/);
-      let foundName = null;
+    .then(function (csvText) {
+      var lines = csvText.split(/\r?\n/);
+      var foundName = null;
 
-      for (const line of lines) {
-        const trimmed = line.trim();
+      for (var i = 0; i < lines.length; i++) {
+        var line = lines[i];
+        var trimmed = line.trim();
         if (!trimmed) continue;
 
         // split only on the first comma
-        const [id, ...rest] = trimmed.split(',');
-        const name = rest.join(',').trim();
+        var parts = trimmed.split(',');
+        var id = parts[0];
+        var rest = parts.slice(1).join(',').trim();
+        var name = rest;
 
         if (id === guestId) {
           foundName = name;
@@ -101,21 +104,21 @@ function loadGuestFromCSV() {
 
       setGuestNameText(foundName);
     })
-    .catch((err) => {
+    .catch(function (err) {
       console.error('Error reading guests.csv:', err);
       setGuestNameText(null); // fallback
     });
 }
 
 /* ===== Scroll Reveal (animate once) ===== */
-const observerOptions = {
+var observerOptions = {
   root: null,
   rootMargin: '0px 0px -80px 0px',
   threshold: 0.15
 };
 
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
+var observer = new IntersectionObserver(function (entries) {
+  entries.forEach(function (entry) {
     if (entry.isIntersecting) {
       entry.target.classList.add('is-visible');
       observer.unobserve(entry.target);
@@ -124,21 +127,24 @@ const observer = new IntersectionObserver((entries) => {
 }, observerOptions);
 
 function observeContentSections() {
-  document.querySelectorAll('[data-reveal]').forEach(el => observer.observe(el));
+  var els = document.querySelectorAll('[data-reveal]');
+  for (var i = 0; i < els.length; i++) {
+    observer.observe(els[i]);
+  }
 }
 
 /* ===== Gallery Modal (click + arrows + swipe) ===== */
-let galleryIndex = 0;
-let galleryImages = [];
+var galleryIndex = 0;
+var galleryImages = [];
 
 // For swipe detection
-let touchStartX = 0;
-let touchEndX = 0;
-const SWIPE_THRESHOLD = 40; // px
+var touchStartX = 0;
+var touchEndX = 0;
+var SWIPE_THRESHOLD = 40; // px
 
 function openModal(src) {
-  const modal = document.getElementById('gallery-modal');
-  const img = document.getElementById('modal-image');
+  var modal = document.getElementById('gallery-modal');
+  var img = document.getElementById('modal-image');
   img.src = src;
   modal.classList.remove('hidden');
 }
@@ -154,33 +160,35 @@ function showGalleryAt(i) {
 }
 
 // Open modal when clicking a thumbnail
-document.addEventListener('click', (e) => {
+document.addEventListener('click', function (e) {
   if (e.target && e.target.matches('.gallery-thumbnail')) {
-    galleryImages = Array.from(document.querySelectorAll('.gallery-thumbnail'));
+    galleryImages = Array.prototype.slice.call(
+      document.querySelectorAll('.gallery-thumbnail')
+    );
     galleryIndex = galleryImages.indexOf(e.target);
     openModal(e.target.src);
   }
 });
 
 // Prev / Next buttons
-const prevBtn = document.getElementById('prev-btn');
+var prevBtn = document.getElementById('prev-btn');
 if (prevBtn) {
-  prevBtn.addEventListener('click', (e) => {
+  prevBtn.addEventListener('click', function (e) {
     e.stopPropagation();
     showGalleryAt(galleryIndex - 1);
   });
 }
 
-const nextBtn = document.getElementById('next-btn');
+var nextBtn = document.getElementById('next-btn');
 if (nextBtn) {
-  nextBtn.addEventListener('click', (e) => {
+  nextBtn.addEventListener('click', function (e) {
     e.stopPropagation();
     showGalleryAt(galleryIndex + 1);
   });
 }
 
 // Swipe left / right inside modal
-const modalContent = document.querySelector('#gallery-modal .modal-content');
+var modalContent = document.querySelector('#gallery-modal .modal-content');
 if (modalContent) {
   modalContent.addEventListener('touchstart', function (e) {
     if (!e.touches || e.touches.length === 0) return;
@@ -194,7 +202,7 @@ if (modalContent) {
   }, { passive: true });
 
   modalContent.addEventListener('touchend', function () {
-    const dx = touchEndX - touchStartX;
+    var dx = touchEndX - touchStartX;
     if (Math.abs(dx) < SWIPE_THRESHOLD) return;
 
     if (dx < 0) {
@@ -208,42 +216,42 @@ if (modalContent) {
 }
 
 /* ===== Page Flow ===== */
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', function () {
   // Lock scroll on first page
   document.body.classList.add('lock-scroll');
 
   loadGuestFromCSV();
 
-  const hero1 = document.getElementById('hero-header');
-  const overlayBtn = document.getElementById('content-overlay');
+  var hero1 = document.getElementById('hero-header');
+  var overlayBtn = document.getElementById('content-overlay');
 
-  const introLayer = document.getElementById('intro-video-layer');
-  const introVideo = document.getElementById('intro-video');
-  const introSkip  = document.getElementById('intro-skip');
+  var introLayer = document.getElementById('intro-video-layer');
+  var introVideo = document.getElementById('intro-video');
+  var introSkip  = document.getElementById('intro-skip');
 
-  const page2Backdrop = document.getElementById('video-bg-page2');
-  const hero2   = document.getElementById('hero-header-2');
-  const invite2 = document.getElementById('invite-2');
-  const page2Main = document.getElementById('page2-main');
+  var page2Backdrop = document.getElementById('video-bg-page2');
+  var hero2   = document.getElementById('hero-header-2');
+  var invite2 = document.getElementById('invite-2');
+  var page2Main = document.getElementById('page2-main');
 
-  const mobileWrapper = document.getElementById('mobile-wrapper');
+  var mobileWrapper = document.getElementById('mobile-wrapper');
 
   // Music element
-  const bgMusic = document.getElementById('bg-music');
+  var bgMusic = document.getElementById('bg-music');
 
   // Popup menu elements
-  const menuToggle = document.getElementById('menu-toggle');
-  const popupMenu  = document.getElementById('popup-menu');
+  var menuToggle = document.getElementById('menu-toggle');
+  var popupMenu  = document.getElementById('popup-menu');
 
   // Music item inside popup menu
-  const menuMusicItem = document.getElementById('menu-item-music');
-  const menuMusicIcon = document.getElementById('menu-music-icon');
-  const menuMusicText = document.getElementById('menu-music-text');
+  var menuMusicItem = document.getElementById('menu-item-music');
+  var menuMusicIcon = document.getElementById('menu-music-icon');
+  var menuMusicText = document.getElementById('menu-music-text');
 
   function updateMusicToggleUI() {
     if (!menuMusicItem || !menuMusicIcon || !menuMusicText) return;
 
-    const isPlaying = bgMusic && !bgMusic.paused && !bgMusic.muted;
+    var isPlaying = bgMusic && !bgMusic.paused && !bgMusic.muted;
 
     if (isPlaying) {
       menuMusicIcon.textContent = '🔊';
@@ -257,13 +265,15 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   if (menuMusicItem) {
-    menuMusicItem.addEventListener('click', (e) => {
+    menuMusicItem.addEventListener('click', function (e) {
       e.stopPropagation();
       if (!bgMusic) return;
 
       if (bgMusic.paused || bgMusic.muted) {
         bgMusic.muted = false;
-        bgMusic.play().catch((err) => console.warn('Music play blocked:', err));
+        bgMusic.play().catch(function (err) {
+          console.warn('Music play blocked:', err);
+        });
       } else {
         bgMusic.pause();
       }
@@ -278,16 +288,16 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ==== Calendar scroll hint state + handler ====
-  let hasHiddenCalendarHint = false;
+  var hasHiddenCalendarHint = false;
 
   function handleCalendarScrollHint() {
     if (hasHiddenCalendarHint) return;
 
-    const hint = document.getElementById('calendar-scroll-hint');
+    var hint = document.getElementById('calendar-scroll-hint');
     if (!hint) return;
 
-    const container = getScrollContainer();
-    let scrollTop;
+    var container = getScrollContainer();
+    var scrollTop;
 
     if (container === window) {
       scrollTop =
@@ -323,20 +333,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Scroll helper for popup menu ONLY
   function scrollToSection(id) {
-    const target = document.getElementById(id);
+    var target = document.getElementById(id);
     if (!target) return;
 
-    const container = getScrollContainer();
+    var container = getScrollContainer();
 
     if (container === window) {
-      const rect = target.getBoundingClientRect();
-      const offset = rect.top + window.pageYOffset - 80;
+      var rect = target.getBoundingClientRect();
+      var offset = rect.top + window.pageYOffset - 80;
       window.scrollTo({ top: offset, behavior: 'smooth' });
     } else {
-      const cRect = container.getBoundingClientRect();
-      const tRect = target.getBoundingClientRect();
-      const offset = tRect.top - cRect.top + container.scrollTop - 80;
-      container.scrollTo({ top: offset, behavior: 'smooth' });
+      var cRect = container.getBoundingClientRect();
+      var tRect = target.getBoundingClientRect();
+      var offset2 = tRect.top - cRect.top + container.scrollTop - 80;
+      container.scrollTo({ top: offset2, behavior: 'smooth' });
     }
 
     if (popupMenu && !popupMenu.classList.contains('hidden')) {
@@ -350,7 +360,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.classList.remove('lock-scroll');
 
     introLayer.classList.remove('show');
-    setTimeout(() => introLayer.classList.add('hidden'), 200);
+    setTimeout(function () { introLayer.classList.add('hidden'); }, 200);
 
     page2Backdrop.classList.remove('hidden');
 
@@ -378,7 +388,7 @@ document.addEventListener('DOMContentLoaded', () => {
     observeContentSections();
 
     // Start listening for scroll to hide the calendar hint
-    const container = getScrollContainer();
+    var container = getScrollContainer();
     if (container === window) {
       window.addEventListener('scroll', handleCalendarScrollHint, { passive: true });
     } else if (container) {
@@ -391,13 +401,13 @@ document.addEventListener('DOMContentLoaded', () => {
   function showIntroVideo() {
     if (bgMusic) {
       bgMusic.currentTime = 0;
-      const playPromise = bgMusic.play();
+      var playPromise = bgMusic.play();
       if (playPromise && typeof playPromise.then === 'function') {
         playPromise
-          .then(() => {
+          .then(function () {
             updateMusicToggleUI();
           })
-          .catch(err => {
+          .catch(function (err) {
             console.warn('Music play blocked:', err);
             updateMusicToggleUI();
           });
@@ -418,13 +428,15 @@ document.addEventListener('DOMContentLoaded', () => {
     introLayer.classList.remove('hidden');
 
     introVideo.currentTime = 0;
-    const p = introVideo.play();
+    var p = introVideo.play();
     if (p && typeof p.then === 'function') {
-      p.catch(() => introVideo.setAttribute('controls', 'controls'));
+      p.catch(function () {
+        introVideo.setAttribute('controls', 'controls');
+      });
     }
-    introVideo.onended = () => goToPage2();
+    introVideo.onended = function () { goToPage2(); };
 
-    setTimeout(() => {
+    setTimeout(function () {
       if (!introVideo.paused && !introVideo.ended) return;
       goToPage2();
     }, 30000);
@@ -435,42 +447,42 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   overlayBtn.addEventListener('click', onFirstClick);
-  overlayBtn.addEventListener('keydown', (e) => {
+  overlayBtn.addEventListener('keydown', function (e) {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
       onFirstClick();
     }
   });
 
-  introSkip.addEventListener('click', (e) => {
+  introSkip.addEventListener('click', function (e) {
     e.stopPropagation();
-    try { introVideo.pause(); } catch {}
+    try { introVideo.pause(); } catch (err) {}
     hideSection1Now();
     goToPage2();
   });
 
   // Popup menu toggle
   if (menuToggle && popupMenu) {
-    menuToggle.addEventListener('click', () => {
-      const isHidden = popupMenu.classList.contains('hidden');
+    menuToggle.addEventListener('click', function () {
+      var isHidden = popupMenu.classList.contains('hidden');
       popupMenu.classList.toggle('hidden');
       menuToggle.setAttribute('aria-expanded', isHidden ? 'true' : 'false');
     });
 
-    popupMenu.addEventListener('click', (e) => {
-      const btn = e.target.closest('.menu-item');
+    popupMenu.addEventListener('click', function (e) {
+      var btn = e.target.closest('.menu-item');
       if (!btn) return;
 
       if (btn.id === 'menu-item-music') {
         return;
       }
 
-      const targetId = btn.getAttribute('data-target');
+      var targetId = btn.getAttribute('data-target');
       if (!targetId) return;
       scrollToSection(targetId);
     });
 
-    document.addEventListener('click', (e) => {
+    document.addEventListener('click', function (e) {
       if (
         !popupMenu.classList.contains('hidden') &&
         !popupMenu.contains(e.target) &&
@@ -484,13 +496,13 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ===== Our Calendar: Background Slideshow ===== */
-  const calendarSlides = document.querySelectorAll('.calendar-slide');
+  var calendarSlides = document.querySelectorAll('.calendar-slide');
   if (calendarSlides.length > 1) {
-    let calendarIndex = 0;
+    var calendarIndex = 0;
 
     calendarSlides[0].classList.add('is-active');
 
-    setInterval(() => {
+    setInterval(function () {
       calendarSlides[calendarIndex].classList.remove('is-active');
       calendarIndex = (calendarIndex + 1) % calendarSlides.length;
       calendarSlides[calendarIndex].classList.add('is-active');
@@ -498,33 +510,35 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ===== Our Calendar: Countdown ===== */
-  const weddingDate = new Date('2026-01-11T10:00:00+07:00');
+  var weddingDate = new Date('2026-01-11T10:00:00+07:00');
 
-  const elDays = document.getElementById('count-days');
-  const elHours = document.getElementById('count-hours');
-  const elMinutes = document.getElementById('count-minutes');
-  const elSeconds = document.getElementById('count-seconds');
+  var elDays = document.getElementById('count-days');
+  var elHours = document.getElementById('count-hours');
+  var elMinutes = document.getElementById('count-minutes');
+  var elSeconds = document.getElementById('count-seconds');
 
   function pad(num, size) {
-    return String(num).padStart(size, '0');
+    var s = String(num);
+    while (s.length < size) s = '0' + s;
+    return s;
   }
 
   function updateCountdown() {
     if (!elDays || !elHours || !elMinutes || !elSeconds) return;
 
-    const now = new Date();
-    let diff = weddingDate - now;
+    var now = new Date();
+    var diff = weddingDate - now;
 
     if (diff < 0) {
       diff = 0;
     }
 
-    const seconds = Math.floor(diff / 1000) % 60;
-    const minutes = Math.floor(diff / (1000 * 60)) % 60;
-    const hours   = Math.floor(diff / (1000 * 60 * 60)) % 24;
-    const days    = Math.floor(diff / (1000 * 60 * 60 * 24));
+    var seconds = Math.floor(diff / 1000) % 60;
+    var minutes = Math.floor(diff / (1000 * 60)) % 60;
+    var hours   = Math.floor(diff / (1000 * 60 * 60)) % 24;
+    var days    = Math.floor(diff / (1000 * 60 * 60 * 24));
 
-    elDays.textContent    = pad(days, 2);
+    elDays.textContent    = pad(days, 3);
     elHours.textContent   = pad(hours, 2);
     elMinutes.textContent = pad(minutes, 2);
     elSeconds.textContent = pad(seconds, 2);
@@ -532,4 +546,115 @@ document.addEventListener('DOMContentLoaded', () => {
 
   updateCountdown();
   setInterval(updateCountdown, 1000);
+
+    /* ===== Guest Wishes (Firestore) ===== */
+  try {
+    var wishesForm = document.getElementById('wishes-form');
+    var wishesNameInput = document.getElementById('wishes-name');
+    var wishesMessageInput = document.getElementById('wishes-message');
+    var wishesList = document.getElementById('wishes-list');
+    var wishesStatus = document.getElementById('wishes-status');
+
+    // Only continue if section exists and Firestore is available
+    if (
+      wishesForm &&
+      wishesMessageInput &&
+      wishesList &&
+      typeof firebase !== 'undefined' &&
+      firebase.apps &&
+      firebase.apps.length > 0 &&
+      firebase.firestore
+    ) {
+      var wishesRef = firebase.firestore().collection('wishes');
+
+      // Handle submit
+      wishesForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var name = (wishesNameInput.value || '').trim() || 'Guest';
+        var message = (wishesMessageInput.value || '').trim();
+
+        if (!message) {
+          wishesStatus.textContent = 'សូមសរសេរសារមុននឹងផ្ញើ 🙏';
+          return;
+        }
+
+        wishesStatus.textContent = 'កំពុងផ្ញើ...';
+
+        wishesRef
+          .add({
+            name: name,
+            message: message,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+          })
+          .then(function () {
+            wishesMessageInput.value = '';
+            wishesStatus.textContent = 'បានផ្ញើរួចរាល់ 💌 សូមអរគុណ!';
+            setTimeout(function () {
+              wishesStatus.textContent = '';
+            }, 3000);
+          })
+          .catch(function (err) {
+            console.error('Error adding wish:', err);
+            wishesStatus.textContent = 'មានបញ្ហា ខណៈពេលផ្ញើ សូមព្យាយាមម្ដងទៀត 🙏';
+          });
+      });
+
+      // Render list from snapshot (top 10 newest)
+      function renderWishes(snapshot) {
+        wishesList.innerHTML = '';
+
+        // Firestore returns in the order we requested: newest first (desc)
+        snapshot.forEach(function (doc) {
+          var data = doc.data();
+          var name = data.name || 'Guest';
+          var message = data.message || '';
+          var ts = data.createdAt ? data.createdAt.toDate() : null;
+
+          var li = document.createElement('div');
+          li.className = 'wish-item';
+
+          var nameEl = document.createElement('div');
+          nameEl.className = 'wish-name';
+          nameEl.textContent = name;
+
+          var msgEl = document.createElement('div');
+          msgEl.className = 'wish-message';
+          msgEl.textContent = message;
+
+          li.appendChild(nameEl);
+          li.appendChild(msgEl);
+
+          if (ts) {
+            var timeEl = document.createElement('div');
+            timeEl.className = 'wish-time';
+            var hh = String(ts.getHours());
+            if (hh.length < 2) hh = '0' + hh;
+            var mm = String(ts.getMinutes());
+            if (mm.length < 2) mm = '0' + mm;
+            timeEl.textContent = hh + ':' + mm;
+            li.appendChild(timeEl);
+          }
+
+          wishesList.appendChild(li);
+        });
+      }
+
+      // Realtime listener (🔟 newest wishes only)
+      wishesRef
+        .orderBy('createdAt', 'desc')
+        .limit(10)
+        .onSnapshot(
+          function (snapshot) {
+            renderWishes(snapshot);
+          },
+          function (err) {
+            console.error('Error listening for wishes:', err);
+          }
+        );
+    }
+  } catch (e) {
+    console.error('Wishes section init error:', e);
+  }
+  /* ===== End Guest Wishes ===== */
+
 });
