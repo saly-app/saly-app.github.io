@@ -154,53 +154,57 @@ const FULL_GALLERY_IMAGES = [
   // add more here...
 ];
 
-/* ===== Viewer State ===== */
+
+// Current index
 let galleryIndex = 0;
 
-/* ===== Open Modal ===== */
+// ELEMENT REFERENCES
+const modal = document.getElementById("gallery-modal");
+const modalImg = document.getElementById("modal-image");
+
+// Apply slide-in animation
+function animateSlide(direction) {
+  modalImg.classList.remove("slide-in-left", "slide-in-right");
+
+  void modalImg.offsetWidth; // Force reflow (restart animation)
+
+  if (direction === "left") {
+    modalImg.classList.add("slide-in-left");
+  } else {
+    modalImg.classList.add("slide-in-right");
+  }
+}
+
+// OPEN MODAL
 function openModal(index) {
   galleryIndex = index;
-
-  const modal = document.getElementById("gallery-modal");
-  const img = document.getElementById("modal-image");
-
-  img.classList.remove("active"); // reset animation
-  img.src = FULL_GALLERY_IMAGES[galleryIndex];
-
-  // Wait 10ms so CSS animation can trigger again
-  setTimeout(() => img.classList.add("active"), 10);
-
+  modalImg.src = FULL_GALLERY_IMAGES[galleryIndex];
+  modalImg.classList.add("active");
   modal.classList.remove("hidden");
 }
 
-/* ===== Close Modal ===== */
+// CLOSE MODAL
 function closeModal() {
-  document.getElementById("gallery-modal").classList.add("hidden");
+  modal.classList.add("hidden");
 }
 
-/* ===== Next Image ===== */
+// NEXT IMAGE (Slide LEFT)
 function showNext() {
   galleryIndex = (galleryIndex + 1) % FULL_GALLERY_IMAGES.length;
-
-  const img = document.getElementById("modal-image");
-  img.classList.remove("active");
-  img.src = FULL_GALLERY_IMAGES[galleryIndex];
-  setTimeout(() => img.classList.add("active"), 10);
+  modalImg.src = FULL_GALLERY_IMAGES[galleryIndex];
+  animateSlide("left");
 }
 
-/* ===== Previous Image ===== */
+// PREVIOUS IMAGE (Slide RIGHT)
 function showPrev() {
   galleryIndex =
     (galleryIndex - 1 + FULL_GALLERY_IMAGES.length) %
     FULL_GALLERY_IMAGES.length;
-
-  const img = document.getElementById("modal-image");
-  img.classList.remove("active");
-  img.src = FULL_GALLERY_IMAGES[galleryIndex];
-  setTimeout(() => img.classList.add("active"), 10);
+  modalImg.src = FULL_GALLERY_IMAGES[galleryIndex];
+  animateSlide("right");
 }
 
-/* ===== Attach Click on Thumbnails ===== */
+// CLICK THUMBNAILS TO OPEN
 document.addEventListener("click", function (e) {
   if (e.target.classList.contains("gallery-thumb")) {
     const index = Number(e.target.dataset.index);
@@ -208,12 +212,12 @@ document.addEventListener("click", function (e) {
   }
 });
 
-/* ===== Prev / Next Buttons ===== */
-document.getElementById("next-btn").onclick = function (e) {
+// BUTTONS
+document.getElementById("next-btn").onclick = (e) => {
   e.stopPropagation();
   showNext();
 };
-document.getElementById("prev-btn").onclick = function (e) {
+document.getElementById("prev-btn").onclick = (e) => {
   e.stopPropagation();
   showPrev();
 };
@@ -230,29 +234,26 @@ const modalContent = document.querySelector("#gallery-modal .modal-content");
 if (modalContent) {
   modalContent.addEventListener(
     "touchstart",
-    function (e) {
-      if (e.touches.length > 0) {
-        touchStartX = e.touches[0].clientX;
-      }
+    (e) => {
+      touchStartX = e.changedTouches[0].clientX;
     },
     { passive: true }
   );
 
   modalContent.addEventListener(
     "touchmove",
-    function (e) {
-      if (e.touches.length > 0) {
-        touchEndX = e.touches[0].clientX;
-      }
+    (e) => {
+      touchEndX = e.changedTouches[0].clientX;
     },
     { passive: true }
   );
 
-  modalContent.addEventListener("touchend", function () {
-    let dx = touchEndX - touchStartX;
+  modalContent.addEventListener("touchend", () => {
+    const dx = touchEndX - touchStartX;
+
     if (Math.abs(dx) > SWIPE_THRESHOLD) {
-      if (dx < 0) showNext(); // Swipe left
-      else showPrev();       // Swipe right
+      if (dx < 0) showNext();
+      else showPrev();
     }
   });
 }

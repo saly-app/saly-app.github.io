@@ -1170,3 +1170,43 @@ body.lock-scroll {
   cursor: pointer;
   z-index: 1003;
 }
+
+/* ============================
+   FULLSCREEN IMAGE SLIDE ANIMATION
+   ============================ */
+
+#modal-image {
+  transition: transform 0.28s ease, opacity 0.28s ease;
+}
+
+/* slide next (push left) */
+.slide-in-left {
+  animation: slideLeft 0.28s ease forwards;
+}
+
+/* slide previous (push right) */
+.slide-in-right {
+  animation: slideRight 0.28s ease forwards;
+}
+
+@keyframes slideLeft {
+  0% {
+    transform: translateX(100%);
+    opacity: 0.4;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideRight {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0.4;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
