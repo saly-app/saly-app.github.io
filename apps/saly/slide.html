@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wedding Gallery</title>
+
+<link rel="stylesheet" href="slide.css">
+
+</head>
+<body>
+
+<!-- Section 2.7 Gallery -->
+<section id="gallery" class="gallery-card" data-reveal>
+  <div class="gallery-grid">
+
+    <!-- BIG Preview Image -->
+    <div class="gallery-row full">
+      <img 
+        src="./images/my_photos/IMG_2629.jpg" 
+        class="gallery-img gallery-thumb"
+        data-index="0"
+      />
+    </div>
+
+    <!-- 4 small images -->
+    <div class="gallery-row four">
+      <img src="./images/my_photos/IMG_2759.jpg" class="gallery-img gallery-thumb" data-index="1" />
+      <img src="./images/my_photos/IMG_2610.jpg"  class="gallery-img gallery-thumb" data-index="2" />
+      <img src="./images/my_photos/IMG_2618.jpg"  class="gallery-img gallery-thumb" data-index="3" />
+      <img src="./images/my_photos/IMG_2596.jpg"  class="gallery-img gallery-thumb" data-index="4" />
+    </div>
+
+    <!-- BIG Preview Image -->
+    <div class="gallery-row full">
+      <img 
+        src="./images/my_photos/IMG_2690.jpg" 
+        class="gallery-img gallery-thumb"
+        data-index="5"
+      />
+    </div>
+
+    <!-- 4 small images -->
+    <div class="gallery-row four">
+      <img src="./images/my_photos/IMG_2723.jpg" class="gallery-img gallery-thumb" data-index="6" />
+      <img src="./images/my_photos/IMG_2710.jpg"  class="gallery-img gallery-thumb" data-index="7" />
+      <img src="./images/my_photos/IMG_2698.jpg"  class="gallery-img gallery-thumb" data-index="8" />
+      <img src="./images/my_photos/IMG_2741.jpg"  class="gallery-img gallery-thumb" data-index="9" />
+    </div>
+
+    <!-- BIG Preview Image -->
+    <div class="gallery-row full">
+      <img 
+        src="./images/my_photos/IMG_2772.jpg" 
+        class="gallery-img gallery-thumb"
+        data-index="10"
+      />
+    </div>
+
+    <!-- 4 small images -->
+    <div class="gallery-row four">
+      <img src="./images/my_photos/IMG_2646.jpg" class="gallery-img gallery-thumb" data-index="11" />
+      <img src="./images/my_photos/IMG_2566.jpg"  class="gallery-img gallery-thumb" data-index="12" />
+      <img src="./images/my_photos/IMG_2669.jpg"  class="gallery-img gallery-thumb" data-index="13" />
+      <img src="./images/my_photos/IMG_2513.jpg"  class="gallery-img gallery-thumb" data-index="14" />
+    </div>
+
+  </div>
+</section>
+
+
+<!-- LIGHTBOX (Full-screen preview) -->
+<!-- LIGHTBOX (Full-screen preview) -->
+<div id="lightbox" class="lightbox hidden">
+  
+  <div class="lightbox-content">
+    <img id="lightbox-img" src="" />
+  </div>
+
+  <!-- PREV BUTTON -->
+  <button id="prevBtn" class="nav-btn prev-btn">❮</button>
+
+  <!-- NEXT BUTTON -->
+  <button id="nextBtn" class="nav-btn next-btn">❯</button>
+
+</div>
+
+
+<script src="slide.js"></script>
+</body>
+</html>
