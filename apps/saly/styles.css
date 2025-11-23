@@ -1175,10 +1175,35 @@ body.lock-scroll {
    FULLSCREEN IMAGE SLIDE ANIMATION
    ============================ */
 
+/* ============================
+   SMOOTH SLIDE TRANSITIONS
+   ============================ */
+
 #modal-image {
+  width: 100%;
+  max-height: 90vh;
+  object-fit: contain;
+  transition: transform .25s ease-out, opacity .25s ease-out;
+}
+
+/* NEXT slide (swipe left → new comes from right) */
+.slide-next-start {
+  transform: translateX(100%);
   opacity: 0;
+}
+.slide-next-end {
   transform: translateX(0);
-  transition: opacity 180ms ease, transform 180ms ease;
+  opacity: 1;
+}
+
+/* PREVIOUS slide (swipe right → new comes from left) */
+.slide-prev-start {
+  transform: translateX(-100%);
+  opacity: 0;
+}
+.slide-prev-end {
+  transform: translateX(0);
+  opacity: 1;
 }
 
 /* Instant left slide (lightweight) */

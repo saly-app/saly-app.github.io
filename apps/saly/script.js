@@ -137,11 +137,14 @@ function observeContentSections() {
    FULL GALLERY SYSTEM (SHOW 1 BIG + 4 SMALL, PREVIEW ALL)
    ============================================================ */
 
-/* === FULL LIST OF IMAGES FOR FULLSCREEN VIEWER === */
-/* Add ALL of your images here — even those not shown in the grid */
+   /* ========================================================
+   FULL GALLERY WITH SMOOTH SLIDE ANIMATION + PRELOAD
+   ======================================================== */
+
+/* === YOUR FULL IMAGE LIST (ALL 39+) === */
 const FULL_GALLERY_IMAGES = [
-  "./images/my_photos/IMG_2629.jpg",   // 0 (big on page)
-  "./images/my_photos/IMG_2759.jpg",  // 1
+  "./images/my_photos/IMG_2629.jpg",
+  "./images/my_photos/IMG_2759.jpg",
   "./images/my_photos/IMG_2610.jpg",
   "./images/my_photos/IMG_2618.jpg",
   "./images/my_photos/IMG_2596.jpg",
@@ -157,11 +160,11 @@ const FULL_GALLERY_IMAGES = [
   "./images/my_photos/IMG_2628.jpg",
   "./images/my_photos/IMG_2756.jpg",
   "./images/my_photos/IMG_2757.jpg",
-  "./images/my_photos/IMG_2690.jpg",  // 17 (big on page)
-   "./images/my_photos/IMG_2723.jpg",
+  "./images/my_photos/IMG_2690.jpg",
+  "./images/my_photos/IMG_2723.jpg",
   "./images/my_photos/IMG_2710.jpg",
-   "./images/my_photos/IMG_2698.jpg",
-   "./images/my_photos/IMG_2741.jpg",
+  "./images/my_photos/IMG_2698.jpg",
+  "./images/my_photos/IMG_2741.jpg",
   "./images/my_photos/IMG_2715.jpg",
   "./images/my_photos/IMG_2718.jpg",
   "./images/my_photos/IMG_2731.jpg",
@@ -170,7 +173,7 @@ const FULL_GALLERY_IMAGES = [
   "./images/my_photos/IMG_2693.jpg",
   "./images/my_photos/IMG_2781.jpg",
   "./images/my_photos/IMG_2701.jpg",
-  "./images/my_photos/IMG_2772.jpg", // 30 (big on page)
+  "./images/my_photos/IMG_2772.jpg",
   "./images/my_photos/IMG_2646.jpg",
   "./images/my_photos/IMG_2566.jpg",
   "./images/my_photos/IMG_2669.jpg",
@@ -179,72 +182,93 @@ const FULL_GALLERY_IMAGES = [
   "./images/my_photos/IMG_2774.jpg",
   "./images/my_photos/IMG_2571.jpg",
   "./images/my_photos/IMG_2513.jpg",
-
-  // add more here... IMG_2709
 ];
 
+/* === PRELOAD ALL IMAGES FOR INSTANT SWITCH === */
+FULL_GALLERY_IMAGES.forEach(src => {
+  const img = new Image();
+  img.src = src;
+});
 
-// Current index
+/* === STATE === */
 let galleryIndex = 0;
-
-// ELEMENT REFERENCES
 const modal = document.getElementById("gallery-modal");
 const modalImg = document.getElementById("modal-image");
 
-// Apply slide-in animation
-function animateSlide(direction) {
-  modalImg.classList.remove("slide-in-left", "slide-in-right");
-
-  void modalImg.offsetWidth; // restart CSS transition
-
-  if (direction === "left") modalImg.classList.add("slide-in-left");
-  else modalImg.classList.add("slide-in-right");
-
-  // Apply fade-in after tiny delay
-  setTimeout(() => {
-    modalImg.style.opacity = 1;
-    modalImg.style.transform = "translateX(0)";
-  }, 10);
+/* === DISABLE PAGE SCROLL WHILE PREVIEW OPEN === */
+function disablePageScroll() {
+  document.body.style.overflow = "hidden";
+  document.body.style.touchAction = "none"; // prevent iPhone scroll bounce
+}
+function enablePageScroll() {
+  document.body.style.overflow = "";
+  document.body.style.touchAction = "auto";
 }
 
-// OPEN MODAL
+/* === OPEN MODAL === */
 function openModal(index) {
   galleryIndex = index;
   modalImg.src = FULL_GALLERY_IMAGES[galleryIndex];
-  modalImg.classList.add("active");
   modal.classList.remove("hidden");
+  disablePageScroll();
 }
 
-// CLOSE MODAL
+/* === CLOSE MODAL === */
 function closeModal() {
   modal.classList.add("hidden");
+  enablePageScroll();
 }
 
-// NEXT IMAGE (Slide LEFT)
+/* === ANIMATED SLIDE LOGIC === */
+function animateSwitch(newSrc, direction) {
+  modalImg.classList.remove(
+    "slide-next-start", "slide-next-end",
+    "slide-prev-start", "slide-prev-end"
+  );
+
+  void modalImg.offsetWidth; // reset CSS
+
+  if (direction === "next") {
+    modalImg.classList.add("slide-next-start");
+  } else {
+    modalImg.classList.add("slide-prev-start");
+  }
+
+  modalImg.src = newSrc;
+
+  requestAnimationFrame(() => {
+    modalImg.classList.remove("slide-next-start", "slide-prev-start");
+
+    if (direction === "next") {
+      modalImg.classList.add("slide-next-end");
+    } else {
+      modalImg.classList.add("slide-prev-end");
+    }
+  });
+}
+
+/* === NEXT IMAGE === */
 function showNext() {
   galleryIndex = (galleryIndex + 1) % FULL_GALLERY_IMAGES.length;
-  modalImg.src = FULL_GALLERY_IMAGES[galleryIndex];
-  animateSlide("left");
+  animateSwitch(FULL_GALLERY_IMAGES[galleryIndex], "next");
 }
 
-// PREVIOUS IMAGE (Slide RIGHT)
+/* === PREVIOUS IMAGE === */
 function showPrev() {
   galleryIndex =
     (galleryIndex - 1 + FULL_GALLERY_IMAGES.length) %
     FULL_GALLERY_IMAGES.length;
-  modalImg.src = FULL_GALLERY_IMAGES[galleryIndex];
-  animateSlide("right");
+  animateSwitch(FULL_GALLERY_IMAGES[galleryIndex], "prev");
 }
 
-// CLICK THUMBNAILS TO OPEN
-document.addEventListener("click", function (e) {
+/* === THUMBNAILS CLICK === */
+document.addEventListener("click", (e) => {
   if (e.target.classList.contains("gallery-thumb")) {
-    const index = Number(e.target.dataset.index);
-    openModal(index);
+    openModal(Number(e.target.dataset.index));
   }
 });
 
-// BUTTONS
+/* === BUTTONS === */
 document.getElementById("next-btn").onclick = (e) => {
   e.stopPropagation();
   showNext();
@@ -253,47 +277,32 @@ document.getElementById("prev-btn").onclick = (e) => {
   e.stopPropagation();
   showPrev();
 };
-/* === PRELOAD ALL IMAGES FOR FAST SWITCHING === */
-FULL_GALLERY_IMAGES.forEach(src => {
-  const img = new Image();
-  img.src = src;
-});
 
-/* ============================================================
-   TOUCH SWIPE SUPPORT
-   ============================================================ */
-let touchStartX = 0;
-let touchEndX = 0;
-const SWIPE_THRESHOLD = 40;
+/* === TOUCH SWIPE SUPPORT === */
+let startX = 0;
 
-const modalContent = document.querySelector("#gallery-modal .modal-content");
+modalImg.addEventListener(
+  "touchstart",
+  (e) => {
+    startX = e.touches[0].clientX;
+  },
+  { passive: true }
+);
 
-if (modalContent) {
-  modalContent.addEventListener(
-    "touchstart",
-    (e) => {
-      touchStartX = e.changedTouches[0].clientX;
-    },
-    { passive: true }
-  );
+modalImg.addEventListener(
+  "touchend",
+  (e) => {
+    const endX = e.changedTouches[0].clientX;
+    const dx = endX - startX;
 
-  modalContent.addEventListener(
-    "touchmove",
-    (e) => {
-      touchEndX = e.changedTouches[0].clientX;
-    },
-    { passive: true }
-  );
-
-  modalContent.addEventListener("touchend", () => {
-    const dx = touchEndX - touchStartX;
-
-    if (Math.abs(dx) > SWIPE_THRESHOLD) {
+    if (Math.abs(dx) > 40) {
       if (dx < 0) showNext();
       else showPrev();
     }
-  });
-}
+  },
+  { passive: true }
+);
+
 
 /* ===== Page Flow ===== */
 document.addEventListener('DOMContentLoaded', function () {
