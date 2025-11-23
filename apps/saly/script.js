@@ -209,28 +209,81 @@ function closeModal() {
   modal.classList.add("hidden");
 }
 
-/* SHOW NEXT IMAGE */
-function showNext() {
-  galleryIndex = (galleryIndex + 1) % FULL_GALLERY_IMAGES.length;
-  modalImg.classList.remove("slide-left", "slide-right", "active");
-  modalImg.src = FULL_GALLERY_IMAGES[galleryIndex];
 
-  void modalImg.offsetWidth; // restart animation
-  modalImg.classList.add("slide-left", "active");
+/* =====================
+   Smooth Transition Fix
+   ===================== */
+
+function changeImageSmooth(newIndex, direction) {
+  const newSrc = FULL_GALLERY_IMAGES[newIndex];
+
+  // Create a temp image so browser loads & decodes it BEFORE animation
+  const temp = new Image();
+  temp.src = newSrc;
+
+  temp.onload = () => {
+    // 1. Fade out current image smoothly
+    modalImg.style.transition = "opacity .18s ease";
+    modalImg.style.opacity = "0";
+
+    setTimeout(() => {
+      // 2. Replace image after fade-out
+      modalImg.src = newSrc;
+
+      // Remove old classes
+      modalImg.classList.remove("slide-left", "slide-right", "active");
+
+      // Force browser to re-render (reflow)
+      void modalImg.offsetWidth;
+
+      // 3. Add slide animation + fade-in
+      modalImg.style.transition = "opacity .28s ease";
+      modalImg.style.opacity = "1";
+      modalImg.classList.add(direction === "left" ? "slide-left" : "slide-right");
+      modalImg.classList.add("active");
+
+      galleryIndex = newIndex;
+    }, 180); // fade-out duration
+  };
 }
 
-/* SHOW PREV IMAGE */
+/* NEXT */
+function showNext() {
+  const newIndex = (galleryIndex + 1) % FULL_GALLERY_IMAGES.length;
+  changeImageSmooth(newIndex, "left");
+}
+
+/* PREV */
 function showPrev() {
-  galleryIndex =
+  const newIndex =
     (galleryIndex - 1 + FULL_GALLERY_IMAGES.length) %
     FULL_GALLERY_IMAGES.length;
-
-  modalImg.classList.remove("slide-left", "slide-right", "active");
-  modalImg.src = FULL_GALLERY_IMAGES[galleryIndex];
-
-  void modalImg.offsetWidth;
-  modalImg.classList.add("slide-right", "active");
+  changeImageSmooth(newIndex, "right");
 }
+
+
+// /* SHOW NEXT IMAGE */
+// function showNext() {
+//   galleryIndex = (galleryIndex + 1) % FULL_GALLERY_IMAGES.length;
+//   modalImg.classList.remove("slide-left", "slide-right", "active");
+//   modalImg.src = FULL_GALLERY_IMAGES[galleryIndex];
+
+//   void modalImg.offsetWidth; // restart animation
+//   modalImg.classList.add("slide-left", "active");
+// }
+
+// /* SHOW PREV IMAGE */
+// function showPrev() {
+//   galleryIndex =
+//     (galleryIndex - 1 + FULL_GALLERY_IMAGES.length) %
+//     FULL_GALLERY_IMAGES.length;
+
+//   modalImg.classList.remove("slide-left", "slide-right", "active");
+//   modalImg.src = FULL_GALLERY_IMAGES[galleryIndex];
+
+//   void modalImg.offsetWidth;
+//   modalImg.classList.add("slide-right", "active");
+// }
 
 /* CLICK THUMBNAILS */
 document.addEventListener("click", function (e) {
