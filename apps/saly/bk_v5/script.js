@@ -133,129 +133,209 @@ function observeContentSections() {
   }
 }
 
+/* ===== Gallery Modal (click + arrows + swipe) ===== */
 /* ============================================================
-   FULL GALLERY SYSTEM (SHOW 1 BIG + 4 SMALL, PREVIEW ALL)
+   GALLERY VIEWER (Fullscreen, Swipe, Zoom, Fade)
+   Only modifies gallery behaviour — safe for your whole project.
    ============================================================ */
 
-/* === FULL LIST OF IMAGES FOR FULLSCREEN VIEWER === */
-/* Add ALL of your images here — even those not shown in the grid */
-const FULL_GALLERY_IMAGES = [
-  "./images/my_photos/b1.JPG",   // 0 (big on page)
-  "./images/my_photos/a1.jpeg",  // 1
-  "./images/my_photos/a2.jpg",   // 2
-  "./images/my_photos/a3.jpg",   // 3
-  "./images/my_photos/a4.jpg",   // 4
-  "./images/my_photos/b2.jpeg",   // 5 (NOT displayed but available)
-  "./images/my_photos/c1.jpeg",   // 6
-  "./images/my_photos/c2.jpeg",   // 7
-  "./images/my_photos/c3.jpeg",   // 8
-  "./images/my_photos/c4.jpeg",    // 9
-   "./images/my_photos/c5.jpeg"    // 9
-  // add more here...
-];
-
-/* ===== Viewer State ===== */
+let galleryImages = [];
 let galleryIndex = 0;
 
-/* ===== Open Modal ===== */
-function openModal(index) {
+let viewer = null;
+let viewerImg = null;
+let viewerPrev = null;
+let viewerNext = null;
+let viewerClose = null;
+
+/* Inject fullscreen viewer HTML (replaces old modal) */
+function initViewer() {
+  if (viewer) return;
+
+  const wrapper = document.createElement('div');
+  wrapper.innerHTML = `
+    <div id="image-viewer" class="viewer hidden">
+      <div class="viewer-content">
+        <img id="viewer-img" src="" alt="" />
+        <div id="viewer-close" class="viewer-close">×</div>
+        <div id="viewer-prev" class="viewer-btn prev">‹</div>
+        <div id="viewer-next" class="viewer-btn next">›</div>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(wrapper);
+
+  viewer = document.getElementById("image-viewer");
+  viewerImg = document.getElementById("viewer-img");
+  viewerPrev = document.getElementById("viewer-prev");
+  viewerNext = document.getElementById("viewer-next");
+  viewerClose = document.getElementById("viewer-close");
+
+  viewerClose.addEventListener("click", closeViewer);
+  viewerPrev.addEventListener("click", prevImage);
+  viewerNext.addEventListener("click", nextImage);
+
+  viewer.addEventListener("click", (e) => {
+    if (e.target === viewer) closeViewer();
+  });
+
+  initSwipe();
+  initZoom();
+}
+
+/* Open viewer */
+function openViewer(index) {
+  initViewer();
+
   galleryIndex = index;
+  viewer.classList.remove("hidden");
 
-  const modal = document.getElementById("gallery-modal");
-  const img = document.getElementById("modal-image");
+  viewerImg.classList.remove("active");
+  viewerImg.src = galleryImages[index].src;
 
-  img.classList.remove("active"); // reset animation
-  img.src = FULL_GALLERY_IMAGES[galleryIndex];
+  setTimeout(() => viewerImg.classList.add("active"), 20);
 
-  // Wait 10ms so CSS animation can trigger again
-  setTimeout(() => img.classList.add("active"), 10);
-
-  modal.classList.remove("hidden");
+  resetZoom();
 }
 
-/* ===== Close Modal ===== */
-function closeModal() {
-  document.getElementById("gallery-modal").classList.add("hidden");
+/* Close viewer */
+function closeViewer() {
+  viewerImg.classList.remove("active");
+  viewer.classList.add("hidden");
 }
 
-/* ===== Next Image ===== */
-function showNext() {
-  galleryIndex = (galleryIndex + 1) % FULL_GALLERY_IMAGES.length;
-
-  const img = document.getElementById("modal-image");
-  img.classList.remove("active");
-  img.src = FULL_GALLERY_IMAGES[galleryIndex];
-  setTimeout(() => img.classList.add("active"), 10);
+/* Navigation */
+function nextImage() {
+  galleryIndex = (galleryIndex + 1) % galleryImages.length;
+  switchImage();
 }
 
-/* ===== Previous Image ===== */
-function showPrev() {
-  galleryIndex =
-    (galleryIndex - 1 + FULL_GALLERY_IMAGES.length) %
-    FULL_GALLERY_IMAGES.length;
-
-  const img = document.getElementById("modal-image");
-  img.classList.remove("active");
-  img.src = FULL_GALLERY_IMAGES[galleryIndex];
-  setTimeout(() => img.classList.add("active"), 10);
+function prevImage() {
+  galleryIndex = (galleryIndex - 1 + galleryImages.length) % galleryImages.length;
+  switchImage();
 }
 
-/* ===== Attach Click on Thumbnails ===== */
-document.addEventListener("click", function (e) {
-  if (e.target.classList.contains("gallery-thumb")) {
-    const index = Number(e.target.dataset.index);
-    openModal(index);
-  }
-});
+function switchImage() {
+  viewerImg.classList.remove("active");
+  resetZoom();
 
-/* ===== Prev / Next Buttons ===== */
-document.getElementById("next-btn").onclick = function (e) {
-  e.stopPropagation();
-  showNext();
-};
-document.getElementById("prev-btn").onclick = function (e) {
-  e.stopPropagation();
-  showPrev();
-};
+  setTimeout(() => {
+    viewerImg.src = galleryImages[galleryIndex].src;
+    setTimeout(() => viewerImg.classList.add("active"), 20);
+  }, 150);
+}
 
-/* ============================================================
-   TOUCH SWIPE SUPPORT
-   ============================================================ */
-let touchStartX = 0;
-let touchEndX = 0;
-const SWIPE_THRESHOLD = 40;
+/* ====== Swipe left/right ====== */
+function initSwipe() {
+  let startX = 0;
 
-const modalContent = document.querySelector("#gallery-modal .modal-content");
-
-if (modalContent) {
-  modalContent.addEventListener(
+  viewer.addEventListener(
     "touchstart",
-    function (e) {
-      if (e.touches.length > 0) {
-        touchStartX = e.touches[0].clientX;
+    (e) => {
+      startX = e.changedTouches[0].clientX;
+    },
+    { passive: true }
+  );
+
+  viewer.addEventListener(
+    "touchend",
+    (e) => {
+      let endX = e.changedTouches[0].clientX;
+      let diff = endX - startX;
+
+      if (Math.abs(diff) > 50) {
+        if (diff < 0) nextImage();
+        else prevImage();
+      }
+    },
+    { passive: true }
+  );
+}
+
+/* ====== Pinch Zoom + Drag + Double Tap ====== */
+let scale = 1;
+let moveX = 0;
+let moveY = 0;
+
+function resetZoom() {
+  scale = 1;
+  moveX = 0;
+  moveY = 0;
+  viewerImg.style.transform = `translate(-50%, -50%) scale(1)`;
+}
+
+function initZoom() {
+  let startDistance = 0;
+  let startX = 0,
+    startY = 0;
+
+  viewerImg.addEventListener(
+    "touchstart",
+    (e) => {
+      if (e.touches.length === 2) {
+        let [p1, p2] = e.touches;
+        startDistance = Math.hypot(
+          p2.clientX - p1.clientX,
+          p2.clientY - p1.clientY
+        );
+      } else if (e.touches.length === 1 && scale > 1) {
+        startX = e.touches[0].clientX - moveX;
+        startY = e.touches[0].clientY - moveY;
       }
     },
     { passive: true }
   );
 
-  modalContent.addEventListener(
+  viewerImg.addEventListener(
     "touchmove",
-    function (e) {
-      if (e.touches.length > 0) {
-        touchEndX = e.touches[0].clientX;
+    (e) => {
+      if (e.touches.length === 2) {
+        let [p1, p2] = e.touches;
+        let distance = Math.hypot(
+          p2.clientX - p1.clientX,
+          p2.clientY - p1.clientY
+        );
+
+        scale = Math.min(4, Math.max(1, distance / startDistance));
+        viewerImg.style.transform = `translate(-50%, -50%) scale(${scale})`;
+      } else if (e.touches.length === 1 && scale > 1) {
+        moveX = e.touches[0].clientX - startX;
+        moveY = e.touches[0].clientY - startY;
+
+        viewerImg.style.transform = `translate(calc(-50% + ${moveX}px), calc(-50% + ${moveY}px)) scale(${scale})`;
       }
     },
-    { passive: true }
+    { passive: false }
   );
 
-  modalContent.addEventListener("touchend", function () {
-    let dx = touchEndX - touchStartX;
-    if (Math.abs(dx) > SWIPE_THRESHOLD) {
-      if (dx < 0) showNext(); // Swipe left
-      else showPrev();       // Swipe right
+  /* Double tap to zoom */
+  let lastTap = 0;
+
+  viewerImg.addEventListener("touchend", (e) => {
+    let current = Date.now();
+    if (current - lastTap < 250) {
+      if (scale > 1) resetZoom();
+      else {
+        scale = 2;
+        viewerImg.style.transform = `translate(-50%, -50%) scale(2)`;
+      }
     }
+    lastTap = current;
+
+    if (scale < 1.1) resetZoom();
   });
 }
+
+/* ===== Register gallery images ===== */
+document.addEventListener("DOMContentLoaded", () => {
+  /* all <img class="gallery-img"> */
+  galleryImages = Array.from(document.querySelectorAll(".gallery-img"));
+
+  galleryImages.forEach((img, index) => {
+    img.addEventListener("click", () => openViewer(index));
+  });
+});
 
 /* ===== Page Flow ===== */
 document.addEventListener('DOMContentLoaded', function () {
