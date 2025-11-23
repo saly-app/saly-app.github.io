@@ -195,13 +195,16 @@ const modalImg = document.getElementById("modal-image");
 function animateSlide(direction) {
   modalImg.classList.remove("slide-in-left", "slide-in-right");
 
-  void modalImg.offsetWidth; // Force reflow (restart animation)
+  void modalImg.offsetWidth; // restart CSS transition
 
-  if (direction === "left") {
-    modalImg.classList.add("slide-in-left");
-  } else {
-    modalImg.classList.add("slide-in-right");
-  }
+  if (direction === "left") modalImg.classList.add("slide-in-left");
+  else modalImg.classList.add("slide-in-right");
+
+  // Apply fade-in after tiny delay
+  setTimeout(() => {
+    modalImg.style.opacity = 1;
+    modalImg.style.transform = "translateX(0)";
+  }, 10);
 }
 
 // OPEN MODAL
@@ -250,6 +253,11 @@ document.getElementById("prev-btn").onclick = (e) => {
   e.stopPropagation();
   showPrev();
 };
+/* === PRELOAD ALL IMAGES FOR FAST SWITCHING === */
+FULL_GALLERY_IMAGES.forEach(src => {
+  const img = new Image();
+  img.src = src;
+});
 
 /* ============================================================
    TOUCH SWIPE SUPPORT

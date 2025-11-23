@@ -1176,18 +1176,23 @@ body.lock-scroll {
    ============================ */
 
 #modal-image {
-  transition: transform 0.28s ease, opacity 0.28s ease;
+  opacity: 0;
+  transform: translateX(0);
+  transition: opacity 180ms ease, transform 180ms ease;
 }
 
-/* slide next (push left) */
+/* Instant left slide (lightweight) */
 .slide-in-left {
-  animation: slideLeft 0.28s ease forwards;
+  opacity: 0;
+  transform: translateX(25px);
 }
 
-/* slide previous (push right) */
+/* Instant right slide */
 .slide-in-right {
-  animation: slideRight 0.28s ease forwards;
+  opacity: 0;
+  transform: translateX(-25px);
 }
+
 
 @keyframes slideLeft {
   0% {
