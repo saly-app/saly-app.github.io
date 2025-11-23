@@ -137,10 +137,8 @@ function observeContentSections() {
    FULL GALLERY SYSTEM (SHOW 1 BIG + 4 SMALL, PREVIEW ALL)
    ============================================================ */
 
-/* ============================================================
-   SUPER SMOOTH GALLERY SYSTEM
-   ============================================================ */
-
+/* === FULL LIST OF IMAGES FOR FULLSCREEN VIEWER === */
+/* Add ALL of your images here — even those not shown in the grid */
 const FULL_GALLERY_IMAGES = [
   "./images/my_photos/IMG_2629.jpg",   // 0 (big on page)
   "./images/my_photos/IMG_2759.jpg",  // 1
@@ -185,54 +183,60 @@ const FULL_GALLERY_IMAGES = [
   // add more here... IMG_2709
 ];
 
+
+// Current index
 let galleryIndex = 0;
 
+// ELEMENT REFERENCES
 const modal = document.getElementById("gallery-modal");
 const modalImg = document.getElementById("modal-image");
 
-function animateEntry() {
-  modalImg.classList.remove("active");
-  setTimeout(() => modalImg.classList.add("active"), 20);
+// Apply slide-in animation
+function animateSlide(direction) {
+  modalImg.classList.remove("slide-in-left", "slide-in-right");
+
+  void modalImg.offsetWidth; // restart CSS transition
+
+  if (direction === "left") modalImg.classList.add("slide-in-left");
+  else modalImg.classList.add("slide-in-right");
+
+  // Apply fade-in after tiny delay
+  setTimeout(() => {
+    modalImg.style.opacity = 1;
+    modalImg.style.transform = "translateX(0)";
+  }, 10);
 }
 
-/* OPEN MODAL */
+// OPEN MODAL
 function openModal(index) {
   galleryIndex = index;
   modalImg.src = FULL_GALLERY_IMAGES[galleryIndex];
-
+  modalImg.classList.add("active");
   modal.classList.remove("hidden");
-  animateEntry();
 }
 
-/* CLOSE MODAL */
+// CLOSE MODAL
 function closeModal() {
   modal.classList.add("hidden");
 }
 
-/* SHOW NEXT IMAGE */
+// NEXT IMAGE (Slide LEFT)
 function showNext() {
   galleryIndex = (galleryIndex + 1) % FULL_GALLERY_IMAGES.length;
-  modalImg.classList.remove("slide-left", "slide-right", "active");
   modalImg.src = FULL_GALLERY_IMAGES[galleryIndex];
-
-  void modalImg.offsetWidth; // restart animation
-  modalImg.classList.add("slide-left", "active");
+  animateSlide("left");
 }
 
-/* SHOW PREV IMAGE */
+// PREVIOUS IMAGE (Slide RIGHT)
 function showPrev() {
   galleryIndex =
     (galleryIndex - 1 + FULL_GALLERY_IMAGES.length) %
     FULL_GALLERY_IMAGES.length;
-
-  modalImg.classList.remove("slide-left", "slide-right", "active");
   modalImg.src = FULL_GALLERY_IMAGES[galleryIndex];
-
-  void modalImg.offsetWidth;
-  modalImg.classList.add("slide-right", "active");
+  animateSlide("right");
 }
 
-/* CLICK THUMBNAILS */
+// CLICK THUMBNAILS TO OPEN
 document.addEventListener("click", function (e) {
   if (e.target.classList.contains("gallery-thumb")) {
     const index = Number(e.target.dataset.index);
@@ -240,43 +244,56 @@ document.addEventListener("click", function (e) {
   }
 });
 
-/* BUTTONS */
-document.getElementById("next-btn").onclick = function (e) {
+// BUTTONS
+document.getElementById("next-btn").onclick = (e) => {
   e.stopPropagation();
   showNext();
 };
-document.getElementById("prev-btn").onclick = function (e) {
+document.getElementById("prev-btn").onclick = (e) => {
   e.stopPropagation();
   showPrev();
 };
-
-/* TOUCH SWIPE SUPPORT */
-let touchStartX = 0;
-let touchEndX = 0;
-const SWIPE_THRESHOLD = 40;
-
-modal.addEventListener("touchstart", (e) => {
-  touchStartX = e.changedTouches[0].clientX;
-}, { passive: true });
-
-modal.addEventListener("touchmove", (e) => {
-  touchEndX = e.changedTouches[0].clientX;
-}, { passive: true });
-
-modal.addEventListener("touchend", () => {
-  const dx = touchEndX - touchStartX;
-  if (Math.abs(dx) > SWIPE_THRESHOLD) {
-    if (dx < 0) showNext();
-    else showPrev();
-  }
-});
-
-/* PRELOAD IMAGES */
+/* === PRELOAD ALL IMAGES FOR FAST SWITCHING === */
 FULL_GALLERY_IMAGES.forEach(src => {
   const img = new Image();
   img.src = src;
 });
 
+/* ============================================================
+   TOUCH SWIPE SUPPORT
+   ============================================================ */
+let touchStartX = 0;
+let touchEndX = 0;
+const SWIPE_THRESHOLD = 40;
+
+const modalContent = document.querySelector("#gallery-modal .modal-content");
+
+if (modalContent) {
+  modalContent.addEventListener(
+    "touchstart",
+    (e) => {
+      touchStartX = e.changedTouches[0].clientX;
+    },
+    { passive: true }
+  );
+
+  modalContent.addEventListener(
+    "touchmove",
+    (e) => {
+      touchEndX = e.changedTouches[0].clientX;
+    },
+    { passive: true }
+  );
+
+  modalContent.addEventListener("touchend", () => {
+    const dx = touchEndX - touchStartX;
+
+    if (Math.abs(dx) > SWIPE_THRESHOLD) {
+      if (dx < 0) showNext();
+      else showPrev();
+    }
+  });
+}
 
 /* ===== Page Flow ===== */
 document.addEventListener('DOMContentLoaded', function () {
