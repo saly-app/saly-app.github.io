@@ -194,21 +194,59 @@ function animateEntry() {
   modalImg.classList.remove("active");
   setTimeout(() => modalImg.classList.add("active"), 20);
 }
+function lockScroll() {
+  const wrapper = document.getElementById("mobile-wrapper");
+
+  if (window.innerWidth <= 520) {
+    // --- Mobile (window scroll) ---
+    savedScrollY = window.scrollY;
+    document.body.style.position = "fixed";
+    document.body.style.top = `-${savedScrollY}px`;
+    document.body.style.width = "100%";
+  } else {
+    // --- Desktop Preview (#mobile-wrapper scrolls) ---
+    savedScrollY = wrapper.scrollTop;
+    wrapper.style.overflow = "hidden";
+  }
+}
+
+function unlockScroll() {
+  const wrapper = document.getElementById("mobile-wrapper");
+
+  if (window.innerWidth <= 520) {
+    // --- Restore mobile scroll position ---
+    document.body.style.position = "";
+    document.body.style.top = "";
+    document.body.style.width = "";
+    window.scrollTo(0, savedScrollY);
+  } else {
+    // --- Restore desktop preview scroll position ---
+    wrapper.style.overflow = "";
+    wrapper.scrollTop = savedScrollY;
+  }
+}
+
 
 /* OPEN MODAL */
 function openModal(index) {
   galleryIndex = index;
-  modalImg.src = FULL_GALLERY_IMAGES[galleryIndex];
-
+  modalImg.src = FULL_GALLERY_IMAGES[index];
   modal.classList.remove("hidden");
+
+  // Lock scroll
+  lockScroll();
+
+  // Animate entry
   animateEntry();
 }
 
 /* CLOSE MODAL */
 function closeModal() {
   modal.classList.add("hidden");
-}
 
+  // Unlock scroll
+  unlockScroll();
+}
 
 /* =====================
    Smooth Transition Fix
@@ -217,36 +255,35 @@ function closeModal() {
 function changeImageSmooth(newIndex, direction) {
   const newSrc = FULL_GALLERY_IMAGES[newIndex];
 
-  // Create a temp image so browser loads & decodes it BEFORE animation
+  // Preload/decode next image before animation
   const temp = new Image();
   temp.src = newSrc;
 
   temp.onload = () => {
-    // 1. Fade out current image smoothly
-    modalImg.style.transition = "opacity .18s ease";
-    modalImg.style.opacity = "0";
+    // 1. Blur-out current image
+    modalImg.classList.remove("blur-in");
+    modalImg.classList.add("blur-out");
 
     setTimeout(() => {
-      // 2. Replace image after fade-out
+      // 2. Replace photo
       modalImg.src = newSrc;
 
-      // Remove old classes
-      modalImg.classList.remove("slide-left", "slide-right", "active");
+      // Reset classes
+      modalImg.classList.remove("slide-left", "slide-right", "blur-out");
 
-      // Force browser to re-render (reflow)
+      // Force browser reflow
       void modalImg.offsetWidth;
 
-      // 3. Add slide animation + fade-in
-      modalImg.style.transition = "opacity .28s ease";
-      modalImg.style.opacity = "1";
-      modalImg.classList.add(direction === "left" ? "slide-left" : "slide-right");
-      modalImg.classList.add("active");
+      // 3. Slide + blur-in
+      if (direction === "left") modalImg.classList.add("slide-left");
+      else modalImg.classList.add("slide-right");
+
+      modalImg.classList.add("blur-in");
 
       galleryIndex = newIndex;
-    }, 180); // fade-out duration
+    }, 180); // match blur-out duration
   };
 }
-
 /* NEXT */
 function showNext() {
   const newIndex = (galleryIndex + 1) % FULL_GALLERY_IMAGES.length;

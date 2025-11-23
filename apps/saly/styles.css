@@ -503,11 +503,27 @@ body.lock-scroll {
 
 /* Modal image with scale + fade */
 #modal-image {
-  opacity: 0;
-  transform: scale(0.92);
-  transition: transform 0.28s ease, opacity 0.28s ease;
+  transition:
+    opacity .28s ease,
+    filter .32s ease,
+    transform .28s ease;
+  opacity: 1;
+  filter: blur(0px);
 }
 
+/* Blur-out before switching */
+.blur-out {
+  opacity: 0;
+  filter: blur(8px);
+  transform: scale(0.94);
+}
+
+/* Blur-in after switching */
+.blur-in {
+  opacity: 1;
+  filter: blur(0px);
+  transform: scale(1);
+}
 #modal-image.active {
   opacity: 1;
   transform: scale(1);
@@ -531,6 +547,18 @@ body.lock-scroll {
 }
 
 
+
+/* Prevent background scroll */
+.body-scroll-lock {
+  overflow: hidden !important;
+  height: 100vh !important;
+  touch-action: none !important;
+}
+
+#mobile-wrapper.lock-scroll-inside {
+  overflow: hidden !important;
+  height: 100% !important;
+}
 
 
 
@@ -1236,10 +1264,6 @@ body.lock-scroll {
 /* ============================
    FULLSCREEN IMAGE SLIDE ANIMATION
    ============================ */
-
-#modal-image {
-  transition: transform 0.28s ease, opacity 0.28s ease;
-}
 
 /* slide next (push left) */
 .slide-in-left {

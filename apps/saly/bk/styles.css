@@ -472,6 +472,68 @@ body.lock-scroll {
   transform: scale(1.02);
 }
 
+
+
+/* =======================
+   GALLERY — Smooth Preview
+   ======================= */
+
+/* Thumbnails */
+.gallery-thumb {
+  cursor: pointer;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+  transform-origin: center;
+}
+.gallery-thumb:active {
+  transform: scale(0.94);
+  opacity: 0.85;
+}
+
+/* Modal improves */
+#gallery-modal {
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  animation: fadeIn 0.25s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Modal image with scale + fade */
+#modal-image {
+  opacity: 0;
+  transform: scale(0.92);
+  transition: transform 0.28s ease, opacity 0.28s ease;
+}
+
+#modal-image.active {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Slide left / right animations */
+.slide-left {
+  animation: slideLeft 0.28s ease forwards;
+}
+.slide-right {
+  animation: slideRight 0.28s ease forwards;
+}
+
+@keyframes slideLeft {
+  from { transform: translateX(40%) scale(0.95); opacity: 0.4; }
+  to   { transform: translateX(0) scale(1); opacity: 1; }
+}
+@keyframes slideRight {
+  from { transform: translateX(-40%) scale(0.95); opacity: 0.4; }
+  to   { transform: translateX(0) scale(1); opacity: 1; }
+}
+
+
+
+
+
 /* Gallery */
 .gallery-inner {
   text-align: center;
@@ -552,7 +614,7 @@ body.lock-scroll {
 .modal {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.9);
+  background: rgba(0, 0, 0, 0.7);
   z-index: 100;
   display: flex;
   align-items: center;
@@ -1169,4 +1231,44 @@ body.lock-scroll {
   color: white;
   cursor: pointer;
   z-index: 1003;
+}
+
+/* ============================
+   FULLSCREEN IMAGE SLIDE ANIMATION
+   ============================ */
+
+#modal-image {
+  transition: transform 0.28s ease, opacity 0.28s ease;
+}
+
+/* slide next (push left) */
+.slide-in-left {
+  animation: slideLeft 0.28s ease forwards;
+}
+
+/* slide previous (push right) */
+.slide-in-right {
+  animation: slideRight 0.28s ease forwards;
+}
+
+@keyframes slideLeft {
+  0% {
+    transform: translateX(100%);
+    opacity: 0.4;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideRight {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0.4;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
