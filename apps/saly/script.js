@@ -140,18 +140,47 @@ function observeContentSections() {
 /* === FULL LIST OF IMAGES FOR FULLSCREEN VIEWER === */
 /* Add ALL of your images here — even those not shown in the grid */
 const FULL_GALLERY_IMAGES = [
-  "./images/my_photos/b1.JPG",   // 0 (big on page)
-  "./images/my_photos/a1.jpeg",  // 1
-  "./images/my_photos/a2.jpg",   // 2
-  "./images/my_photos/a3.jpg",   // 3
-  "./images/my_photos/a4.jpg",   // 4
-  "./images/my_photos/b2.jpeg",   // 5 (NOT displayed but available)
-  "./images/my_photos/c1.jpeg",   // 6
-  "./images/my_photos/c2.jpeg",   // 7
-  "./images/my_photos/c3.jpeg",   // 8
-  "./images/my_photos/c4.jpeg",    // 9
-   "./images/my_photos/c5.jpeg"    // 9
-  // add more here...
+  "./images/my_photos/IMG_2629.jpg",   // 0 (big on page)
+  "./images/my_photos/IMG_2759.jpg",  // 1
+  "./images/my_photos/IMG_2610.jpg",
+  "./images/my_photos/IMG_2618.jpg",
+  "./images/my_photos/IMG_2596.jpg",
+  "./images/my_photos/IMG_2576.jpg",
+  "./images/my_photos/IMG_2582.jpg",
+  "./images/my_photos/IMG_2595.jpg",
+  "./images/my_photos/IMG_2606.jpg",
+  "./images/my_photos/IMG_2607.jpg",
+  "./images/my_photos/IMG_2609.jpg",
+  "./images/my_photos/IMG_2621.jpg",
+  "./images/my_photos/IMG_2622.jpg",
+  "./images/my_photos/IMG_2624.jpg",
+  "./images/my_photos/IMG_2628.jpg",
+  "./images/my_photos/IMG_2756.jpg",
+  "./images/my_photos/IMG_2757.jpg",
+  "./images/my_photos/IMG_2690.jpg",  // 17 (big on page)
+   "./images/my_photos/IMG_2723.jpg",
+  "./images/my_photos/IMG_2710.jpg",
+   "./images/my_photos/IMG_2698.jpg",
+   "./images/my_photos/IMG_2741.jpg",
+  "./images/my_photos/IMG_2715.jpg",
+  "./images/my_photos/IMG_2718.jpg",
+  "./images/my_photos/IMG_2731.jpg",
+  "./images/my_photos/IMG_2729.jpg",
+  "./images/my_photos/IMG_2685.jpg",
+  "./images/my_photos/IMG_2693.jpg",
+  "./images/my_photos/IMG_2781.jpg",
+  "./images/my_photos/IMG_2701.jpg",
+  "./images/my_photos/IMG_2772.jpg", // 30 (big on page)
+  "./images/my_photos/IMG_2646.jpg",
+  "./images/my_photos/IMG_2566.jpg",
+  "./images/my_photos/IMG_2669.jpg",
+  "./images/my_photos/IMG_2639.jpg",
+  "./images/my_photos/IMG_2651.jpg",
+  "./images/my_photos/IMG_2774.jpg",
+  "./images/my_photos/IMG_2571.jpg",
+  "./images/my_photos/IMG_2513.jpg",
+
+  // add more here... IMG_2709
 ];
 
 
