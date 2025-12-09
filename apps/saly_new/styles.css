@@ -1,0 +1,1298 @@
+@font-face {
+  font-family: 'KhmerWish';
+  src: url('./font/Moul.ttf') format('truetype');
+}
+/* ================= GLOBAL VARS ================= */
+:root {
+  --vh: 1vh;
+
+  /* Desktop scaling base */
+  --base-w: 390px;
+  --base-h: 844px;
+  --scale: 1;
+}
+
+/* ================= RESET / BASE ================= */
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: #121212;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, "Moul", sans-serif;
+
+  /* Mobile polish */
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+/* Prevent font zoom on iOS during orientation/form focus */
+body {
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+}
+
+html {
+  overflow-x: hidden;
+}
+
+/* Lock scrolling on first page (body class controlled by JS) */
+body.lock-scroll {
+  overflow: hidden;
+  height: 100vh;
+}
+
+/* ================= DESKTOP STAGE ================= */
+#stage {
+  position: fixed;
+  inset: 0;
+  background: transparent; /* let fixed video show */
+  overflow: hidden;
+  min-height: 100vh;
+}
+
+/* ================= “PHONE” WRAPPER ================= */
+#mobile-wrapper {
+  width: var(--base-w);
+  height: var(--base-h);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform-origin: center;
+  transform: translate(-50%, -50%) scale(var(--scale));
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  background: black;
+  border-radius: 20px;
+
+  /* scroll container on desktop preview */
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+
+  padding-bottom: env(safe-area-inset-bottom);
+  z-index: 1; /* above background video */
+}
+
+/* === MOBILE: single-page, window scrolls === */
+@media (max-width: 520px) {
+  html,
+  body {
+    height: auto;
+    min-height: 100%;
+  }
+
+  #stage {
+    position: static;
+    inset: auto;
+    min-height: 100vh;
+    overflow: visible;
+  }
+
+  #mobile-wrapper {
+    position: static;
+    top: auto;
+    left: auto;
+    transform: none;
+    width: 100vw;
+    height: auto;
+    min-height: 100vh;
+    box-shadow: none;
+    border-radius: 0;
+    overflow-y: visible; /* let the window scroll */
+    background: transparent;
+  }
+}
+
+/* ================= REUSABLE LAYERS ================= */
+.relative {
+  position: relative;
+}
+.absolute-fill {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+.cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.relative-layer {
+  position: relative;
+  z-index: 1;
+}
+
+/* ================= PAGE 1 HERO ================= */
+#hero-header {
+  position: relative;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  padding: 24px 0;
+  transition: opacity 1s ease;
+}
+
+#video-wrapper {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+#video-wrapper video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 20% black overlay on first-page video (slightly stronger for readability) */
+.hero-video-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 1;
+}
+
+#invite {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+}
+#invite img {
+  width: 100%;
+  display: block;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+#content-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 5vh 6%;
+  cursor: pointer;
+  z-index: 10;
+}
+
+/* Name card (shared) */
+.namecard,
+#names-background-box,
+#names-background-box-2 {
+  background-image: url("./images/btn_namecard2.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  max-width: 80%;
+  width: 100%;
+  aspect-ratio: 384 / 110;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* YOUR CUSTOM TEXT STYLE (kept as requested) */
+.name-text,
+#tag_name_list,
+#tag_name_list_2 {
+  font-family: "Moul", sans-serif;
+  color: #efc45b; /* keep your gold */
+  font-size: clamp(13px, 3.5vw, 13px); /* keep your size */
+  margin-top: 12%;
+}
+
+/* CTA button (shared) */
+.cta-big,
+#button-background-box,
+#button-background-box-2 {
+  margin-top: auto;
+  width: 50%;
+  max-width: 384px;
+  aspect-ratio: 384 / 110;
+  background-image: url("./images/btn_open.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3));
+  display: grid;
+  place-items: center;
+  z-index: 2;
+  cursor: pointer;
+}
+
+.cta-link {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Zoom pulse */
+@keyframes zoom-pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+.animate-zoom-pulse {
+  animation: zoom-pulse 2s infinite ease-in-out;
+}
+
+/* ================= INTRO VIDEO LAYER ================= */
+#intro-video-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: #000;
+  display: grid;
+  place-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 300ms ease;
+}
+#intro-video-layer.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+#intro-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+#intro-skip {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  background: rgba(0, 0, 0, 0.45);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* ================= PAGE 2 TRANSPARENT GIF OVERLAY ================= */
+#page2-overlay-gif {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: var(--base-w); /* match phone width */
+  max-width: 100%;
+  z-index: 15; /* above content, below popup menu */
+  pointer-events: none; /* user can touch buttons under it */
+  opacity: 1;
+}
+
+/* ================= PAGE 2 BACKGROUND IMAGE (FIXED, OVER CONTENT) ================= */
+#video-bg-page2 {
+  position: fixed;
+  inset: 0;
+  z-index: 999; /* on top of #mobile-wrapper */
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* The actual image */
+#video-bg-page2::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("./images/overlay_gif.gif"); /* transparent GIF */
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  transform: scale(1.02);
+}
+
+/* Optional dark/bright overlay on top of the gif */
+#video-bg-page2 .overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.0);
+}
+
+/* Tiny darkening on small phones, optional but nice */
+@media (max-width: 520px) {
+  #video-bg-page2 .overlay {
+    background: rgba(0, 0, 0, 0.08);
+  }
+}
+
+/* ================= PAGE 2 HERO (kept but not used in this flow) ================= */
+#hero-header-2 {
+  position: relative;
+  z-index: 1;
+  min-height: auto;
+  display: block;
+  padding: 24px 0 12px;
+}
+#invite-2 {
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+  transition: opacity 400ms ease, transform 400ms ease;
+}
+#invite-2 img {
+  width: 100%;
+  display: block;
+  border-radius: inherit;
+}
+
+#invite-2 .overlay-stack {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 6%;
+}
+#invite-2.fade-out {
+  opacity: 0;
+  transform: translateY(-8px);
+}
+
+/* ================= PAGE 2 MAIN: SINGLE PAGE CONTENT ================= */
+#page2-main {
+  position: relative;
+  z-index: 1; /* above fixed bg */
+  padding: 0 0 10px;
+  background-image: url(./images/bg.webp);
+}
+
+/* ================= REVEAL SECTIONS ================= */
+.invite-card,
+.gallery-card {
+  opacity: 0;
+  transform: translateY(18px) scale(0.99);
+  transition:
+    opacity 480ms ease-out,
+    transform 480ms ease-out;
+  will-change: opacity, transform;
+}
+
+.invite-card {
+  position: relative;
+  max-width: 480px;
+  margin: 0 auto 12px;
+  background: rgba(0, 0, 0, 0.0);
+  border-radius: 1rem;
+  box-shadow: none;
+}
+
+.gallery-card {
+  position: relative;
+  max-width: 640px;
+  margin: 0 auto 12px;
+  padding: 24px;
+  background: rgba(0, 0, 0, 0.0);
+  border-radius: 1rem;
+  box-shadow: none;
+}
+
+.invite-card.is-visible,
+.gallery-card.is-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  box-shadow: none;
+}
+
+.invite-card img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  border-radius: inherit;
+}
+
+/* CTA row inside invite cards */
+.cta-row {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+  padding-top: 0;
+}
+.bottom-tight {
+  bottom: 4px;
+  padding: 4px;
+}
+.bottom-gift {
+  bottom: 45px;
+  padding: 2px;
+}
+
+/* Bank QR inline (if used later) */
+.aba-inline {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  padding: 20px;
+}
+
+/* Each QR as a card */
+.qr-thumb {
+  display: block;
+  flex: 1 1 0;
+  max-width: 50%;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 4px solid #fff;
+  transition: transform 0.2s ease;
+}
+.qr-thumb img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.qr-thumb:hover {
+  transform: scale(1.02);
+}
+
+
+
+/* =======================
+   GALLERY — Smooth Preview
+   ======================= */
+
+/* Thumbnails */
+.gallery-thumb {
+  cursor: pointer;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+  transform-origin: center;
+}
+.gallery-thumb:active {
+  transform: scale(0.94);
+  opacity: 0.85;
+}
+
+/* Modal improves */
+#gallery-modal {
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  animation: fadeIn 0.25s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Modal image with scale + fade */
+#modal-image {
+  transition:
+    opacity .28s ease,
+    filter .32s ease,
+    transform .28s ease;
+  opacity: 1;
+  filter: blur(0px);
+}
+
+/* Blur-out before switching */
+.blur-out {
+  opacity: 0;
+  filter: blur(8px);
+  transform: scale(0.94);
+}
+
+/* Blur-in after switching */
+.blur-in {
+  opacity: 1;
+  filter: blur(0px);
+  transform: scale(1);
+}
+#modal-image.active {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Slide left / right animations */
+.slide-left {
+  animation: slideLeft 0.28s ease forwards;
+}
+.slide-right {
+  animation: slideRight 0.28s ease forwards;
+}
+
+@keyframes slideLeft {
+  from { transform: translateX(40%) scale(0.95); opacity: 0.4; }
+  to   { transform: translateX(0) scale(1); opacity: 1; }
+}
+@keyframes slideRight {
+  from { transform: translateX(-40%) scale(0.95); opacity: 0.4; }
+  to   { transform: translateX(0) scale(1); opacity: 1; }
+}
+
+
+
+/* Prevent background scroll */
+.body-scroll-lock {
+  overflow: hidden !important;
+  height: 100vh !important;
+  touch-action: none !important;
+}
+
+#mobile-wrapper.lock-scroll-inside {
+  overflow: hidden !important;
+  height: 100% !important;
+}
+
+
+
+/* Gallery */
+.gallery-inner {
+  text-align: center;
+  color: #fff;
+}
+.gallery-title {
+  font-size: 28px;
+  margin: 0 0 10px;
+  color: #d4af37;
+}
+.gallery-sub {
+  margin: 0 0 18px;
+  font-weight: 500;
+}
+/* 
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+} */
+
+.gallery-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+}
+
+/* Big full-width images */
+.gallery-row.full img {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  object-fit: cover;
+  display: block;
+}
+
+
+/* Four-column clean layout */
+.gallery-row.four {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+.gallery-row.four img {
+  width: 100%;
+  height: 85px;              /* perfect size for all iPhones */
+  object-fit: cover;
+  border-radius: 8px;
+}
+/* Image hover effect (small) */
+.gallery-img {
+  cursor: pointer;
+  transition: transform .25s ease, opacity .25s ease;
+}
+
+.gallery-img:active {
+  transform: scale(0.96);
+  opacity: 0.9;
+}
+.gallery-thumbnail {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 12px;
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease;
+  cursor: pointer;
+  opacity: 0.95;
+}
+.gallery-thumbnail:hover {
+  transform: scale(1.05);
+  opacity: 1;
+}
+
+/* Modal */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  animation: modal-fade 200ms ease-out;
+}
+.modal.hidden {
+  display: none !important;
+}
+
+.modal-content {
+  position: relative;
+  animation: modal-pop 200ms ease-out;
+}
+.modal-content img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 12px;
+}
+.modal-close {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  font-size: 40px;
+  color: #fff;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+.modal-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 40px;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.3);
+  border: none;
+  border-radius: 999px;
+  width: 44px;
+  height: 44px;
+  cursor: pointer;
+}
+.modal-nav.left {
+  left: 8px;
+}
+.modal-nav.right {
+  right: 8px;
+}
+
+/* Modal animations */
+@keyframes modal-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes modal-pop {
+  from {
+    transform: scale(0.92);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* POPUP ICON MENU */
+.menu-fab {
+  position: fixed;
+  right: 16px;
+  bottom: calc(16px + env(safe-area-inset-bottom));
+  z-index: 20;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.9);
+  color: #111827;
+  font-size: 24px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+  cursor: pointer;
+  animation: zoom-pulse 2.2s infinite ease-in-out;
+}
+
+/* On desktop, anchor the FAB closer to the phone */
+@media (min-width: 521px) {
+  .menu-fab {
+    right: calc(50% - 195px); /* approx right edge of 390px phone */
+  }
+}
+
+.popup-menu {
+  position: fixed;
+  right: 16px;
+  bottom: calc(80px + env(safe-area-inset-bottom));
+  z-index: 19;
+  background: rgba(0, 0, 0, 0.85);
+  border-radius: 16px;
+  padding: 8px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 170px;
+}
+
+/* Match FAB alignment on desktop */
+@media (min-width: 521px) {
+  .popup-menu {
+    right: calc(50% - 195px);
+  }
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: none;
+  background: transparent;
+  padding: 6px 8px;
+  border-radius: 10px;
+  color: #e5e7eb;
+  font-size: 13px;
+  cursor: pointer;
+}
+.menu-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+.menu-icon {
+  font-size: 18px;
+}
+.menu-text {
+  white-space: nowrap;
+}
+
+/* Divider between sections & music item */
+.menu-divider {
+  height: 1px;
+  margin: 4px 2px;
+  background: rgba(148, 163, 184, 0.4);
+}
+
+/* Ensure .hidden always hides elements, even if another class sets display */
+.hidden {
+  display: none !important;
+}
+
+/* ===== Orientation overlay (nicer card style) ===== */
+#rotate-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: none; /* only enabled via media query below */
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  text-align: center;
+  background:
+    radial-gradient(circle at top, rgba(248, 250, 252, 0.08), transparent),
+    linear-gradient(135deg, rgba(15, 23, 42, 0.96), rgba(30, 64, 175, 0.88));
+}
+
+#rotate-overlay .rotate-inner {
+  max-width: 340px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 20px 18px 18px;
+  border-radius: 20px;
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(148, 163, 184, 0.7);
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  animation: rotate-card-pop 320ms ease-out;
+}
+
+.rotate-icon {
+  font-size: 40px;
+  margin-bottom: 8px;
+  animation: rotate-phone-nudge 1.6s ease-in-out infinite;
+}
+
+.rotate-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 4px;
+  color: #e5e7eb;
+}
+
+.rotate-text {
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 0;
+  color: #cbd5f5;
+}
+
+/* Show overlay only in landscape on small devices */
+@media (max-width: 820px) and (orientation: landscape) {
+  #rotate-overlay {
+    display: flex;
+  }
+}
+
+@keyframes rotate-card-pop {
+  from {
+    transform: translateY(12px) scale(0.96);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes rotate-phone-nudge {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  40% {
+    transform: translateY(-4px) rotate(-12deg);
+  }
+  70% {
+    transform: translateY(0) rotate(6deg);
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .animate-zoom-pulse {
+    animation: none;
+  }
+  #bg-video,
+  #background-video,
+  #hero-background-video {
+    display: none;
+  }
+}
+
+/* ================= OUR CALENDAR SECTION (FULL-SCREEN-ish) ================= */
+.calendar-card {
+  position: relative;
+  width: 100%;
+  margin: 0 0 16px;
+  border-radius: 0;
+  overflow: hidden;
+}
+
+#our-calendar {
+  margin: 0 0 16px;
+}
+
+/* Full-screen hero area (always full height) */
+.calendar-hero {
+  position: relative;
+  width: 100%;
+  height: calc(var(--vh, 1vh) * 100);  /* full viewport height */
+  min-height: 100vh;
+  border-radius: 0;
+  overflow: hidden;
+}
+
+/* Slides */
+.calendar-slide {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 1.0s ease-in-out;
+  will-change: opacity;
+  backface-visibility: hidden;
+  transform: translate3d(0, 0, 0);
+}
+
+.calendar-slide.is-active {
+  opacity: 1;
+}
+
+/* Dark overlay on top of slideshow */
+.calendar-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.35),
+    rgba(0, 0, 0, 0.65)
+  );
+}
+
+/* Centered content */
+.calendar-content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+  text-align: center;
+  color: #fff;
+}
+
+.calendar-heading-top {
+  letter-spacing: 0.2em;
+  font-size: 11px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  opacity: 0.9;
+}
+
+.calendar-couple-name {
+  font-family: "Georgia", "Times New Roman", serif;
+  font-style: italic;
+  font-size: 26px;
+  margin-bottom: 18px;
+}
+
+/* Countdown grid */
+.calendar-countdown {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  width: 100%;
+  max-width: 320px;
+  margin: 0 auto 10px;
+}
+
+.calendar-count-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.calendar-count-value {
+  font-size: 30px;
+  font-weight: 700;
+}
+
+.calendar-count-label {
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.calendar-date-small {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.9;
+  margin-top: 4px;
+}
+
+/* ===== Calendar scroll hint ===== */
+.calendar-scroll-hint {
+  position: absolute;
+  left: 50%;
+  bottom: 32px;
+  transform: translate(-50%, 0);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.9;
+  pointer-events: none;
+  animation: calendar-hint-bounce 1.8s infinite ease-in-out;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.calendar-scroll-hint .hint-text {
+  font-weight: 500;
+}
+
+.calendar-scroll-hint .hint-arrow {
+  font-size: 16px;
+}
+
+/* When hidden after scroll */
+.calendar-scroll-hint--hidden {
+  opacity: 0;
+  transform: translate(-50%, 10px);
+  pointer-events: none;
+  animation: none;
+}
+
+@keyframes calendar-hint-bounce {
+  0%,
+  100% {
+    transform: translate(-50%, 0);
+  }
+  40% {
+    transform: translate(-50%, -6px);
+  }
+  70% {
+    transform: translate(-50%, 2px);
+  }
+}
+
+/* Slight tweak on very small heights so it doesn't sit too close to bottom */
+@media (max-height: 640px) {
+  .calendar-scroll-hint {
+    bottom: 20px;
+    font-size: 10px;
+  }
+}
+
+/* ===== (End calendar) ===== */
+
+/* ===== Wishes section ===== */
+.wishes-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.wishes-form input,
+.wishes-form textarea {
+  width: 100%;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  padding: 8px 10px;
+  font-size: 14px;
+  font-family: inherit;
+  outline: none;
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.wishes-form input:focus,
+.wishes-form textarea:focus {
+  border-color: #d4af37;
+  box-shadow: 0 0 0 1px rgba(212, 175, 55, 0.3);
+}
+
+.wishes-submit {
+  align-self: flex-end;
+  border: none;
+  border-radius: 999px;
+  padding: 6px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  background: #d4af37;
+  color: #111827;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.wishes-submit:active {
+  transform: scale(0.97);
+}
+
+.wishes-status {
+  font-size: 12px;
+  color: #4b5563;
+  min-height: 16px;
+}
+
+.wishes-list {
+  max-height: 260px;
+  overflow-y: auto;
+  padding-right: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Each wish card */
+.wish-item {
+  background: rgba(255, 255, 255, 0.96);
+  border-radius: 12px;
+  padding: 8px 10px;
+  text-align: left;
+  border: 1px solid #e5e7eb;
+}
+
+.wish-name {
+  font-size: 12px;
+  font-weight: 600;
+  color: #6b7280;
+  margin-bottom: 2px;
+}
+
+.wish-message {
+  font-size: 13px;
+  color: #111827;
+  word-wrap: break-word;
+}
+
+.wish-time {
+  font-size: 11px;
+  color: #9ca3af;
+  margin-top: 2px;
+}
+.wishes-list-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #6b7280;
+  text-align: left;
+  margin: 0 0 6px;
+  font-family: 'KhmerWish', 'Moul', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.hint-text{
+  font-size: 12px;
+  font-weight: 600;
+  color: #ffffff;
+  font-family: 'KhmerWish', 'Moul', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+
+.gallery-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.gallery-row.full img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.gallery-row.three {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.gallery-row.three img {
+  width: 100%;
+  height: 130px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.gallery-img {
+  width: 100%;
+  display: block;
+}
+/* Fullscreen viewer */
+.viewer {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+  overflow: hidden;
+}
+
+.viewer.hidden { display: none; }
+
+.viewer-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Image with smooth fade + zoom transform */
+#viewer-img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  max-width: 100%;
+  max-height: 100%;
+  transform: translate(-50%, -50%) scale(1);
+  transform-origin: center center;
+  transition: opacity .25s ease, transform .25s ease;
+  opacity: 0;
+}
+
+/* Show image */
+#viewer-img.active {
+  opacity: 1;
+}
+
+/* Buttons */
+.viewer-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 10px 14px;
+  font-size: 34px;
+  background: rgba(255,255,255,0.18);
+  border: none;
+  color: white;
+  border-radius: 10px;
+  cursor: pointer;
+  z-index: 1002;
+}
+
+.viewer-btn.prev { left: 12px; }
+.viewer-btn.next { right: 12px; }
+
+.viewer-close {
+  position: absolute;
+  top: 18px;
+  right: 20px;
+  font-size: 40px;
+  color: white;
+  cursor: pointer;
+  z-index: 1003;
+}
+
+/* ============================
+   FULLSCREEN IMAGE SLIDE ANIMATION
+   ============================ */
+
+/* slide next (push left) */
+.slide-in-left {
+  animation: slideLeft 0.28s ease forwards;
+}
+
+/* slide previous (push right) */
+.slide-in-right {
+  animation: slideRight 0.28s ease forwards;
+}
+
+@keyframes slideLeft {
+  0% {
+    transform: translateX(100%);
+    opacity: 0.4;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideRight {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0.4;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
