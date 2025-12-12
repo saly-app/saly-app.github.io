@@ -153,7 +153,7 @@ body.lock-scroll {
 .hero-video-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.4);
+  /* background: rgba(0, 0, 0, 0.4); */
   z-index: 1;
 }
 
@@ -171,6 +171,16 @@ body.lock-scroll {
   pointer-events: none;
 }
 
+.hero-bg-static {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+
+
 #content-overlay {
   position: absolute;
   inset: 0;
@@ -187,7 +197,7 @@ body.lock-scroll {
 .namecard,
 #names-background-box,
 #names-background-box-2 {
-  background-image: url("./images/btn_namecard2.png");
+  background-image: url("./images/btn_namecard.png");
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
@@ -208,7 +218,7 @@ body.lock-scroll {
 #tag_name_list,
 #tag_name_list_2 {
   font-family: "Moul", sans-serif;
-  color: #efc45b; /* keep your gold */
+  color: #8a9a69; /* keep your gold */
   font-size: clamp(13px, 3.5vw, 13px); /* keep your size */
   margin-top: 12%;
 }
@@ -375,7 +385,7 @@ body.lock-scroll {
   position: relative;
   z-index: 1; /* above fixed bg */
   padding: 0 0 10px;
-  background-image: url(./images/bg.webp);
+  background-image: url(./images/bg.png);
 }
 
 /* ================= REVEAL SECTIONS ================= */
@@ -402,7 +412,8 @@ body.lock-scroll {
   position: relative;
   max-width: 640px;
   margin: 0 auto 12px;
-  padding: 24px;
+  padding-left: 24px;
+  padding-right: 24px;
   background: rgba(0, 0, 0, 0.0);
   border-radius: 1rem;
   box-shadow: none;
@@ -1094,8 +1105,8 @@ body.lock-scroll {
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  background: #d4af37;
-  color: #111827;
+  background: #415828;
+  color: #fff;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
 

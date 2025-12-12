@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Animated Invitation</title>
+ <style>
+    body {
+      margin: 0;
+      background: #f0f0f0;  /* Light background to help see the container */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .invite {
+      position: relative;
+      width: 100%;  /* makes the container fill the available width */
+      max-width: 375px;  /* optional: this keeps the max width for large screens */
+      height: auto;
+      overflow: hidden;
+      background-color: #e0e0e0; /* Light gray background for debugging */
+      border: 2px solid red; /* Border for debugging */
+    }
+
+    .invite img {
+      position: absolute;
+      width: 100%;
+      height: auto;  /* Adjust height to maintain aspect ratio */
+      object-fit: cover;
+    }
+
+    .bg {
+      z-index: 1;
+    }
+
+    .curtain {
+      z-index: 2;
+      transform-origin: top center;
+      animation: curtainSway 4s ease-in-out infinite;
+    }
+
+    .flowers {
+      z-index: 3;
+      bottom: 0;
+      width: 100%;  /* makes the flower width responsive */
+      max-width: 100%;  /* ensures the flowers don't exceed the image width */
+      animation: flowersFloat 5s ease-in-out infinite;
+    }
+
+    @keyframes curtainSway {
+      0%   { transform: translateY(0px) skewX(0deg); }
+      25%  { transform: translateY(2px) skewX(0.4deg); }
+      50%  { transform: translateY(4px) skewX(0deg); }
+      75%  { transform: translateY(2px) skewX(-0.4deg); }
+      100% { transform: translateY(0px) skewX(0deg); }
+    }
+
+    @keyframes flowersFloat {
+      0%   { transform: translateY(0px) scale(1); }
+      50%  { transform: translateY(-6px) scale(1.03); }
+      100% { transform: translateY(0px) scale(1); }
+    }
+  </style>
+</head>
+<body>
+  <div class="invite">
+    <img src="images/bg1.png" class="bg" />
+    <img src="images/bg1.png" class="curtain" />
+    <img src="images/flowers.png" class="flowers"/>
+  </div>
+</body>
+</html>
