@@ -55,7 +55,7 @@ document.addEventListener('visibilitychange', function () {
 
 /* ===== Guest Name from guests.csv ===== */
 function setGuestNameText(name) {
-  var displayName = name || 'ស្វាមី និង ភរិយា';
+  var displayName = name || ' ';
 
   var n1 = document.getElementById('tag_name_list');
   var n2 = document.getElementById('tag_name_list_2');
