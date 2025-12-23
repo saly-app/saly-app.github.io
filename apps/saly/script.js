@@ -766,15 +766,18 @@ document.addEventListener('DOMContentLoaded', function () {
           var data = doc.data();
           var name = data.name || 'Guest';
           var message = data.message || '';
+          // Convert Firestore timestamp to JS Date object
           var ts = data.createdAt ? data.createdAt.toDate() : null;
 
           var li = document.createElement('div');
           li.className = 'wish-item';
 
+          // 1. Name
           var nameEl = document.createElement('div');
           nameEl.className = 'wish-name';
           nameEl.textContent = name;
 
+          // 2. Message
           var msgEl = document.createElement('div');
           msgEl.className = 'wish-message';
           msgEl.textContent = message;
@@ -782,14 +785,18 @@ document.addEventListener('DOMContentLoaded', function () {
           li.appendChild(nameEl);
           li.appendChild(msgEl);
 
+          // 3. Date & Time
           if (ts) {
             var timeEl = document.createElement('div');
             timeEl.className = 'wish-time';
-            var hh = String(ts.getHours());
-            if (hh.length < 2) hh = '0' + hh;
-            var mm = String(ts.getMinutes());
-            if (mm.length < 2) mm = '0' + mm;
-            timeEl.textContent = hh + ':' + mm;
+
+            // Format options: Month Day • Hour:Minute AM/PM
+            // Example: "Dec 23 • 10:30 PM"
+            var datePart = ts.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+            var timePart = ts.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+            
+            timeEl.textContent = datePart + ' • ' + timePart;
+            
             li.appendChild(timeEl);
           }
 
